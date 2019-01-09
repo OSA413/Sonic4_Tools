@@ -97,70 +97,90 @@ namespace OldModConversionTool
             return null;
         }
 
-        static List<string> UnpackFiles(string file, string mod_path, string output_path, string game_path)
+        static void UnpackFiles(string folder, string mod_path, string output_path, string game_path)
         {
-            List<string> FilesNeededToBeChecked = new List<string> { };
-            List<string> DirsNeededToBeChecked = new List<string> { };
+            Console.WriteLine(folder);
+            Console.WriteLine(mod_path);
+            Console.WriteLine(output_path);
+            Console.WriteLine(game_path);
 
-            string[] game_files;
 
+            bool check_again = false;
+            
             //Think up a comment that describes what this block does
             string the_orig_path;
-            if (Directory.Exists(Path.GetDirectoryName(Path.Combine(output_path, "orig", file))))
-            { the_orig_path = Path.Combine(output_path, "orig"); }
+            if (Directory.Exists(Path.Combine(output_path, "orig", folder)))
+            { the_orig_path = Path.Combine(output_path, "orig", folder); }
             else
-            { the_orig_path = game_path; }
-    
+            { the_orig_path = Path.Combine(game_path, folder); }
+            
 
-            if (Directory.Exists(Path.GetDirectoryName(Path.Combine(the_orig_path, file))))
-            {
-                game_files = Directory.GetFiles(Path.GetDirectoryName(Path.Combine(game_path, file)), "*", SearchOption.AllDirectories);
-            }
-            else
-            {
-                game_files = new string[0];
-            }
+            string[] mod_files = Directory.GetFiles(Path.Combine(mod_path, folder), "*", SearchOption.AllDirectories);
 
+            string[] game_files = Directory.GetFiles(the_orig_path, "*", SearchOption.AllDirectories);
+            
             for (int i = 0; i < game_files.Length; i++)
-            { game_files[i] = game_files[i].Substring(game_path.Length + 1); }
+            { game_files[i] = game_files[i].Substring(the_orig_path.Length + 1); }
 
-            if (game_files.Contains(file))
+            for (int i = 0; i < mod_files.Length; i++)
+            { mod_files[i] = mod_files[i].Substring(mod_path.Length + folder.Length + 2); }
+            
+            foreach (string file in mod_files)
             {
-                if (Sha(Path.Combine(output_path, file)) == Sha(Path.Combine(the_orig_path, file)))
+                if (game_files.Contains(file))
                 {
-                    File.Delete(Path.Combine(output_path, file));
+                    string orig_file = Path.Combine(the_orig_path, file);
+                    string output_orig_file = Path.Combine(output_path, "orig", folder, file);
+                    string output_mod_file = Path.Combine(output_path, folder, file);
+                    
+                    if (Sha(output_mod_file) == Sha(orig_file))
+                    {
+                        File.Delete(output_mod_file);
+                        check_again = true;
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(output_orig_file));
+                        if (orig_file != output_orig_file)
+                        {
+                            File.Copy(orig_file, output_orig_file, true);
+                        }
+
+                        if (file.EndsWith(".AMB", StringComparison.OrdinalIgnoreCase))
+                        {
+                            Process.Start("AMBPatcher.exe", output_mod_file).WaitForExit();
+                            File.Delete(output_mod_file);
+                            Directory.Move(output_mod_file + "_extracted", output_mod_file);
+
+                            Process.Start("AMBPatcher.exe", output_orig_file).WaitForExit();
+                            File.Delete(output_orig_file);
+                            Directory.Move(output_orig_file + "_extracted", output_orig_file);
+
+                            check_again = true;
+                        }
+                        else if (file.EndsWith(".CSB", StringComparison.OrdinalIgnoreCase))
+                        {
+                            Process.Start("CsbEditor.exe", output_mod_file).WaitForExit();
+                            File.Delete(output_mod_file);
+
+                            Process.Start("CsbEditor.exe", output_orig_file).WaitForExit();
+                            File.Delete(output_orig_file);
+
+                            check_again = true;
+                        }
+                    }
                 }
                 else
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(output_path, "orig", file)));
-                    File.Copy(Path.Combine(game_path, file), Path.Combine(output_path, "orig", file), true);
-
-                    if (file.EndsWith(".AMB", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Process.Start("AMBPatcher.exe", Path.Combine(output_path, file)).WaitForExit();
-                        File.Delete(Path.Combine(output_path, file));
-                        Directory.Move(Path.Combine(output_path, file + "_extracted"), Path.Combine(output_path, file));
-
-                        Process.Start("AMBPatcher.exe", Path.Combine(output_path, "orig", file)).WaitForExit();
-                        File.Delete(Path.Combine(output_path, "orig", file));
-                        Directory.Move(Path.Combine(output_path, "orig", file + "_extracted"), Path.Combine(output_path, "orig", file));
-
-                        DirsNeededToBeChecked.Add(Path.Combine(output_path, file));
-                    }
-                    else if (file.EndsWith(".CSB", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Process.Start("CsbEditor.exe", Path.Combine(output_path, file)).WaitForExit();
-                        File.Delete(Path.Combine(output_path, file));
-
-                        Process.Start("CsbEditor.exe", Path.Combine(output_path, "orig", file)).WaitForExit();
-                        File.Delete(Path.Combine(output_path, "orig", file));
-
-                        DirsNeededToBeChecked.Add(Path.Combine(output_path, "orig", file));
-                    }
+                    //Console.WriteLine(file);
                 }
             }
 
-            return DirsNeededToBeChecked;
+            if (check_again)
+            {
+                Console.WriteLine("-");
+                UnpackFiles(folder, output_path, output_path, Path.Combine(output_path, "orig"));
+            }
         }
 
         private void Convert()
@@ -195,29 +215,30 @@ namespace OldModConversionTool
 
             if (Directory.Exists(tbOutputPath.Text))
             { Directory.Delete(tbOutputPath.Text, true); }
-
+            
             foreach (string file in mod_files)
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(tbOutputPath.Text, file)));
                 File.Copy(Path.Combine(tbModPath.Text, file), Path.Combine(tbOutputPath.Text, file), true);
             }
 
-            statusBar.Text = "Comparing files... (first stage)";
+            statusBar.Text = "Comparing files...";
             Refresh();
-            
-            List<string> FilesNeededToBeChecked = new List<string>(mod_files);
 
-            while (FilesNeededToBeChecked.Count != 0)
+            foreach (string folder in Directory.GetDirectories(tbModPath.Text))
             {
-                Console.WriteLine(FilesNeededToBeChecked[0]);
-                if (File.Exists(Path.Combine(tbModPath.Text, FilesNeededToBeChecked[0])))
-                {
-                    var a = UnpackFiles(FilesNeededToBeChecked[0], tbModPath.Text, tbOutputPath.Text, tbGamePath.Text);
-                    if (a.Count != 0)
-                    { FilesNeededToBeChecked.AddRange(a); }
-                }
-                FilesNeededToBeChecked.RemoveAt(0);
+                string ffolder = Path.GetFileName(folder);
+                UnpackFiles(ffolder, tbModPath.Text, tbOutputPath.Text, tbGamePath.Text);Console.WriteLine("+");
             }
+
+            statusBar.Text = "Removing temp files...";
+            Refresh();
+
+            Directory.Delete(Path.Combine(tbOutputPath.Text, "orig"), true);
+
+            statusBar.Text = "Done";
+
+            Process.Start("explorer", tbOutputPath.Text);
         }
 
         private void bModPath_Click(object sender, EventArgs e)
