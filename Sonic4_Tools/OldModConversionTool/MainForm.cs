@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Security.Cryptography;
+using System.Collections.Generic;
+using System.Linq;
+using System.Diagnostics;
 
 namespace OldModConversionTool
 {
@@ -18,6 +16,19 @@ namespace OldModConversionTool
             InitializeComponent();
             RefreshStatus();
             IsReady();
+        }
+
+        static string Sha(string file)
+        {
+            byte[] hash;
+            byte[] raw_file = File.ReadAllBytes(file);
+            string str_hash = "";
+            
+            hash = new SHA512CryptoServiceProvider().ComputeHash(raw_file);
+            
+            foreach (byte b in hash) { str_hash += b.ToString("X"); }
+
+            return str_hash;
         }
 
         private void RefreshStatus()
@@ -56,10 +67,7 @@ namespace OldModConversionTool
         {
             bConvert.Enabled = false;
             if (   lAMBPatcherStatus.Text   == "OK"
-                && lCsbEditorStatus.Text    == "OK"
-                && tbModPath.Text       != ""
-                && tbGamePath.Text      != ""
-                && tbOutputPath.Text    != "")
+                && lCsbEditorStatus.Text    == "OK")
             {
                 bConvert.Enabled = true;
             }
@@ -89,6 +97,129 @@ namespace OldModConversionTool
             return null;
         }
 
+        static List<string> UnpackFiles(string file, string mod_path, string output_path, string game_path)
+        {
+            List<string> FilesNeededToBeChecked = new List<string> { };
+            List<string> DirsNeededToBeChecked = new List<string> { };
+
+            string[] game_files;
+
+            //Think up a comment that describes what this block does
+            string the_orig_path;
+            if (Directory.Exists(Path.GetDirectoryName(Path.Combine(output_path, "orig", file))))
+            { the_orig_path = Path.Combine(output_path, "orig"); }
+            else
+            { the_orig_path = game_path; }
+    
+
+            if (Directory.Exists(Path.GetDirectoryName(Path.Combine(the_orig_path, file))))
+            {
+                game_files = Directory.GetFiles(Path.GetDirectoryName(Path.Combine(game_path, file)), "*", SearchOption.AllDirectories);
+            }
+            else
+            {
+                game_files = new string[0];
+            }
+
+            for (int i = 0; i < game_files.Length; i++)
+            { game_files[i] = game_files[i].Substring(game_path.Length + 1); }
+
+            if (game_files.Contains(file))
+            {
+                if (Sha(Path.Combine(output_path, file)) == Sha(Path.Combine(the_orig_path, file)))
+                {
+                    File.Delete(Path.Combine(output_path, file));
+                }
+                else
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(output_path, "orig", file)));
+                    File.Copy(Path.Combine(game_path, file), Path.Combine(output_path, "orig", file), true);
+
+                    if (file.EndsWith(".AMB", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Process.Start("AMBPatcher.exe", Path.Combine(output_path, file)).WaitForExit();
+                        File.Delete(Path.Combine(output_path, file));
+                        Directory.Move(Path.Combine(output_path, file + "_extracted"), Path.Combine(output_path, file));
+
+                        Process.Start("AMBPatcher.exe", Path.Combine(output_path, "orig", file)).WaitForExit();
+                        File.Delete(Path.Combine(output_path, "orig", file));
+                        Directory.Move(Path.Combine(output_path, "orig", file + "_extracted"), Path.Combine(output_path, "orig", file));
+
+                        DirsNeededToBeChecked.Add(Path.Combine(output_path, file));
+                    }
+                    else if (file.EndsWith(".CSB", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Process.Start("CsbEditor.exe", Path.Combine(output_path, file)).WaitForExit();
+                        File.Delete(Path.Combine(output_path, file));
+
+                        Process.Start("CsbEditor.exe", Path.Combine(output_path, "orig", file)).WaitForExit();
+                        File.Delete(Path.Combine(output_path, "orig", file));
+
+                        DirsNeededToBeChecked.Add(Path.Combine(output_path, "orig", file));
+                    }
+                }
+            }
+
+            return DirsNeededToBeChecked;
+        }
+
+        private void Convert()
+        {
+            statusBar.Text = "Checking directory existence...";
+            Refresh();
+
+            tbModPath.BackColor = Color.White;
+            tbGamePath.BackColor = Color.White;
+
+            if (!(Directory.Exists(tbModPath.Text) && Directory.Exists(tbGamePath.Text)))
+            {
+                if (!Directory.Exists(tbModPath.Text)) { tbModPath.BackColor = Color.FromArgb(255, 192, 192); }
+                if (!Directory.Exists(tbGamePath.Text)) { tbGamePath.BackColor = Color.FromArgb(255, 192, 192); }
+                MessageBox.Show("The mod root directory and/or the game root directory not found.", "Directory not found");
+                return;
+            }
+
+            statusBar.Text = "Getting list of files...";
+            Refresh();
+
+            string[] mod_files = Directory.GetFiles(tbModPath.Text, "*", SearchOption.AllDirectories);
+            for (int i = 0; i < mod_files.Length; i++)
+            { mod_files[i] = mod_files[i].Substring(tbModPath.Text.Length + 1); }
+
+            string[] game_files = Directory.GetFiles(tbGamePath.Text, "*", SearchOption.AllDirectories);
+            for (int i = 0; i < game_files.Length; i++)
+            { game_files[i] = game_files[i].Substring(tbGamePath.Text.Length + 1); }
+            
+            statusBar.Text = "Copying mod files...";
+            Refresh();
+
+            if (Directory.Exists(tbOutputPath.Text))
+            { Directory.Delete(tbOutputPath.Text, true); }
+
+            foreach (string file in mod_files)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(tbOutputPath.Text, file)));
+                File.Copy(Path.Combine(tbModPath.Text, file), Path.Combine(tbOutputPath.Text, file), true);
+            }
+
+            statusBar.Text = "Comparing files... (first stage)";
+            Refresh();
+            
+            List<string> FilesNeededToBeChecked = new List<string>(mod_files);
+
+            while (FilesNeededToBeChecked.Count != 0)
+            {
+                Console.WriteLine(FilesNeededToBeChecked[0]);
+                if (File.Exists(Path.Combine(tbModPath.Text, FilesNeededToBeChecked[0])))
+                {
+                    var a = UnpackFiles(FilesNeededToBeChecked[0], tbModPath.Text, tbOutputPath.Text, tbGamePath.Text);
+                    if (a.Count != 0)
+                    { FilesNeededToBeChecked.AddRange(a); }
+                }
+                FilesNeededToBeChecked.RemoveAt(0);
+            }
+        }
+
         private void bModPath_Click(object sender, EventArgs e)
         {
             string path = DirectorySelectionDialog(0);
@@ -112,7 +243,7 @@ namespace OldModConversionTool
 
         private void bConvert_Click(object sender, EventArgs e)
         {
-
+            Convert();
         }
 
         private void bRefresh_Click(object sender, EventArgs e)
