@@ -80,7 +80,7 @@
             this.bModPath.Location = new System.Drawing.Point(402, 45);
             this.bModPath.Name = "bModPath";
             this.bModPath.Size = new System.Drawing.Size(32, 23);
-            this.bModPath.TabIndex = 3;
+            this.bModPath.TabIndex = 2;
             this.bModPath.Text = "...";
             this.bModPath.UseVisualStyleBackColor = true;
             this.bModPath.Click += new System.EventHandler(this.bModPath_Click);
@@ -90,7 +90,7 @@
             this.bGamePath.Location = new System.Drawing.Point(402, 94);
             this.bGamePath.Name = "bGamePath";
             this.bGamePath.Size = new System.Drawing.Size(32, 23);
-            this.bGamePath.TabIndex = 6;
+            this.bGamePath.TabIndex = 4;
             this.bGamePath.Text = "...";
             this.bGamePath.UseVisualStyleBackColor = true;
             this.bGamePath.Click += new System.EventHandler(this.bGamePath_Click);
@@ -109,14 +109,14 @@
             this.tbGamePath.Location = new System.Drawing.Point(12, 96);
             this.tbGamePath.Name = "tbGamePath";
             this.tbGamePath.Size = new System.Drawing.Size(384, 20);
-            this.tbGamePath.TabIndex = 4;
+            this.tbGamePath.TabIndex = 3;
             // 
             // bConvert
             // 
             this.bConvert.Location = new System.Drawing.Point(167, 213);
             this.bConvert.Name = "bConvert";
             this.bConvert.Size = new System.Drawing.Size(128, 32);
-            this.bConvert.TabIndex = 7;
+            this.bConvert.TabIndex = 8;
             this.bConvert.Text = "Convert";
             this.bConvert.UseVisualStyleBackColor = true;
             this.bConvert.Click += new System.EventHandler(this.bConvert_Click);
@@ -163,7 +163,7 @@
             this.bRefresh.Location = new System.Drawing.Point(57, 170);
             this.bRefresh.Name = "bRefresh";
             this.bRefresh.Size = new System.Drawing.Size(32, 32);
-            this.bRefresh.TabIndex = 12;
+            this.bRefresh.TabIndex = 7;
             this.bRefresh.Text = "⟳";
             this.bRefresh.UseVisualStyleBackColor = true;
             this.bRefresh.Click += new System.EventHandler(this.bRefresh_Click);
@@ -173,7 +173,7 @@
             this.bOutputPath.Location = new System.Drawing.Point(402, 142);
             this.bOutputPath.Name = "bOutputPath";
             this.bOutputPath.Size = new System.Drawing.Size(32, 23);
-            this.bOutputPath.TabIndex = 15;
+            this.bOutputPath.TabIndex = 6;
             this.bOutputPath.Text = "...";
             this.bOutputPath.UseVisualStyleBackColor = true;
             this.bOutputPath.Click += new System.EventHandler(this.bOutputPath_Click);
@@ -192,7 +192,7 @@
             this.tbOutputPath.Location = new System.Drawing.Point(12, 144);
             this.tbOutputPath.Name = "tbOutputPath";
             this.tbOutputPath.Size = new System.Drawing.Size(384, 20);
-            this.tbOutputPath.TabIndex = 13;
+            this.tbOutputPath.TabIndex = 5;
             // 
             // statusStrip1
             // 

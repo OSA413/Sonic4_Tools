@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Security.Cryptography;
-using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 
@@ -11,8 +10,11 @@ namespace OldModConversionTool
 {
     public partial class MainForm:Form
     {
+        public static int LastSecond { get; set; }
+
         public MainForm()
         {
+            LastSecond = DateTime.Now.Second;
             InitializeComponent();
             RefreshStatus();
             IsReady();
@@ -31,20 +33,34 @@ namespace OldModConversionTool
             return str_hash;
         }
 
+        static void RemoveEmptyDirs(string parent_dir)
+        {
+            foreach (string dir in Directory.GetDirectories(parent_dir))
+            { RemoveEmptyDirs(dir); }
+
+            if (Directory.GetFileSystemEntries(parent_dir).Length == 0)
+            { Directory.Delete(parent_dir); }
+        }
+
         private void StatusBarProgress()
         {
-            char progress = statusBar.Text.Substring(statusBar.Text.Length - 1).ToCharArray()[0];
-
-            switch (progress)
+            //This is kind of optimization
+            if (DateTime.Now.Second != LastSecond)
             {
-                case '\\': progress = '|'; break;
-                case '|': progress = '/'; break;
-                case '/': progress = '-'; break;
-                case '-': progress = '\\'; break;
-            }
+                LastSecond = DateTime.Now.Second;
+                char progress = statusBar.Text.Substring(statusBar.Text.Length - 1).ToCharArray()[0];
 
-            statusBar.Text = statusBar.Text.Substring(0, statusBar.Text.Length - 1) + progress.ToString();
-            Refresh();
+                switch (progress)
+                {
+                    case '\\': progress = '|'; break;
+                    case '|': progress = '/'; break;
+                    case '/': progress = '-'; break;
+                    case '-': progress = '\\'; break;
+                }
+
+                statusBar.Text = statusBar.Text.Substring(0, statusBar.Text.Length - 1) + progress.ToString();
+                Refresh();
+            }
         }
 
         private void RefreshStatus()
@@ -147,6 +163,9 @@ namespace OldModConversionTool
                     string orig_file = Path.Combine(the_orig_path, file);
                     string output_orig_file = Path.Combine(output_path, "orig", folder, file);
                     string output_mod_file = Path.Combine(output_path, folder, file);
+
+                    if (!File.Exists(output_mod_file))
+                    { continue; }
                     
                     if (Sha(output_mod_file) == Sha(orig_file))
                     {
@@ -166,12 +185,19 @@ namespace OldModConversionTool
                         if (file.EndsWith(".AMB", StringComparison.OrdinalIgnoreCase))
                         {
                             StatusBarProgress();
-                            Process.Start("AMBPatcher.exe", output_mod_file, ).WaitForExit();
+                            ProcessStartInfo startInfo = new ProcessStartInfo
+                            {
+                                FileName = "AMBPatcher.exe",
+                                Arguments = output_mod_file,
+                                WindowStyle = ProcessWindowStyle.Hidden
+                            };
+                            Process.Start(startInfo).WaitForExit();
                             File.Delete(output_mod_file);
                             Directory.Move(output_mod_file + "_extracted", output_mod_file);
 
                             StatusBarProgress();
-                            Process.Start("AMBPatcher.exe", output_orig_file).WaitForExit();
+                            startInfo.Arguments = output_orig_file;
+                            Process.Start(startInfo).WaitForExit();
                             File.Delete(output_orig_file);
                             Directory.Move(output_orig_file + "_extracted", output_orig_file);
 
@@ -180,15 +206,55 @@ namespace OldModConversionTool
                         else if (file.EndsWith(".CSB", StringComparison.OrdinalIgnoreCase))
                         {
                             StatusBarProgress();
-                            Process.Start("CsbEditor.exe", output_mod_file).WaitForExit();
+                            ProcessStartInfo startInfo = new ProcessStartInfo
+                            {
+                                FileName = "CsbEditor.exe",
+                                Arguments = output_mod_file,
+                                WindowStyle = ProcessWindowStyle.Hidden
+                            };
+                            Process.Start(startInfo).WaitForExit();
                             File.Delete(output_mod_file);
 
                             StatusBarProgress();
-                            Process.Start("CsbEditor.exe", output_orig_file).WaitForExit();
+                            startInfo.Arguments = output_orig_file;
+                            Process.Start(startInfo).WaitForExit();
                             File.Delete(output_orig_file);
 
                             check_again = true;
                         }
+                        else if (file.EndsWith(".CPK", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (!mod_files.Contains(file.Substring(0, file.Length - 4) + ".CBS"))
+                            {
+                                orig_file = Path.Combine(game_path, folder, file.Substring(0, file.Length - 4) + ".CSB");
+                                output_orig_file = output_orig_file.Substring(0, output_orig_file.Length - 4) + ".CSB";
+                                output_mod_file = output_mod_file.Substring(0, output_mod_file.Length - 4) + ".CSB";
+
+                                StatusBarProgress();
+                                File.Copy(orig_file, output_orig_file);
+                                File.Copy(orig_file, output_mod_file);
+
+                                StatusBarProgress();
+                                ProcessStartInfo startInfo = new ProcessStartInfo
+                                {
+                                    FileName = "CsbEditor.exe",
+                                    Arguments = output_mod_file,
+                                    WindowStyle = ProcessWindowStyle.Hidden
+                                };
+                                Process.Start(startInfo).WaitForExit();
+                                File.Delete(output_mod_file);
+                                File.Delete(output_mod_file.Substring(0, output_mod_file.Length - 4) + ".CPK");
+
+                                StatusBarProgress();
+                                startInfo.Arguments = output_orig_file;
+                                Process.Start(startInfo).WaitForExit();
+                                File.Delete(output_orig_file);
+                                File.Delete(output_orig_file.Substring(0, output_orig_file.Length - 4) + ".CPK");
+
+                                check_again = true;
+                            }
+                        }
+
                     }
                 }
             }
@@ -196,7 +262,7 @@ namespace OldModConversionTool
             if (check_again)
             {
                 StatusBarProgress();
-                UnpackFiles(folder, output_path, output_path, Path.Combine(output_path, "orig"));
+                UnpackFiles(folder, output_path, output_path, game_path);
             }
         }
 
@@ -227,26 +293,22 @@ namespace OldModConversionTool
             for (int i = 0; i < game_files.Length; i++)
             { game_files[i] = game_files[i].Substring(tbGamePath.Text.Length + 1); }
             
-            statusBar.Text = "Copying mod files... \\";
-            Refresh();
-
             if (Directory.Exists(tbOutputPath.Text))
             { Directory.Delete(tbOutputPath.Text, true); }
             
             foreach (string file in mod_files)
             {
-                StatusBarProgress();
+                statusBar.Text = "Copying mod files... ("+file+")";
+                Refresh();
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(tbOutputPath.Text, file)));
                 File.Copy(Path.Combine(tbModPath.Text, file), Path.Combine(tbOutputPath.Text, file), true);
             }
-
-            statusBar.Text = "Comparing files... \\";
-            Refresh();
-
+            
             foreach (string folder in Directory.GetDirectories(tbModPath.Text))
             {
-                StatusBarProgress();
                 string ffolder = Path.GetFileName(folder);
+                statusBar.Text = "Comparing files in \"" + ffolder + "\"... \\";
+                Refresh();
                 UnpackFiles(ffolder, tbModPath.Text, tbOutputPath.Text, tbGamePath.Text);
             }
 
@@ -254,6 +316,11 @@ namespace OldModConversionTool
             Refresh();
 
             Directory.Delete(Path.Combine(tbOutputPath.Text, "orig"), true);
+
+            statusBar.Text = "Removing empty directories...";
+            Refresh();
+
+            RemoveEmptyDirs(tbOutputPath.Text);
 
             statusBar.Text = "Done";
 
