@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("OldModConversionTool")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Tool to convert an old mod to make it compatible with the Mod Loader")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("OSA413")]
 [assembly: AssemblyProduct("OldModConversionTool")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]

@@ -31,6 +31,22 @@ namespace OldModConversionTool
             return str_hash;
         }
 
+        private void StatusBarProgress()
+        {
+            char progress = statusBar.Text.Substring(statusBar.Text.Length - 1).ToCharArray()[0];
+
+            switch (progress)
+            {
+                case '\\': progress = '|'; break;
+                case '|': progress = '/'; break;
+                case '/': progress = '-'; break;
+                case '-': progress = '\\'; break;
+            }
+
+            statusBar.Text = statusBar.Text.Substring(0, statusBar.Text.Length - 1) + progress.ToString();
+            Refresh();
+        }
+
         private void RefreshStatus()
         {
             //AMBPatcher
@@ -97,14 +113,8 @@ namespace OldModConversionTool
             return null;
         }
 
-        static void UnpackFiles(string folder, string mod_path, string output_path, string game_path)
+        private void UnpackFiles(string folder, string mod_path, string output_path, string game_path)
         {
-            Console.WriteLine(folder);
-            Console.WriteLine(mod_path);
-            Console.WriteLine(output_path);
-            Console.WriteLine(game_path);
-
-
             bool check_again = false;
             
             //Think up a comment that describes what this block does
@@ -113,18 +123,23 @@ namespace OldModConversionTool
             { the_orig_path = Path.Combine(output_path, "orig", folder); }
             else
             { the_orig_path = Path.Combine(game_path, folder); }
-            
+
+            StatusBarProgress();
 
             string[] mod_files = Directory.GetFiles(Path.Combine(mod_path, folder), "*", SearchOption.AllDirectories);
 
             string[] game_files = Directory.GetFiles(the_orig_path, "*", SearchOption.AllDirectories);
             
+            StatusBarProgress();
+
             for (int i = 0; i < game_files.Length; i++)
             { game_files[i] = game_files[i].Substring(the_orig_path.Length + 1); }
 
             for (int i = 0; i < mod_files.Length; i++)
             { mod_files[i] = mod_files[i].Substring(mod_path.Length + folder.Length + 2); }
-            
+
+            StatusBarProgress();
+
             foreach (string file in mod_files)
             {
                 if (game_files.Contains(file))
@@ -135,11 +150,13 @@ namespace OldModConversionTool
                     
                     if (Sha(output_mod_file) == Sha(orig_file))
                     {
+                        StatusBarProgress();
                         File.Delete(output_mod_file);
                         check_again = true;
                     }
                     else
                     {
+                        StatusBarProgress();
                         Directory.CreateDirectory(Path.GetDirectoryName(output_orig_file));
                         if (orig_file != output_orig_file)
                         {
@@ -148,10 +165,12 @@ namespace OldModConversionTool
 
                         if (file.EndsWith(".AMB", StringComparison.OrdinalIgnoreCase))
                         {
-                            Process.Start("AMBPatcher.exe", output_mod_file).WaitForExit();
+                            StatusBarProgress();
+                            Process.Start("AMBPatcher.exe", output_mod_file, ).WaitForExit();
                             File.Delete(output_mod_file);
                             Directory.Move(output_mod_file + "_extracted", output_mod_file);
 
+                            StatusBarProgress();
                             Process.Start("AMBPatcher.exe", output_orig_file).WaitForExit();
                             File.Delete(output_orig_file);
                             Directory.Move(output_orig_file + "_extracted", output_orig_file);
@@ -160,9 +179,11 @@ namespace OldModConversionTool
                         }
                         else if (file.EndsWith(".CSB", StringComparison.OrdinalIgnoreCase))
                         {
+                            StatusBarProgress();
                             Process.Start("CsbEditor.exe", output_mod_file).WaitForExit();
                             File.Delete(output_mod_file);
 
+                            StatusBarProgress();
                             Process.Start("CsbEditor.exe", output_orig_file).WaitForExit();
                             File.Delete(output_orig_file);
 
@@ -170,15 +191,11 @@ namespace OldModConversionTool
                         }
                     }
                 }
-                else
-                {
-                    //Console.WriteLine(file);
-                }
             }
 
             if (check_again)
             {
-                Console.WriteLine("-");
+                StatusBarProgress();
                 UnpackFiles(folder, output_path, output_path, Path.Combine(output_path, "orig"));
             }
         }
@@ -210,7 +227,7 @@ namespace OldModConversionTool
             for (int i = 0; i < game_files.Length; i++)
             { game_files[i] = game_files[i].Substring(tbGamePath.Text.Length + 1); }
             
-            statusBar.Text = "Copying mod files...";
+            statusBar.Text = "Copying mod files... \\";
             Refresh();
 
             if (Directory.Exists(tbOutputPath.Text))
@@ -218,17 +235,19 @@ namespace OldModConversionTool
             
             foreach (string file in mod_files)
             {
+                StatusBarProgress();
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(tbOutputPath.Text, file)));
                 File.Copy(Path.Combine(tbModPath.Text, file), Path.Combine(tbOutputPath.Text, file), true);
             }
 
-            statusBar.Text = "Comparing files...";
+            statusBar.Text = "Comparing files... \\";
             Refresh();
 
             foreach (string folder in Directory.GetDirectories(tbModPath.Text))
             {
+                StatusBarProgress();
                 string ffolder = Path.GetFileName(folder);
-                UnpackFiles(ffolder, tbModPath.Text, tbOutputPath.Text, tbGamePath.Text);Console.WriteLine("+");
+                UnpackFiles(ffolder, tbModPath.Text, tbOutputPath.Text, tbGamePath.Text);
             }
 
             statusBar.Text = "Removing temp files...";
