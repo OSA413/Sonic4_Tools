@@ -9,9 +9,8 @@ cd /d %cwd%
 cd ..
 cd ..
 
-::Creating empty "dist" directory
+::Creating empty directory
 rmdir /s /q "dist/OldModConversionTool"
-::mkdir "dist"
 mkdir "dist/OldModConversionTool"
 
 ::Copying required files
