@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OldModConversionTool", "OldModConversionTool\OldModConversionTool.csproj", "{4368B51B-2856-47A3-BF94-3B99FF7F8C7F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TXBEditor", "TXBEditor\TXBEditor.csproj", "{AFE031DF-2DD6-480E-BDFC-AAE610F46CEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4368B51B-2856-47A3-BF94-3B99FF7F8C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4368B51B-2856-47A3-BF94-3B99FF7F8C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4368B51B-2856-47A3-BF94-3B99FF7F8C7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFE031DF-2DD6-480E-BDFC-AAE610F46CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE031DF-2DD6-480E-BDFC-AAE610F46CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE031DF-2DD6-480E-BDFC-AAE610F46CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE031DF-2DD6-480E-BDFC-AAE610F46CEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
