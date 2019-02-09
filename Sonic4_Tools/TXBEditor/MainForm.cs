@@ -47,6 +47,8 @@ namespace TXBEditor
             
             if (Values.Count > 0)
             { cb_Num.SelectedIndex = 0; }
+
+            l_FileNum.Text = Values.Count().ToString();
         }
 
         private void b_Open_Click(object sender, EventArgs e)
@@ -54,10 +56,44 @@ namespace TXBEditor
             string tmp_file = DirectorySelectionDialog();
             if (tmp_file != null)
             { 
-                l_File.Text = tmp_file;
+                tb_File.Text = tmp_file;
                 Values = TXB.Read(tmp_file);
                 UpdateValues();
             }
+        }
+
+        private void rb_Int_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cb_Num.SelectedIndex == -1)
+            { return; }
+
+            byte[] the_value = new byte[Values[cb_Num.SelectedIndex].Length];
+            Array.Copy(Values[cb_Num.SelectedIndex], the_value, Values[cb_Num.SelectedIndex].Length);
+
+            if (cb_Endianness.Checked)
+            { Array.Reverse(the_value); }
+
+            tb_Hex.Text = BitConverter.ToString(the_value).Replace("-","");
+
+            if (rb_Int.Checked)
+            {
+                tb_Value.Text = BitConverter.ToInt32(the_value, 0).ToString();
+            }
+            else
+            {
+                tb_Value.Text = BitConverter.ToSingle(the_value, 0).ToString();
+            }
+            
+        }
+
+        private void cb_Endianness_CheckStateChanged(object sender, EventArgs e)
+        {
+            rb_Int_CheckedChanged(sender, e);
+        }
+
+        private void cb_Num_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            rb_Int_CheckedChanged(sender, e);
         }
     }
 }
