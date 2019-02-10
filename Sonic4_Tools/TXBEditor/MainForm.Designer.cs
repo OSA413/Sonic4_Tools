@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.cb_Num = new System.Windows.Forms.ComboBox();
             this.rb_Int = new System.Windows.Forms.RadioButton();
             this.rb_Single = new System.Windows.Forms.RadioButton();
@@ -43,7 +44,7 @@
             this.tb_File = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tb_Hex = new System.Windows.Forms.TextBox();
-            this.l_FileNum = new System.Windows.Forms.Label();
+            this.l_VarNum = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // cb_Num
@@ -188,21 +189,21 @@
             this.tb_Hex.Size = new System.Drawing.Size(80, 20);
             this.tb_Hex.TabIndex = 15;
             // 
-            // l_FileNum
+            // l_VarNum
             // 
-            this.l_FileNum.Location = new System.Drawing.Point(109, 126);
-            this.l_FileNum.Name = "l_FileNum";
-            this.l_FileNum.Size = new System.Drawing.Size(50, 23);
-            this.l_FileNum.TabIndex = 16;
-            this.l_FileNum.Text = "File Num";
-            this.l_FileNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.l_VarNum.Location = new System.Drawing.Point(109, 126);
+            this.l_VarNum.Name = "l_VarNum";
+            this.l_VarNum.Size = new System.Drawing.Size(50, 23);
+            this.l_VarNum.TabIndex = 16;
+            this.l_VarNum.Text = "Var Num";
+            this.l_VarNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(274, 185);
-            this.Controls.Add(this.l_FileNum);
+            this.Controls.Add(this.l_VarNum);
             this.Controls.Add(this.tb_Hex);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tb_File);
@@ -218,6 +219,7 @@
             this.Controls.Add(this.rb_Single);
             this.Controls.Add(this.rb_Int);
             this.Controls.Add(this.cb_Num);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "TXB Editor";
             this.ResumeLayout(false);
@@ -242,7 +244,7 @@
         private System.Windows.Forms.TextBox tb_File;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tb_Hex;
-        private System.Windows.Forms.Label l_FileNum;
+        private System.Windows.Forms.Label l_VarNum;
     }
 }
 

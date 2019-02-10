@@ -48,7 +48,7 @@ namespace TXBEditor
             if (Values.Count > 0)
             { cb_Num.SelectedIndex = 0; }
 
-            l_FileNum.Text = Values.Count().ToString();
+            l_VarNum.Text = Values.Count().ToString();
         }
 
         private void b_Open_Click(object sender, EventArgs e)
