@@ -111,10 +111,13 @@
             // 
             // tb_Value
             // 
+            this.tb_Value.Enabled = false;
             this.tb_Value.Location = new System.Drawing.Point(64, 72);
             this.tb_Value.Name = "tb_Value";
             this.tb_Value.Size = new System.Drawing.Size(80, 20);
             this.tb_Value.TabIndex = 7;
+            this.tb_Value.TextChanged += new System.EventHandler(this.tb_Value_TextChanged);
+            this.tb_Value.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_Value_KeyPress);
             // 
             // label4
             // 
@@ -184,10 +187,13 @@
             // 
             // tb_Hex
             // 
+            this.tb_Hex.Enabled = false;
             this.tb_Hex.Location = new System.Drawing.Point(64, 98);
             this.tb_Hex.Name = "tb_Hex";
             this.tb_Hex.Size = new System.Drawing.Size(80, 20);
             this.tb_Hex.TabIndex = 15;
+            this.tb_Hex.TextChanged += new System.EventHandler(this.tb_Hex_TextChanged);
+            this.tb_Hex.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_Hex_KeyPress);
             // 
             // l_VarNum
             // 
@@ -225,6 +231,11 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void Tb_Value_TextChanged(object sender, System.EventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion
