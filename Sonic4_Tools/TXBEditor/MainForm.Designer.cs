@@ -130,21 +130,25 @@
             // 
             // b_Reload
             // 
+            this.b_Reload.Enabled = false;
             this.b_Reload.Location = new System.Drawing.Point(28, 126);
             this.b_Reload.Name = "b_Reload";
             this.b_Reload.Size = new System.Drawing.Size(75, 23);
             this.b_Reload.TabIndex = 9;
             this.b_Reload.Text = "Reload";
             this.b_Reload.UseVisualStyleBackColor = true;
+            this.b_Reload.Click += new System.EventHandler(this.b_Reload_Click);
             // 
             // b_Save
             // 
+            this.b_Save.Enabled = false;
             this.b_Save.Location = new System.Drawing.Point(165, 126);
             this.b_Save.Name = "b_Save";
             this.b_Save.Size = new System.Drawing.Size(75, 23);
             this.b_Save.TabIndex = 10;
             this.b_Save.Text = "Save";
             this.b_Save.UseVisualStyleBackColor = true;
+            this.b_Save.Click += new System.EventHandler(this.b_Save_Click);
             // 
             // label5
             // 
@@ -225,6 +229,7 @@
             this.Controls.Add(this.rb_Single);
             this.Controls.Add(this.rb_Int);
             this.Controls.Add(this.cb_Num);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "TXB Editor";

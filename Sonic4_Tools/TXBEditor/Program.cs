@@ -18,7 +18,7 @@ namespace TXBEditor
             { FileNumber = BitConverter.ToInt32(BitConverter.GetBytes(FileNumber).Reverse().ToArray(), 0); }
 
             List<byte[]> Return = new List<byte[]>();
-            
+
             if (FileNumber > 0)
             {
                 int NamePointer = BitConverter.ToInt32(RawFile, 0x1C);
@@ -37,6 +37,35 @@ namespace TXBEditor
         public static List<byte[]> Read(string FileName)
         {
             return TXB.Read(File.ReadAllBytes(FileName));
+        }
+
+        public static byte[] Rewrite(byte[] RawFile, List<byte[]> Values)
+        {
+            int FileNumber = BitConverter.ToInt32(RawFile, 0x10);
+            if (BitConverter.IsLittleEndian)
+            { FileNumber = BitConverter.ToInt32(BitConverter.GetBytes(FileNumber).Reverse().ToArray(), 0); }
+
+            if (FileNumber > 0)
+            {
+                int NamePointer = BitConverter.ToInt32(RawFile, 0x1C);
+                if (BitConverter.IsLittleEndian)
+                { NamePointer = BitConverter.ToInt32(BitConverter.GetBytes(NamePointer).Reverse().ToArray(), 0); }
+
+                for (int i = 0; i < Values.Count; i++)
+                {
+                    for (int j = 0; j < Values[i].Length; j++)
+                    {
+                        RawFile[0x20 + i * 4 + j] = Values[i][j];
+                    }
+                }
+            }
+
+            return RawFile;
+        }
+
+        public static void Rewrite(string FileName, List<byte[]> Values)
+        {
+            File.WriteAllBytes(FileName, TXB.Rewrite(File.ReadAllBytes(FileName), Values));
         }
     }
 

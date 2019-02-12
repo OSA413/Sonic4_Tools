@@ -47,6 +47,7 @@ namespace TXBEditor
 
             tb_Value.Enabled = false;
             tb_Hex.Enabled   = false;
+            b_Save.Enabled   = false;
             tb_Value.Text = "";
             tb_Hex.Text   = "";
 
@@ -55,6 +56,7 @@ namespace TXBEditor
                 cb_Num.SelectedIndex = 0;
                 tb_Value.Enabled = true;
                 tb_Hex.Enabled   = true;
+                b_Save.Enabled   = true;
             }
 
             l_VarNum.Text = Values.Count().ToString();
@@ -64,7 +66,8 @@ namespace TXBEditor
         {
             string tmp_file = DirectorySelectionDialog();
             if (tmp_file != null)
-            { 
+            {
+                b_Reload.Enabled = true;
                 tb_File.Text = tmp_file;
                 Values = TXB.Read(tmp_file);
                 UpdateValues();
@@ -141,7 +144,7 @@ namespace TXBEditor
 
         private void tb_Hex_TextChanged(object sender, EventArgs e)
         {
-            Console.WriteLine(sender);
+            if (tb_Hex.Text == "" || cb_Num.SelectedIndex == -1) { return; }
 
             //Handeling the Delete key (yes, that's it)
             if (tb_Hex.Text.Length < 8 && tb_Hex.Focused)
@@ -239,6 +242,20 @@ namespace TXBEditor
                 tb_Hex.SelectionStart = prev_pos + 1;
             }
             e.Handled = true;
+        }
+
+        private void b_Save_Click(object sender, EventArgs e)
+        {
+            TXB.Rewrite(tb_File.Text, Values);
+        }
+
+        private void b_Reload_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(tb_File.Text))
+            {
+                Values = TXB.Read(tb_File.Text);
+                UpdateValues();
+            }
         }
     }
 }
