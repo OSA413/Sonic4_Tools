@@ -19,13 +19,13 @@ SET dist="dist\OldModConversionTool\"
 
 ::OldModConversionTool
 ::License
-COPY "LICENSE"									%dist%"LICENSE-OldModConversionTool"
+COPY "LICENSE"									%dist%"LICENSE-Sonic4_Tools"
 ::EXEs
 COPY "Sonic4_Tools\OldModConversionTool\bin\Release\OldModConversionTool.exe"	%dist%"OldModConversionTool.exe"
 
 ::AMBPatcher
 ::License
-COPY "dependencies\AMBPatcher\LICENSE"			%dist%"LICENSE-AMBPatcher"
+COPY "dependencies\AMBPatcher\LICENSE"			%dist%"LICENSE-Sonic4_ModLoader"
 ::EXEs
 COPY "dependencies\AMBPatcher\AMBPatcher.exe"		%dist%"AMBPatcher.exe"
 
