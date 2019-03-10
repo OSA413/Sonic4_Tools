@@ -12,3 +12,7 @@ It also can convert **sound and music mods**.
 ## TXB Editor
 
 ???
+
+------------
+
+See https://github.com/OSA413/Sonic4_Tools/blob/master/docs/File%20description.md for more tools
