@@ -18,6 +18,7 @@ DF  | ??? | ???
 DI  | ??? | ???
 EV  | ??? | ???
 GPB | ??? | ???
+GVR | GVR texture | [Puyo Tools][puyo_tools_link]
 LTS | ??? | ???
 MD  | ??? | ???
 MFS | ??? | ???
@@ -40,3 +41,4 @@ ZNV | Animation/model | [Dario's LibGens][libgens_link] (requires modification)
 [sonicaudiotools_link]: https://github.com/blueskythlikesclouds/SonicAudioTools
 [libgens_link]: https://github.com/DarioSamo/libgens-sonicglvl
 [powervr_sdk_link]: https://www.imgtec.com/developers/powervr-sdk-tools/
+[puyo_tools_link]: https://github.com/nickworonekin/puyotools
