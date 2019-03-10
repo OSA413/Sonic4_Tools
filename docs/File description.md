@@ -31,10 +31,10 @@ SSS | ??? | ???
 TXB | ??? (probably TeXture Boundary) | [TXBEditor from Tools][tools_link]
 VSH | Compiled HLSL | ???
 YSD | ??? | ???
-XNM | Animation/model | [Dario's LibGens][libgens_link] (requires modification)
-ZNM | Animation/model | [Dario's LibGens][libgens_link] (requires modification)
-ZNO | Animation/model | [Dario's LibGens][libgens_link] (requires modification)
-ZNV | Animation/model | [Dario's LibGens][libgens_link] (requires modification)
+INO/INM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
+GNO/GNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
+XNO/XNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
+ZNO/ZNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 
 [modloader_link]: https://github.com/OSA413/Sonic4_ModLoader
 [tools_link]: https://github.com/OSA413/Sonic4_Tools
