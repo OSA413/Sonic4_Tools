@@ -10,8 +10,8 @@ AMB | (It is more a container than) an archive that contains game assets (textur
 AME | ??? | ???
 AT  | ??? | ???
 AYK | ??? | ???
-CSB | Criware's audio containter | [CsbEditor][sonicaudiotools_link]
-CPK | See CSB | [CsbEditor][sonicaudiotools_link]
+CPK | Criware's audio containter | [CsbEditor from Sonic Audio Tools][sonicaudiotools_link]
+CSB | Criware's audio containter | [CsbEditor from Sonic Audio Tools][sonicaudiotools_link]
 DC  | ??? | ???
 DDS | DirectDraw Surface (image) | Any image editor that supports DDS (GIMP, PhotoShop, etc)
 DF  | ??? | ???
@@ -24,9 +24,10 @@ MFS | ??? | ???
 MP  | ??? | ???
 MSG | ??? | ???
 PSH | Compiled HLSL | ???
+PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
 RG  | ??? | ???
 SSS | ??? | ???
-TXB | ??? (probably TeXture Boundary) | [TXBEditor][tools_link]
+TXB | ??? (probably TeXture Boundary) | [TXBEditor from Tools][tools_link]
 VSH | Compiled HLSL | ???
 YSD | ??? | ???
 XNM | Animation/model | [Dario's LibGens][libgens_link] (requires modification)
@@ -38,3 +39,4 @@ ZNV | Animation/model | [Dario's LibGens][libgens_link] (requires modification)
 [tools_link]: https://github.com/OSA413/Sonic4_Tools
 [sonicaudiotools_link]: https://github.com/blueskythlikesclouds/SonicAudioTools
 [libgens_link]: https://github.com/DarioSamo/libgens-sonicglvl
+[powervr_sdk_link]: https://www.imgtec.com/developers/powervr-sdk-tools/
