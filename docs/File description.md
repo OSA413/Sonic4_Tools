@@ -4,7 +4,7 @@
 
 File extension | Description | Program(s)
 ------------ | ------------- | -------------
-ADX | Criware's audio file | Any WAV/MP3 to ADX converter
+ADX | Criware's audio file | Any WAV/MP3 to ADX converter (e.g. Audacity with FFmpeg)
 AMA | ??? | ???
 AMB | (It is more a container than) an archive that contains game assets (textures, models...) | [AMBPatcher][modloader_link]
 AME | ??? | ???
@@ -28,9 +28,10 @@ PSH | Compiled HLSL | ???
 PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
 RG  | ??? | ???
 SSS | ??? | ???
-TXB | ??? (probably TeXture Boundary) | [TXBEditor from Tools][tools_link]
+TXB | ??? (probably TeXture Boundary) | [TXBEditor from Tools][tools_link] (not human-friendly)
 VSH | Compiled HLSL | ???
 YSD | ??? | ???
+ENO/ENM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 INO/INM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 GNO/GNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 XNO/XNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
