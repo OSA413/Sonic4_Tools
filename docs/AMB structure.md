@@ -6,8 +6,6 @@
 0x10 | [FN] | [LP] | [DP] | [NP]
 [LP] | [FP] | [FL] |  ?   | 0x00
 
-If file structure after 0x10 is different, try to open the file with a different HEX editor.
-
 ## Header
 
 [ED] (Endianness) - This 32-bit integer identifies the endianness of the file.
