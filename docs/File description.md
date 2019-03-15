@@ -32,7 +32,7 @@ TXB | ??? (probably TeXture Boundary) | [TXBEditor from Tools][tools_link] (not 
 VSH | Compiled HLSL | ???
 YSD | ??? | ???
 ENO/ENM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
-INO/INM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
+INO/INM/INV | Model/animation/??? | [Dario's LibGens][libgens_link] (requires modification)
 GNO/GNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 XNO/XNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 ZNO/ZNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
