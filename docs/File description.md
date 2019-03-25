@@ -4,6 +4,7 @@
 
 File extension | Description | Program(s)
 ------------ | ------------- | -------------
+ACB | ??? | Probably [Skyth's AcbEditor][sonicaudiotools_link]
 ADX | Criware's audio file | Any WAV/MP3 to ADX converter (e.g. Audacity with FFmpeg)
 AMA | ??? | ???
 AMB | (It is more a container than) an archive that contains game assets (textures, models...) | [AMBPatcher][modloader_link]
@@ -19,6 +20,8 @@ DI  | ??? | ???
 EV  | ??? | ???
 GPB | ??? | ???
 GVR | GVR texture | [Puyo Tools][puyo_tools_link]
+H | Looks like a C(++) header | ???
+HBM | ??? | ???
 LTS | ??? | ???
 MD  | ??? | ???
 MFS | ??? | ???
@@ -36,6 +39,7 @@ INO/INM/INV | Model/animation/??? | [Dario's LibGens][libgens_link] (requires mo
 GNO/GNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 XNO/XNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 ZNO/ZNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
+LNO | Model | ???
 
 [modloader_link]: https://github.com/OSA413/Sonic4_ModLoader
 [tools_link]: https://github.com/OSA413/Sonic4_Tools
