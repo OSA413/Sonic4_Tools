@@ -4,7 +4,7 @@
 
 File extension | Description | Program(s)
 ------------ | ------------- | -------------
-ACB | ??? | Probably [Skyth's AcbEditor][sonicaudiotools_link]
+ACB | Audio container | Probably [Skyth's AcbEditor][sonicaudiotools_link]
 ADX | Criware's audio file | Any WAV/MP3 to ADX converter (e.g. Audacity with FFmpeg)
 AMA | ??? | ???
 AMB | (It is more a container than) an archive that contains game assets (textures, models...) | [AMBPatcher][modloader_link]
@@ -33,7 +33,7 @@ RG  | ??? | ???
 SSS | ??? | ???
 TXB | ??? (probably TeXture Boundary) | [TXBEditor from Tools][tools_link] (not human-friendly)
 VSH | Compiled HLSL | ???
-YSD | ??? | ???
+YSD | This one holds in-game credits | ???
 ENO/ENM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 INO/INM/INV | Model/animation/??? | [Dario's LibGens][libgens_link] (requires modification)
 GNO/GNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
