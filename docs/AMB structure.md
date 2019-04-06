@@ -2,13 +2,13 @@
 
 .    | 0-3  | 4-7  | 8-B  | C-F
 ---- | ---- | ---- | ---- | ----
-0x00 | #AMB | [ED] |  ?   |  ?  
+0x00 | #AMB | [ED]¹ |  ?¹   |  ?¹  
 0x10 | [FN] | [LP] | [DP] | [NP]
 [LP] | [FP] | [FL] |  0x00 or 0xFF   | 0x00
 
 ## Header
 
-[ED] (Endianness) - This 32-bit integer identifies the endianness of the file.
+[ED]¹ (Endianness) - This 32-bit integer identifies the endianness of the file.
 
 [FN] (File Number) - Number of files in the archive (may differ from the actual number of files).
 
@@ -21,6 +21,8 @@
 [FP] (File Pointer) - Pointer to where file data starts.
 
 [FL] (File Length) - Pointer to the length of the file.
+
+¹ - Changing this value to a random one doesn't crash game.
 
 ## Endianness
 
