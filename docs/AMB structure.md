@@ -12,11 +12,11 @@
 
 [FN] (File Number) - Number of files in the archive (may differ from the actual number of files).
 
-[LP] (List Pointer) - Pointer to where enumeration of the files pointers and lengths starts.
+[LP] (List Pointer) - Pointer to where enumeration of the file pointers and lengths starts.
 
-[DP] (Data Pointer) - Pointer to where enumeration of the files data starts.
+[DP] (Data Pointer) - Pointer to where enumeration of the file data starts.
 
-[NP] (Name Pointer) - Pointer to where enumeration of the files names starts.
+[NP] (Name Pointer) - Pointer to where enumeration of the file names starts.
 
 [FP] (File Pointer) - Pointer to where file data starts.
 
