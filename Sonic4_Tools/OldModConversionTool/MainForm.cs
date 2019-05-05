@@ -10,6 +10,28 @@ namespace OldModConversionTool
 {
     public partial class MainForm:Form
     {
+        
+        static void File_Delete(string file)
+        {
+            //Program will crash if it tries to delete a read-only file
+            File.SetAttributes(file, FileAttributes.Normal);
+            File.Delete(file);
+        }
+
+        static void DirectoryRemoveRecursively(string dir)
+        {
+            foreach (string file in Directory.GetFiles(dir))
+            {
+                File_Delete(file);
+            }
+
+            foreach (string dirr in Directory.GetDirectories(dir))
+            {
+                DirectoryRemoveRecursively(dirr);
+            }
+            DirectoryRemoveRecursively(dir);
+        }
+
         public static int LastSecond { get; set; }
 
         public MainForm()
@@ -39,7 +61,7 @@ namespace OldModConversionTool
             { RemoveEmptyDirs(dir); }
 
             if (Directory.GetFileSystemEntries(parent_dir).Length == 0)
-            { Directory.Delete(parent_dir); }
+            { DirectoryRemoveRecursively(parent_dir); }
         }
 
         private void StatusBarProgress()
@@ -170,7 +192,7 @@ namespace OldModConversionTool
                     if (Sha(output_mod_file) == Sha(orig_file))
                     {
                         StatusBarProgress();
-                        File.Delete(output_mod_file);
+                        File_Delete(output_mod_file);
                         check_again = true;
                     }
                     else
@@ -192,13 +214,13 @@ namespace OldModConversionTool
                                 WindowStyle = ProcessWindowStyle.Hidden
                             };
                             Process.Start(startInfo).WaitForExit();
-                            File.Delete(output_mod_file);
+                            File_Delete(output_mod_file);
                             Directory.Move(output_mod_file + "_extracted", output_mod_file);
 
                             StatusBarProgress();
                             startInfo.Arguments = output_orig_file;
                             Process.Start(startInfo).WaitForExit();
-                            File.Delete(output_orig_file);
+                            File_Delete(output_orig_file);
                             Directory.Move(output_orig_file + "_extracted", output_orig_file);
 
                             check_again = true;
@@ -213,12 +235,12 @@ namespace OldModConversionTool
                                 WindowStyle = ProcessWindowStyle.Hidden
                             };
                             Process.Start(startInfo).WaitForExit();
-                            File.Delete(output_mod_file);
+                            File_Delete(output_mod_file);
 
                             StatusBarProgress();
                             startInfo.Arguments = output_orig_file;
                             Process.Start(startInfo).WaitForExit();
-                            File.Delete(output_orig_file);
+                            File_Delete(output_orig_file);
 
                             check_again = true;
                         }
@@ -242,14 +264,14 @@ namespace OldModConversionTool
                                     WindowStyle = ProcessWindowStyle.Hidden
                                 };
                                 Process.Start(startInfo).WaitForExit();
-                                File.Delete(output_mod_file);
-                                File.Delete(output_mod_file.Substring(0, output_mod_file.Length - 4) + ".CPK");
+                                File_Delete(output_mod_file);
+                                File_Delete(output_mod_file.Substring(0, output_mod_file.Length - 4) + ".CPK");
 
                                 StatusBarProgress();
                                 startInfo.Arguments = output_orig_file;
                                 Process.Start(startInfo).WaitForExit();
-                                File.Delete(output_orig_file);
-                                File.Delete(output_orig_file.Substring(0, output_orig_file.Length - 4) + ".CPK");
+                                File_Delete(output_orig_file);
+                                File_Delete(output_orig_file.Substring(0, output_orig_file.Length - 4) + ".CPK");
 
                                 check_again = true;
                             }
@@ -282,6 +304,15 @@ namespace OldModConversionTool
                 return;
             }
 
+            if (Directory.Exists(tbOutputPath.Text))
+            {
+                if (Directory.GetFileSystemEntries(tbOutputPath.Text).Length != 0)
+                {
+                    DialogResult wait_continue = MessageBox.Show("The output directory is not empty. If you continue, it will delete all files in it! Are you sure?", "Wait!", MessageBoxButtons.OKCancel);
+                    if (wait_continue != DialogResult.OK) { return; }
+                }
+            }
+
             statusBar.Text = "Getting list of files...";
             Refresh();
 
@@ -294,7 +325,7 @@ namespace OldModConversionTool
             { game_files[i] = game_files[i].Substring(tbGamePath.Text.Length + 1); }
             
             if (Directory.Exists(tbOutputPath.Text))
-            { Directory.Delete(tbOutputPath.Text, true); }
+            { DirectoryRemoveRecursively(tbOutputPath.Text); }
             
             foreach (string file in mod_files)
             {
@@ -315,7 +346,7 @@ namespace OldModConversionTool
             statusBar.Text = "Removing temp files...";
             Refresh();
 
-            Directory.Delete(Path.Combine(tbOutputPath.Text, "orig"), true);
+            DirectoryRemoveRecursively(Path.Combine(tbOutputPath.Text, "orig"));
 
             statusBar.Text = "Removing empty directories...";
             Refresh();
