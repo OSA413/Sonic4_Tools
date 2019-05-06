@@ -29,7 +29,7 @@ namespace OldModConversionTool
             {
                 DirectoryRemoveRecursively(dirr);
             }
-            DirectoryRemoveRecursively(dir);
+            Directory.Delete(dir);
         }
 
         public static int LastSecond { get; set; }
