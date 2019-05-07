@@ -1,4 +1,9 @@
 # Sonic4_Tools
+
+The latest version of the programs can be found on [AppVeyor][appveyor_artifacts] (**dependencies not included**).
+
+More or less sutable for use versions are planned to be published on GitHub's release page.
+
 ------------
 
 ## Old Mod Conversion Tool
@@ -16,3 +21,5 @@ It also can convert **sound and music mods**.
 ------------
 
 See https://github.com/OSA413/Sonic4_Tools/blob/master/docs/File%20description.md for more tools
+
+[appveyor_artifacts]: https://ci.appveyor.com/project/OSA413/sonic4-tools/build/artifacts
