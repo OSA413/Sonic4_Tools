@@ -1,4 +1,5 @@
 #!/bin/bash
+cd "$(dirname "$0")"
 
 NAME="OldModConversionTool"
 DIST="./dist/"$NAME"/"
