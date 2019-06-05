@@ -7,7 +7,7 @@ File extension | Description | Program(s)
 ACB | Audio container | Probably [Skyth's AcbEditor][sonicaudiotools_link]
 ADX | Criware's audio file | Any WAV/MP3 to ADX converter (e.g. Audacity with FFmpeg)
 AMA | ??? | ???
-AMB | (It is more a container than) an archive that contains game assets (textures, models...) | [AMBPatcher][modloader_link]
+AMB | Game assets (textures, models...) container | [AMBPatcher][modloader_link]
 AME | ??? | ???
 AT  | ??? | ???
 AYK | ??? | ???
