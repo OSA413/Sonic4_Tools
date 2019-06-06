@@ -5,6 +5,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Linq;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace OldModConversionTool
 {
@@ -356,6 +357,7 @@ namespace OldModConversionTool
             statusBar.Text = "Done";
 
             Process.Start("explorer", tbOutputPath.Text);
+            bConvert.Enabled = true;
         }
 
         private void bModPath_Click(object sender, EventArgs e)
@@ -379,9 +381,13 @@ namespace OldModConversionTool
             { tbOutputPath.Text = path; }
         }
 
-        private void bConvert_Click(object sender, EventArgs e)
+        async private void bConvert_Click(object sender, EventArgs e)
         {
-            Convert();
+            bConvert.Enabled = false;
+            await Task.Run(() =>
+            {
+                Convert();
+            });
         }
 
         private void bRefresh_Click(object sender, EventArgs e)
