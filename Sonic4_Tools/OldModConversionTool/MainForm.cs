@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
@@ -249,68 +249,50 @@ namespace OldModConversionTool
             }
         }
 
-        private void Convert()
+        async private void Convert()
         {
-            statusBar.Text = "Checking directory existence...";
-
-            tbModPath.BackColor = Color.White;
-            tbGamePath.BackColor = Color.White;
-
-            if (!(Directory.Exists(tbModPath.Text) && Directory.Exists(tbGamePath.Text)))
+            await Task.Run(() => 
             {
-                if (!Directory.Exists(tbModPath.Text)) { tbModPath.BackColor = Color.FromArgb(255, 192, 192); }
-                if (!Directory.Exists(tbGamePath.Text)) { tbGamePath.BackColor = Color.FromArgb(255, 192, 192); }
-                MessageBox.Show("The mod root directory and/or the game root directory not found.", "Directory not found");
-                return;
-            }
+                statusBar.Text = "Getting list of files...";
 
-            if (Directory.Exists(tbOutputPath.Text))
-            {
-                if (Directory.GetFileSystemEntries(tbOutputPath.Text).Length != 0)
+                string[] mod_files = Directory.GetFiles(tbModPath.Text, "*", SearchOption.AllDirectories);
+                for (int i = 0; i < mod_files.Length; i++)
+                { mod_files[i] = mod_files[i].Substring(tbModPath.Text.Length + 1); }
+
+                string[] game_files = Directory.GetFiles(tbGamePath.Text, "*", SearchOption.AllDirectories);
+                for (int i = 0; i < game_files.Length; i++)
+                { game_files[i] = game_files[i].Substring(tbGamePath.Text.Length + 1); }
+                
+                if (Directory.Exists(tbOutputPath.Text))
+                { DirectoryRemoveRecursively(tbOutputPath.Text); }
+                
+                foreach (string file in mod_files)
                 {
-                    DialogResult wait_continue = MessageBox.Show("The output directory is not empty. If you continue, it will delete all files in it! Are you sure?", "Wait!", MessageBoxButtons.OKCancel);
-                    if (wait_continue != DialogResult.OK) { statusBar.Text = "Canceled."; return; }
+                    statusBar.Text = "Copying mod files... ("+file+")";
+                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(tbOutputPath.Text, file)));
+                    File.Copy(Path.Combine(tbModPath.Text, file), Path.Combine(tbOutputPath.Text, file), true);
                 }
-            }
+                
+                foreach (string folder in Directory.GetDirectories(tbModPath.Text))
+                {
+                    string ffolder = Path.GetFileName(folder);
+                    statusBar.Text = "Comparing files in \"" + ffolder + "\"... \\";
+                    UnpackFiles(ffolder, tbModPath.Text, tbOutputPath.Text, tbGamePath.Text);
+                }
 
-            statusBar.Text = "Getting list of files...";
+                statusBar.Text = "Removing temp files...";
 
-            string[] mod_files = Directory.GetFiles(tbModPath.Text, "*", SearchOption.AllDirectories);
-            for (int i = 0; i < mod_files.Length; i++)
-            { mod_files[i] = mod_files[i].Substring(tbModPath.Text.Length + 1); }
+                DirectoryRemoveRecursively(Path.Combine(tbOutputPath.Text, "orig"));
 
-            string[] game_files = Directory.GetFiles(tbGamePath.Text, "*", SearchOption.AllDirectories);
-            for (int i = 0; i < game_files.Length; i++)
-            { game_files[i] = game_files[i].Substring(tbGamePath.Text.Length + 1); }
-            
-            if (Directory.Exists(tbOutputPath.Text))
-            { DirectoryRemoveRecursively(tbOutputPath.Text); }
-            
-            foreach (string file in mod_files)
-            {
-                statusBar.Text = "Copying mod files... ("+file+")";
-                Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(tbOutputPath.Text, file)));
-                File.Copy(Path.Combine(tbModPath.Text, file), Path.Combine(tbOutputPath.Text, file), true);
-            }
-            
-            foreach (string folder in Directory.GetDirectories(tbModPath.Text))
-            {
-                string ffolder = Path.GetFileName(folder);
-                statusBar.Text = "Comparing files in \"" + ffolder + "\"... \\";
-                UnpackFiles(ffolder, tbModPath.Text, tbOutputPath.Text, tbGamePath.Text);
-            }
+                statusBar.Text = "Removing empty directories...";
 
-            statusBar.Text = "Removing temp files...";
+                RemoveEmptyDirs(tbOutputPath.Text);
 
-            DirectoryRemoveRecursively(Path.Combine(tbOutputPath.Text, "orig"));
+                statusBar.Text = "Done";
 
-            statusBar.Text = "Removing empty directories...";
-
-            RemoveEmptyDirs(tbOutputPath.Text);
-
-            statusBar.Text = "Done";
-
-            Process.Start("explorer", tbOutputPath.Text);
+                Process.Start("explorer", tbOutputPath.Text);
+                bConvert.Enabled = true;
+            });
         }
 
         private void bModPath_Click(object sender, EventArgs e)
@@ -334,14 +316,32 @@ namespace OldModConversionTool
           { tbOutputPath.Text = path; }
         }
 
-        async private void bConvert_Click(object sender, EventArgs e)
+        private void bConvert_Click(object sender, EventArgs e)
         {
-            bConvert.Enabled = false;
-            await Task.Run(() =>
+            statusBar.Text = "Checking directory existence...";
+
+            tbModPath.BackColor = Color.White;
+            tbGamePath.BackColor = Color.White;
+
+            if (!(Directory.Exists(tbModPath.Text) && Directory.Exists(tbGamePath.Text)))
             {
-                Convert();
-                bConvert.Enabled = true;
-            });
+                if (!Directory.Exists(tbModPath.Text)) { tbModPath.BackColor = Color.FromArgb(255, 192, 192); }
+                if (!Directory.Exists(tbGamePath.Text)) { tbGamePath.BackColor = Color.FromArgb(255, 192, 192); }
+                MessageBox.Show("The mod root directory and/or the game root directory not found.", "Directory not found");
+                return;
+            }
+
+            if (Directory.Exists(tbOutputPath.Text))
+            {
+                if (Directory.GetFileSystemEntries(tbOutputPath.Text).Length != 0)
+                {
+                    DialogResult wait_continue = MessageBox.Show("The output directory is not empty. If you continue, it will delete all files in it! Are you sure?", "Wait!", MessageBoxButtons.OKCancel);
+                    if (wait_continue != DialogResult.OK) { statusBar.Text = "Canceled."; return; }
+                }
+            }
+
+            bConvert.Enabled = false;
+            Convert();
         }
 
         private void bRefresh_Click(object sender, EventArgs e)
