@@ -16,7 +16,7 @@ It also can convert **sound and music mods**.
 
 ## TXB Editor
 
-???
+An advanced-limited hex-editor for integer and floating-point numbers per byte. Mostly useless at this moment. You can try to use it with other formats as well.
 
 ------------
 
