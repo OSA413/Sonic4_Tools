@@ -188,32 +188,27 @@ namespace OldModConversionTool
             foreach (string file in mod_files)
             {
                 statusBar.Text = "Comparing files... (" + Path.Combine(folder, file) + ")";
-                Console.WriteLine( Path.Combine(folder, file) );
 
                 if (game_files.Contains(file))
                 {
-                    Console.WriteLine(1);
                     string orig_file = Path.Combine(the_orig_path, file);
                     string output_orig_file = Path.Combine(output_path, "orig", folder, file);
                     string output_mod_file = Path.Combine(output_path, folder, file);
 
                     if (!File.Exists(output_mod_file))
                     { continue; }
-                    Console.WriteLine(2);
+
                     if (Sha(output_mod_file) == Sha(orig_file))
                     {
                         File_Delete(output_mod_file);
                         check_again = true;
-                        Console.WriteLine(3);
                     }
                     else
                     {
-                        Console.WriteLine(4);
                         Directory.CreateDirectory(Path.GetDirectoryName(output_orig_file));
                         if (orig_file != output_orig_file)
                         {
                             File.Copy(orig_file, output_orig_file, true);
-                            Console.WriteLine(5);
                         }
 
                         if (file.EndsWith(".AMB", StringComparison.OrdinalIgnoreCase))
@@ -296,18 +291,23 @@ namespace OldModConversionTool
         {
             await Task.Run(() => 
             {
-                statusBar.Text = "Getting list of files...";
+                statusBar.Text = "Getting list of mod files...";
 
                 string[] mod_files = Directory.GetFiles(tbModPath.Text, "*", SearchOption.AllDirectories);
                 for (int i = 0; i < mod_files.Length; i++)
                 { mod_files[i] = mod_files[i].Substring(tbModPath.Text.Length + 1); }
+
+                statusBar.Text = "Getting list of game files...";
 
                 string[] game_files = Directory.GetFiles(tbGamePath.Text, "*", SearchOption.AllDirectories);
                 for (int i = 0; i < game_files.Length; i++)
                 { game_files[i] = game_files[i].Substring(tbGamePath.Text.Length + 1); }
                 
                 if (Directory.Exists(tbOutputPath.Text))
-                { DirectoryRemoveRecursively(tbOutputPath.Text); }
+                {
+                    statusBar.Text = "Removing output directory...";
+                    DirectoryRemoveRecursively(tbOutputPath.Text);
+                }
                 
                 foreach (string file in mod_files)
                 {
