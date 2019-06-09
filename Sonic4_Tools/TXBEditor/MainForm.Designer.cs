@@ -156,7 +156,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(275, 26);
             this.label5.TabIndex = 11;
-            this.label5.Text = "The purpose of those values is unknown at this moment.\r\nIf you have any suggestio" +
+            this.label5.Text = "Purpose of these values is unknown at this moment.\r\nIf you have any suggestio" +
     "ns, contact OSA413";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
