@@ -148,12 +148,12 @@ namespace OldModConversionTool
                 ofd.CheckPathExists = true;
                 ofd.FileName = "[DIRECTORY]";
 
-                if (type == 0)
-                { ofd.Title = "Select the root directory of your mod"; }
-                else if (type == 1)
-                { ofd.Title = "Select the root directory the game"; }
-                else if (type == 2)
-                { ofd.Title = "Select the output directory"; }
+                switch (type)
+                {
+                    case 0: ofd.Title = "Select the root directory of your mod"; break;
+                    case 1: ofd.Title = "Select the root directory the game"; break;
+                    case 2: fd.Title = "Select the output directory"; break;
+                }
 
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
