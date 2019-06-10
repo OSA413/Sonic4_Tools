@@ -15,7 +15,7 @@ namespace TXBEditor
             using (var ofd = new OpenFileDialog())
             {
                 ofd.Filter = "TXB|*.TXB|All files|*.*";
-                ofd.CheckFileExists = true;
+                ofd.CheckFileExists =
                 ofd.CheckPathExists = true;
                 ofd.Title = "Select a TXB file";
 
@@ -40,8 +40,8 @@ namespace TXBEditor
                 cb_Num.Items.Add(i);
             }
 
-            tb_Value.Enabled = false;
-            tb_Hex.Enabled   = false;
+            tb_Value.Enabled =
+            tb_Hex.Enabled   =
             b_Save.Enabled   = false;
             tb_Value.Text = "";
             tb_Hex.Text   = "";
@@ -49,8 +49,8 @@ namespace TXBEditor
             if (Values.Count > 0)
             {
                 cb_Num.SelectedIndex = 0;
-                tb_Value.Enabled = true;
-                tb_Hex.Enabled   = true;
+                tb_Value.Enabled =
+                tb_Hex.Enabled   =
                 b_Save.Enabled   = true;
             }
 
