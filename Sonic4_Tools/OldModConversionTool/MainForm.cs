@@ -152,7 +152,7 @@ namespace OldModConversionTool
                 {
                     case 0: ofd.Title = "Select the root directory of your mod"; break;
                     case 1: ofd.Title = "Select the root directory the game"; break;
-                    case 2: fd.Title = "Select the output directory"; break;
+                    case 2: ofd.Title = "Select the output directory"; break;
                 }
 
                 if (ofd.ShowDialog() == DialogResult.OK)
