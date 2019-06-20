@@ -8,7 +8,7 @@ ACB | Audio container | Probably [Skyth's AcbEditor][sonicaudiotools_link]
 ADX | Criware's audio file | Any WAV/MP3 to ADX converter (e.g. Audacity with FFmpeg)
 AMA | ??? | ???
 AMB | Game assets (textures, models...) container | [AMBPatcher][modloader_link]
-AME | ??? | ???
+AME | Something particles/effects related | ???
 AT  | ??? | ???
 AYK | ??? | ???
 CPK | Criware's audio containter | [CsbEditor from Sonic Audio Tools][sonicaudiotools_link]
