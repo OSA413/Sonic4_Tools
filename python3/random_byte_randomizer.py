@@ -29,6 +29,9 @@ while random_byte_address in exception_address_list:
 
 a = a[0:random_byte_address] + bytes(random_byte_value) + a[random_byte_address + 1, len(a)]
 
+print(hex(random_byte_address))
+print(random_byte_value)
+
 with open(file_name, "wb") as f:
     f.write(a)
 
