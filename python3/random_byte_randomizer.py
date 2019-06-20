@@ -18,8 +18,8 @@ if os.path.isfile(file_name + "_exceptions"):
 with open(file_name, "rb") as f:
     a = f.read()
 
-random_byte_address = random.randint(len(a))
-random_byte_value = byte(random.randint(0, 255))
+random_byte_address = random.randint(0, len(a))
+random_byte_value = random.randint(0, 255)
 
 if len(exception_address_list) == len(a): print("too much exceptions"); exit()
 
@@ -27,10 +27,10 @@ while random_byte_address in exception_address_list:
     random_byte_address += 1
     if random_byte_address >= len(a): random_byte_address = 0
 
-a = a[0:random_byte_address] + bytes(random_byte_value) + a[random_byte_address + 1, len(a)]
+a = a[0:random_byte_address] + bytes([random_byte_value]) + a[random_byte_address + 1: len(a)]
 
 print(hex(random_byte_address))
-print(random_byte_value)
+print(hex(random_byte_value))
 
 with open(file_name, "wb") as f:
     f.write(a)
