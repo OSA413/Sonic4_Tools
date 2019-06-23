@@ -23,7 +23,7 @@ for i in range(5):
     random_byte_address = random.randint(0, len(a))
     random_byte_value = random.randint(0, 255)
 
-    if len(exception_address_list) == len(a): print("too much exceptions"); exit()
+    if len(exception_address_list) == len(a): print("too much exceptions"); break
 
     while random_byte_address in exception_address_list:
         random_byte_address += 1
