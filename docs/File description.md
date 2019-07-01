@@ -6,7 +6,7 @@ File extension | Description | Program(s)
 ------------ | ------------- | -------------
 ACB | Audio container | Probably [Skyth's AcbEditor][sonicaudiotools_link]
 ADX | Criware's audio file | Any WAV/MP3 to ADX converter (e.g. Audacity with FFmpeg)
-AMA | ??? | ???
+AMA | Something sprites related | ???
 AMB | Game assets (textures, models...) container | [AMBPatcher][modloader_link]
 AME | Something particles/effects related | ???
 AT  | ??? | ???
@@ -31,7 +31,7 @@ PSH | Compiled HLSL | ???
 PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
 RG  | ??? | ???
 SSS | ??? | ???
-TXB | ??? (probably TeXture Boundary) | [TXBEditor from Tools][tools_link] (not human-friendly)
+TXB | ??? (probably TeXture Boundary) | ???
 VSH | Compiled HLSL | ???
 YSD | This one holds in-game credits | ???
 ENO/ENM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
