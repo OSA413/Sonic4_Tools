@@ -5,7 +5,7 @@
 File extension | Description | Program(s) | Usage
 -------------- | ----------- | ---------- | -----
 ACB | Audio container | Probably [Skyth's AcbEditor][sonicaudiotools_link]
-:star: ADX | Criware's audio file | Any WAV/MP3 to ADX converter (e.g. [Audacity][audacity_link] [with FFmpeg][audacity_ffmpeg_instruction]¹, or [FFmpeg alone][ffmpeg_link]) | EP1 EP2
+:star: ADX | Criware's audio file | Good WAV/MP3 to ADX converter (e.g. [Audacity][audacity_link] [with FFmpeg][audacity_ffmpeg_instruction]¹, or [FFmpeg alone][ffmpeg_link]²) | EP1 EP2
 :dizzy: AMA | Something sprites related | ??? | EP1 EP2
 :star: AMB | Game asset (textures, models...) container | [AMBPatcher][modloader_link] | EP1 EP2
 AME | Something particles/effects related | ??? | EP1 EP2
@@ -48,6 +48,7 @@ Icon | Legend
 :zzz: | Probably changes nothing
 
 ¹ - (This applies to Windows) Since [Audacity is still using old 2.2.2 ffmpeg](https://forum.audacityteam.org/viewtopic.php?f=20&t=105590), it can't properly export ADX files (sample number isn't written to file), but it can import them. You will need to use newer version (4.1.3 tested) to export them.
+² - Alright, turn out that FFmpeg 4.1.3 can export ADX to make it sound, BUT music stops playing when it switches from `Intro.adx` to `Loop.adx` (or `Intro.adx` doesn't stop at all). Try to find some good WAV to ADX converter (e.g. from CRI themself).
 
 [modloader_link]: https://github.com/OSA413/Sonic4_ModLoader
 [tools_link]: https://github.com/OSA413/Sonic4_Tools
