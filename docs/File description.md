@@ -50,7 +50,7 @@ Icon | Legend
 
 ¹ - (This applies to Windows) Since [Audacity is still using old 2.2.2 ffmpeg](https://forum.audacityteam.org/viewtopic.php?f=20&t=105590), it can't properly export ADX files (sample number isn't written to file), but it can import them. You will need to use newer version (4.1.3 tested) to export them.
 
-² - Alright, turn out that FFmpeg 4.1.3 can export ADX to make it sound, BUT music stops playing at the end. The workaround is add ADX's End of File. Use FixFFmpegADX from this repository.
+² - Alright, turn out that FFmpeg 4.1.3 can export ADX to make it sound, BUT music stops playing at the end. The workaround is add ADX's End of File. Use FixFFmpegADX from this repository and [scripts from here](https://github.com/OSA413/Sonic4_ModLoader_examples/tree/master/examples/Jingle%20Rings).
 
 [modloader_link]: https://github.com/OSA413/Sonic4_ModLoader
 [tools_link]: https://github.com/OSA413/Sonic4_Tools
