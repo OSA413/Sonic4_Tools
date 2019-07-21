@@ -8,11 +8,11 @@ More or less suitable for use versions are planned to be published on GitHub's r
 
 ## Old Mod Conversion Tool
 
-This program is a tool that converts old mods to work properly with the mod loader.
+This program is a tool that converts old mods to make them work properly with the mod loader.
 
 It also can convert **sound and music mods**.
 
-**You need the game to properly convert the mod.**
+**You need the game to properly convert mods.**
 
 ## TXB Editor
 
