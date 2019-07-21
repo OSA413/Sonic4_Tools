@@ -2,7 +2,7 @@
 
 The latest version of the programs can be found on [AppVeyor][appveyor_artifacts] (**dependencies not included**).
 
-More or less sutable for use versions are planned to be published on GitHub's release page.
+More or less suitable for use versions are planned to be published on GitHub's release page.
 
 ------------
 
