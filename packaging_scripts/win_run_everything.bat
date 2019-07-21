@@ -1,1 +1,0 @@
-for %%f in (win\*.bat) do (start /wait "%%f" "%%f")

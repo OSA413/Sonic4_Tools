@@ -7,7 +7,11 @@ namespace EndiannessSwapper
     {
         static void Main(string[] args)
         {
-            if (File.Exists(args[0]))
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Usage: EndiannessSwapper [file]");
+            }
+            else if (File.Exists(args[0]))
             {
                 byte[] raw_file = File.ReadAllBytes(args[0]);
 

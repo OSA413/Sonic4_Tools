@@ -102,7 +102,7 @@ namespace OldModConversionTool
             //AMBPatcher
             lAMBPatcherStatus.Text = "AMBPatcher.exe is missing";
             lAMBPatcherStatus.ForeColor = Color.Red;
-            if (File.Exists("AMBPatcher.exe"))
+            if (File.Exists("Common/AMBPatcher.exe"))
             {
                 lAMBPatcherStatus.Text = "OK";
                 lAMBPatcherStatus.ForeColor = Color.Green;
@@ -110,16 +110,16 @@ namespace OldModConversionTool
 
             //CsbEditor
             lCsbEditorStatus.ForeColor = Color.Red;
-            if (File.Exists("CsbEditor.exe") && File.Exists("SonicAudioLib.dll"))
+            if (File.Exists("Common/CsbEditor.exe") && File.Exists("Common/SonicAudioLib.dll"))
             {
                 lCsbEditorStatus.Text = "OK";
                 lCsbEditorStatus.ForeColor = Color.Green;
             }
-            else if (File.Exists("CsbEditor.exe"))
+            else if (File.Exists("Common/CsbEditor.exe"))
             {
                 lCsbEditorStatus.Text = "SonicAudioLib.dll is missing";
             }
-            else if (File.Exists("SonicAudioLib.dll"))
+            else if (File.Exists("Common/SonicAudioLib.dll"))
             {
                 lCsbEditorStatus.Text = "CsbEditor.exe is missing";
             }
@@ -215,7 +215,7 @@ namespace OldModConversionTool
                         {
                             ProcessStartInfo startInfo = new ProcessStartInfo
                             {
-                                FileName = "AMBPatcher.exe",
+                                FileName = "Common/AMBPatcher.exe",
                                 Arguments = output_mod_file,
                                 WindowStyle = ProcessWindowStyle.Hidden
                             };
@@ -234,7 +234,7 @@ namespace OldModConversionTool
                         {
                             ProcessStartInfo startInfo = new ProcessStartInfo
                             {
-                                FileName = "CsbEditor.exe",
+                                FileName = "Common/CsbEditor.exe",
                                 Arguments = output_mod_file,
                                 WindowStyle = ProcessWindowStyle.Hidden
                             };
@@ -260,7 +260,7 @@ namespace OldModConversionTool
 
                                 ProcessStartInfo startInfo = new ProcessStartInfo
                                 {
-                                    FileName = "CsbEditor.exe",
+                                    FileName = "Common/CsbEditor.exe",
                                     Arguments = output_mod_file,
                                     WindowStyle = ProcessWindowStyle.Hidden
                                 };
