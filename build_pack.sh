@@ -21,8 +21,7 @@ for file in $(ls ./packaging_scripts); do
     bash ./packaging_scripts/$file
 done
 
-cp "./python3" "./dist/Sonic4_Tools/python3"
-
+cp -r "./python3" "./dist/Sonic4_Tools/python3/"
 
 #Dependencies
 for dir in $(ls ./dependencies); do
