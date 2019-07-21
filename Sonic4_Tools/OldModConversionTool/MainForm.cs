@@ -215,10 +215,11 @@ namespace OldModConversionTool
                         {
                             ProcessStartInfo startInfo = new ProcessStartInfo
                             {
-                                FileName = "Common/AMBPatcher.exe",
+                                FileName = @".\Common\AMBPatcher.exe",
                                 Arguments = output_mod_file,
                                 WindowStyle = ProcessWindowStyle.Hidden
                             };
+
                             Process.Start(startInfo).WaitForExit();
                             File_Delete(output_mod_file);
                             Directory.Move(output_mod_file + "_extracted", output_mod_file);
@@ -234,7 +235,7 @@ namespace OldModConversionTool
                         {
                             ProcessStartInfo startInfo = new ProcessStartInfo
                             {
-                                FileName = "Common/CsbEditor.exe",
+                                FileName = @".\Common\CsbEditor.exe",
                                 Arguments = output_mod_file,
                                 WindowStyle = ProcessWindowStyle.Hidden
                             };
@@ -260,7 +261,7 @@ namespace OldModConversionTool
 
                                 ProcessStartInfo startInfo = new ProcessStartInfo
                                 {
-                                    FileName = "Common/CsbEditor.exe",
+                                    FileName = @".\Common\CsbEditor.exe",
                                     Arguments = output_mod_file,
                                     WindowStyle = ProcessWindowStyle.Hidden
                                 };
@@ -330,10 +331,22 @@ namespace OldModConversionTool
 
                 statusBar.Text = "Done";
 
-                tbModPath.Enabled = 
-                tbGamePath.Enabled = 
-                tbOutputPath.Enabled =
-                bConvert.Enabled = true;
+                if (tbModPath.InvokeRequired)
+                {
+                    tbModPath.Invoke(new MethodInvoker(delegate {
+                        //Code goes here
+                        tbModPath.Enabled    =
+                        tbGamePath.Enabled   =
+                        tbOutputPath.Enabled =
+                        bConvert.Enabled     =
+                        bRefresh.Enabled     =
+                        bModPath.Enabled     =
+                        bGamePath.Enabled    =
+                        bOutputPath.Enabled  = true;
+                        ;
+                    }));
+                }
+                
 
                 string local_explorer = "";
                 switch ((int) Environment.OSVersion.Platform)
@@ -393,15 +406,23 @@ namespace OldModConversionTool
             {
                 if (Directory.GetFileSystemEntries(tbOutputPath.Text).Length != 0)
                 {
-                    DialogResult wait_continue = MessageBox.Show("The output directory is not empty. If you continue, it will delete all files in it! Are you sure?", "Wait!", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+                    DialogResult wait_continue = MessageBox.Show("The output directory is not empty. If you continue, it will delete all files in it! Are you sure?"
+                                                                , "Watch out, you are going to crash!"
+                                                                , MessageBoxButtons.OKCancel
+                                                                , MessageBoxIcon.Exclamation);
                     if (wait_continue != DialogResult.OK) { statusBar.Text = "Canceled"; return; }
                 }
             }
 
-            tbModPath.Enabled = 
-            tbGamePath.Enabled = 
+            tbModPath.Enabled    =
+            tbGamePath.Enabled   =
             tbOutputPath.Enabled =
-            bConvert.Enabled = false;
+            bConvert.Enabled     =
+            bRefresh.Enabled     =
+            bModPath.Enabled     =
+            bGamePath.Enabled    =
+            bOutputPath.Enabled  = false;
+
             Convert();
         }
 
