@@ -215,7 +215,7 @@ namespace OldModConversionTool
                         {
                             ProcessStartInfo startInfo = new ProcessStartInfo
                             {
-                                FileName = @".\Common\AMBPatcher.exe",
+                                FileName = Path.Combine("Common", "AMBPatcher.exe"),
                                 Arguments = output_mod_file,
                                 WindowStyle = ProcessWindowStyle.Hidden
                             };
@@ -235,7 +235,7 @@ namespace OldModConversionTool
                         {
                             ProcessStartInfo startInfo = new ProcessStartInfo
                             {
-                                FileName = @".\Common\CsbEditor.exe",
+                                FileName = Path.Combine("Common", "CsbEditor.exe"),
                                 Arguments = output_mod_file,
                                 WindowStyle = ProcessWindowStyle.Hidden
                             };
@@ -261,7 +261,7 @@ namespace OldModConversionTool
 
                                 ProcessStartInfo startInfo = new ProcessStartInfo
                                 {
-                                    FileName = @".\Common\CsbEditor.exe",
+                                    FileName = Path.Combine("Common", "CsbEditor.exe"),
                                     Arguments = output_mod_file,
                                     WindowStyle = ProcessWindowStyle.Hidden
                                 };
