@@ -24,6 +24,8 @@
 
 ¹ - Changing this value to a random one doesn't crash game.
 
+Note: In some iOS version of Episode 1 the actual Data Pointer is at 0x1C. Starting from 0x14 there are zero (0x00) byte following after a meaningful value (LP 00 DP 00 NP 00..) //TODO
+
 ## Endianness
 
 Console versions are big endian. PC and Mobile are little endian.
