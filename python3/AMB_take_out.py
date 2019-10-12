@@ -28,7 +28,6 @@ for i in range(len(a) - 4):
         with open(".".join(file_name.split(".")[:-1]) + "_" + str(split_ind) + ".AMB", "wb") as f:
             f.write(a[split_ind:end_index])
         split_ind = -1
-        i = end_index
 
 print("Done!")
 input()
