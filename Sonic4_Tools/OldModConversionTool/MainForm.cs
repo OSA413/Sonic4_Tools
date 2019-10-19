@@ -61,14 +61,24 @@ namespace OldModConversionTool
                 lCsbEditorStatus.Text = "CsbEditor.exe and SonicAudioLib.dll are missing";
         }
 
+        private void MakeUIActive(bool active)
+        {
+            tbModPath.Enabled    =
+            tbGamePath.Enabled   =
+            tbOutputPath.Enabled =
+            bConvert.Enabled     =
+            bRefresh.Enabled     =
+            bModPath.Enabled     =
+            bGamePath.Enabled    =
+            bOutputPath.Enabled  = active;
+        }
+
         private void IsReady()
         {
             bConvert.Enabled = false;
             if (   lAMBPatcherStatus.Text   == "OK"
                 && lCsbEditorStatus.Text    == "OK")
-            {
                 bConvert.Enabled = true;
-            }
         }
         
         private void UnpackFiles(string folder, string mod_path, string output_path, string game_path)
@@ -167,9 +177,7 @@ namespace OldModConversionTool
             }
 
             if (check_again)
-            {
                 UnpackFiles(folder, output_path, output_path, game_path);
-            }
         }
 
         async private void Convert()
@@ -177,14 +185,10 @@ namespace OldModConversionTool
             await Task.Run(() => 
             {
                 statusBar.Text = "Getting list of mod files...";
-                string[] mod_files = Directory.GetFiles(tbModPath.Text, "*", SearchOption.AllDirectories);
-                for (int i = 0; i < mod_files.Length; i++)
-                    mod_files[i] = mod_files[i].Substring(tbModPath.Text.Length + 1);
+                string[] mod_files = MyDirectory.GetRelativeFileNames(tbModPath.Text);
 
                 statusBar.Text = "Getting list of game files...";
-                string[] game_files = Directory.GetFiles(tbGamePath.Text, "*", SearchOption.AllDirectories);
-                for (int i = 0; i < game_files.Length; i++)
-                    game_files[i] = game_files[i].Substring(tbGamePath.Text.Length + 1);
+                string[] game_files = MyDirectory.GetRelativeFileNames(tbGamePath.Text);
                 
                 if (Directory.Exists(tbOutputPath.Text))
                 {
@@ -195,8 +199,10 @@ namespace OldModConversionTool
                 foreach (string file in mod_files)
                 {
                     statusBar.Text = "Copying mod files... ("+file+")";
-                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(tbOutputPath.Text, file)));
-                    File.Copy(Path.Combine(tbModPath.Text, file), Path.Combine(tbOutputPath.Text, file), true);
+                    string output = Path.Combine(tbOutputPath.Text, file);
+                    Directory.CreateDirectory(Path.GetDirectoryName(output));
+                    File.Copy(Path.Combine(tbModPath.Text, file), output, true);
+                    File.SetAttributes(output, FileAttributes.Normal);
                 }
                 
                 foreach (string folder in Directory.GetDirectories(tbModPath.Text))
@@ -217,14 +223,7 @@ namespace OldModConversionTool
                 {
                     tbModPath.Invoke(new MethodInvoker(delegate {
                         //Code goes here
-                        tbModPath.Enabled    =
-                        tbGamePath.Enabled   =
-                        tbOutputPath.Enabled =
-                        bConvert.Enabled     =
-                        bRefresh.Enabled     =
-                        bModPath.Enabled     =
-                        bGamePath.Enabled    =
-                        bOutputPath.Enabled  = true;
+                        MakeUIActive(true);
                         ;
                     }));
                 }
@@ -284,15 +283,7 @@ namespace OldModConversionTool
                 }
             }
 
-            tbModPath.Enabled    =
-            tbGamePath.Enabled   =
-            tbOutputPath.Enabled =
-            bConvert.Enabled     =
-            bRefresh.Enabled     =
-            bModPath.Enabled     =
-            bGamePath.Enabled    =
-            bOutputPath.Enabled  = false;
-
+            MakeUIActive(false);
             Convert();
         }
 

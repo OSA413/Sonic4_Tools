@@ -65,7 +65,7 @@ namespace OldModConversionTool
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = Path.Combine("Common", "AMBPatcher.exe"),
-                Arguments = file,
+                Arguments = "\"" + file + "\"",
                 WindowStyle = ProcessWindowStyle.Hidden
             };
             Process.Start(startInfo).WaitForExit();
@@ -76,7 +76,7 @@ namespace OldModConversionTool
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = Path.Combine("Common", "CsbEditor.exe"),
-                Arguments = file,
+                Arguments = "\"" + file + "\"",
                 WindowStyle = ProcessWindowStyle.Hidden
             };
             Process.Start(startInfo).WaitForExit();
@@ -142,6 +142,16 @@ namespace OldModConversionTool
                 case 6: local_explorer = "open"; break;
             }
             Process.Start(local_explorer, folder);
+        }
+
+        public static string[] GetRelativeFileNames(string path)
+        {
+            int extra_slash = path.EndsWith(Path.DirectorySeparatorChar.ToString()) ? 0 : 1;
+            string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+            for (int i = 0; i < files.Length; i++)
+                files[i] = files[i].Substring(path.Length + extra_slash);
+
+            return files;
         }
     }
 
