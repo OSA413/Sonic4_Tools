@@ -3,6 +3,7 @@
 ##################
 
 dist/
+dependencies_source/
 
 ###############
 #Visual Studio#
