@@ -1,6 +1,6 @@
 # Sonic4_Tools
 
-The latest version of the programs can be found on [AppVeyor][appveyor_artifacts] (**dependencies not included**).
+The latest version of the programs can be found on [AppVeyor][appveyor_artifacts] (including dependencies).
 
 More or less suitable for use versions are planned to be published on GitHub's release page.
 
