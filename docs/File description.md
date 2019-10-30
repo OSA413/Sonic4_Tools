@@ -7,7 +7,7 @@ File extension | Description | Program(s) | Usage
 ACB | Audio container | Probably [Skyth's AcbEditor][sonicaudiotools_link]
 :gear: ADX | Criware's audio file | Good WAV/MP3 to ADX converter (e.g. [Audacity][audacity_link] [with FFmpeg][audacity_ffmpeg_instruction]¹, or [FFmpeg alone][ffmpeg_link]²) | EP1 EP2
 :dizzy: AMA | Something sprites related | ??? | EP1 EP2
-:star: AMB | Game asset (textures, models...) container | [AMBPatcher][modloader_link] | EP1 EP2
+:star: AMB | Game asset (textures, models...) container | [AMBPatcher][modloader_link] (recommended), [Skyth's AMBPack][skyth_tools] | EP1 EP2
 AME | Something particles/effects related | ??? | EP1 EP2
 AT  | ??? | ??? | EP1 EP2
 AYK | ??? | ??? | EP2
@@ -61,3 +61,4 @@ Icon | Legend
 [audacity_link]: https://www.audacityteam.org/
 [audacity_ffmpeg_instruction]: https://manual.audacityteam.org/man/faq_installation_and_plug_ins.html#ffdown
 [ffmpeg_link]: https://ffmpeg.org/
+[skyth_tools]: https://github.com/blueskythlikesclouds/SkythTools
