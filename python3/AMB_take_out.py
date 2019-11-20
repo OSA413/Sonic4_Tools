@@ -15,16 +15,17 @@ with open(file_name, "rb") as f:
 
 split_ind = -1
 
-print("Searching AMB files...")
+print("Searching for AMB files...")
 for i in range(len(a) - 4):
     if a[i] == 0x23 \
     and a[i+1] == 0x41 \
     and a[i+2] == 0x4d \
     and a[i+3] == 0x42:
+        print(i)
         split_ind = i
         end_index = i + byte2int(a[split_ind + 0x1c : split_ind + 0x20]) + byte2int(a[split_ind + 0x10 : split_ind + 0x14]) * 0x20
 
-    if split_ind >= 0 and end_index < len(a)/4:
+    if split_ind >= 0:
         with open(".".join(file_name.split(".")[:-1]) + "_" + str(split_ind) + ".AMB", "wb") as f:
             f.write(a[split_ind:end_index])
         split_ind = -1
