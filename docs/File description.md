@@ -5,7 +5,7 @@
 File extension | Description | Program(s) | Usage
 -------------- | ----------- | ---------- | -----
 ACB | Audio container | Probably [Skyth's AcbEditor][sonicaudiotools_link]
-:gear: ADX | Criware's audio file | Good WAV/MP3 to ADX converter (e.g. [Audacity][audacity_link] [with FFmpeg][audacity_ffmpeg_instruction]¹, or [FFmpeg alone][ffmpeg_link]²) | EP1 EP2
+:star: ADX | Criware's audio file | Good ADX converter (e.g. [FFmpeg-based ADX converter][FFmpeg-based_ADX_converter]) | EP1 EP2
 :dizzy: AMA | Something sprites related | ??? | EP1 EP2
 :star: AMB | Game asset (textures, models...) container | [AMBPatcher][modloader_link] (recommended), [Skyth's AMBPack][skyth_tools] | EP1 EP2
 AME | Something particles/effects related | ??? | EP1 EP2
@@ -44,13 +44,8 @@ LNO | Model | ???
 Icon | Legend
 -----|------------
 :star: | Well editable
-:gear: | Requires a specific software to be properly edited
 :dizzy: | Deep research required
 :zzz: | Probably changes nothing
-
-¹ - (This applies to Windows) Since [Audacity is still using old 2.2.2 ffmpeg](https://forum.audacityteam.org/viewtopic.php?f=20&t=105590), it can't properly export ADX files (sample number isn't written to file), but it can import them. You will need to use newer version (4.1.3 tested) to export them.
-
-² - Alright, turn out that FFmpeg 4.1.3 can export ADX to make it sound, BUT music stops playing at the end. The workaround is add ADX's End of File. Use FixFFmpegADX from this repository and [scripts from here](https://github.com/OSA413/Sonic4_ModLoader_examples/tree/master/examples/Jingle%20Rings).
 
 [modloader_link]: https://github.com/OSA413/Sonic4_ModLoader
 [tools_link]: https://github.com/OSA413/Sonic4_Tools
@@ -58,7 +53,5 @@ Icon | Legend
 [libgens_link]: https://github.com/DarioSamo/libgens-sonicglvl
 [powervr_sdk_link]: https://www.imgtec.com/developers/powervr-sdk-tools/
 [puyo_tools_link]: https://github.com/nickworonekin/puyotools
-[audacity_link]: https://www.audacityteam.org/
-[audacity_ffmpeg_instruction]: https://manual.audacityteam.org/man/faq_installation_and_plug_ins.html#ffdown
-[ffmpeg_link]: https://ffmpeg.org/
+[FFmpeg-based_ADX_converter]: https://github.com/OSA413/FFmpeg-based-ADX-converter
 [skyth_tools]: https://github.com/blueskythlikesclouds/SkythTools
