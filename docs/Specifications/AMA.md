@@ -30,22 +30,43 @@ Address | Description
 
 End of file.
 
+## Group 1 Object
+
+TODO
+
+## Group 2 Object
+
+Address | Description
+------- | ------------
+  0x00  | 0x09
+  0x04  | Object order number (int32)
+  0x08  | 0x01
+  0x0C  | 0x00
+  0x10  | X position (float)
+  0x14  | Y position (float)
+  0x18  | X size (float)
+  0x1C  | Y size (float)
+  0x20  | 0x00
+  0x24  | ptr0
+   ...  | Lots of 0x00
+ptr0 (0x40)| ???
+  0x44  | ??? (int)
+  0x48  | ??? (int)
+  0x4C  | ptr1
+  0x50  | ptr2
+   ...  | Lots of 0x00
+ptr1 (0x70)| ???
+  0x74  | 0x00
+ptr2 (0x78)| ???
+  0x7C  | ??? (int)
+  0x80  | ??? (int)
+  0x84  | ??? (float)
+  0x88  | UV left edge (float)
+  0x8C  | UV upper edge (float)
+  0x90  | UV right edge (float)
+  0x94  | UV bottom edge (float)
 
 G1C - Number of object in group 1
 G2C - Number of object in group 2
 G1NP - Pointer to list of pointers of object names in group 1.
 G2NP - Pointer to list of pointers of object names in group 2.
-
-Content:
-
-0x34 - x possition (float)
-0x38 - y size (float)
-0x3C - x size (float)
-0x40 - y size (float)
-0xAC - UV x position 0 (float)
-0xB0 - UV y position 0 (float)
-0xB4 - UV x position 1 (float)
-0xB8 - UV y position 1 (float)
-
-(name pointers)
-(names)
