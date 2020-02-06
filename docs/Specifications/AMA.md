@@ -1,10 +1,16 @@
-AMA file structure:
+# AMA file structure
 
-Header:
-0x00 - string (#AMA)
-0x0C - uint (Number of files)
-0x1C - uint (Pointer to pointers to file names)
-0x20 - unit (number of meaningful values before name pointers)
+## Header
+
+.    | 0-3  | 4-7  | 8-B  | C-F
+---- | ---- | ---- | ---- | ----
+0x00 | #AMA | 0x00 | G1C  | G2C
+0x10 |   ?  |   ?  | G1NP | G2NP
+
+G1C - Number of object in group 1
+G2C - Number of object in group 2
+G1NP - Pointer to list of pointers of object names in group 1.
+G2NP - Pointer to list of pointers of object names in group 2.
 
 Content:
 
