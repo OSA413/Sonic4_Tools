@@ -6,7 +6,7 @@ File extension | Description | Program(s) | Usage
 -------------- | ----------- | ---------- | -----
 ACB | Audio container | Probably [Skyth's AcbEditor][sonicaudiotools_link]
 :star: ADX | Criware's audio file | Good ADX converter (e.g. [FFmpeg-based ADX converter][FFmpeg-based_ADX_converter]) | EP1 EP2
-:dizzy: AMA | Something sprites related | ??? | EP1 EP2
+:hammer_and_wrench: AMA | Something sprites related | [AMAEditor][tools_link] | EP1 EP2
 :star: AMB | Game asset (textures, models...) container | [AMBPatcher][modloader_link] (recommended), [Skyth's AMBPack][skyth_tools] | EP1 EP2
 AME | Something particles/effects related | ??? | EP1 EP2
 AT  | ??? | ??? | EP1 EP2
@@ -44,7 +44,7 @@ LNO | Model | ???
 Icon | Legend
 -----|------------
 :star: | Well editable
-:dizzy: | Deep research required
+:hammer_and_wrench: | Currently being worked on
 :zzz: | Probably changes nothing
 
 [modloader_link]: https://github.com/OSA413/Sonic4_ModLoader
