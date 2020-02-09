@@ -77,7 +77,9 @@ namespace AMAEditor
             foreach (int ptr in g2Dict.Keys)
             {
                 StrangeIsntIt(fileRaw, ptr, 0x09);
-                StrangeIsntIt(fileRaw, ptr + 4, Group2.IndexOf(g2Dict[ptr]));
+                StrangeIsntIt(fileRaw, ptr + 0x04, Group2.IndexOf(g2Dict[ptr]));
+                StrangeIsntIt(fileRaw, ptr + 0x08, 0x01);
+                StrangeIsntIt(fileRaw, ptr + 0x0C, 0x00);
 
                 g2Dict[ptr].PositionX = BitConverter.ToSingle(fileRaw, ptr + 0x10);
                 g2Dict[ptr].PositionY = BitConverter.ToSingle(fileRaw, ptr + 0x14);
