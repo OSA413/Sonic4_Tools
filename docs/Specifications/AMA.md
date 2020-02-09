@@ -58,18 +58,18 @@ Address | Description
   0x20  | 0x00
   0x24  | ptr0
    ...  | Lots of 0x00
-ptr0 (0x40)| ???
-  0x44  | ??? (int)
-  0x48  | ??? (int)
+ptr0 (0x40)| Unknown0
+  0x44  | Unknown1 (int)
+  0x48  | Unknown2 (int)
   0x4C  | ptr1
   0x50  | ptr2
    ...  | Lots of 0x00
-ptr1 (0x70)| ???
+ptr1 (0x70)| Unknown3
   0x74  | 0x00
-ptr2 (0x78)| ???
-  0x7C  | ??? (int)
-  0x80  | ??? (int)
-  0x84  | ??? (float)
+ptr2 (0x78)| Unknown4
+  0x7C  | Unknown5 (int)
+  0x80  | Unknown6 (int)
+  0x84  | Unknown7 (float)
   0x88  | UV left edge (float)
   0x8C  | UV upper edge (float)
   0x90  | UV right edge (float)

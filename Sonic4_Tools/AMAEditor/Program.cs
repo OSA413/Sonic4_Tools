@@ -199,8 +199,7 @@ namespace AMAEditor
         public int Unknown4;
         public int Unknown5;
         public int Unknown6;
-        public int Unknown7;
-        public float Unknown8;
+        public float Unknown7;
     }
 
     class MainClass
@@ -263,8 +262,7 @@ namespace AMAEditor
                 Console.Write(ama.Group2[i].Unknown4 + " ");
                 Console.Write(ama.Group2[i].Unknown5 + " ");
                 Console.Write(ama.Group2[i].Unknown6 + " ");
-                Console.Write(ama.Group2[i].Unknown7 + " ");
-                Console.Write(ama.Group2[i].Unknown8 + "\n\n");
+                Console.Write(ama.Group2[i].Unknown7 + "\n\n");
             }
 
             if (ama.Strange)
