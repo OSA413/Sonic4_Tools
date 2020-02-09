@@ -55,7 +55,7 @@ Address | Description
   0x14  | Y position (float)
   0x18  | X size (float)
   0x1C  | Y size (float)
-  0x20  | 0x00
+  0x20  | ptr3
   0x24  | ptr0
    ...  | Lots of 0x00
 ptr0 (0x40)| Unknown0
@@ -63,6 +63,10 @@ ptr0 (0x40)| Unknown0
   0x48  | Unknown2 (int)
   0x4C  | ptr1
   0x50  | ptr2
+  0x54  | Unknown8
+  0x58  | Unknown9
+  0x5C  | Unknown10
+  0x60  | Unknown11
    ...  | Lots of 0x00
 ptr1 (0x70)| Unknown3
   0x74  | 0x00

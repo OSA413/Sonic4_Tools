@@ -86,7 +86,7 @@ namespace AMAEditor
                 g2Dict[ptr].SizeX = BitConverter.ToSingle(fileRaw, ptr + 0x18);
                 g2Dict[ptr].SizeY = BitConverter.ToSingle(fileRaw, ptr + 0x1C);
 
-                StrangeIsntIt(fileRaw, ptr + 0x20, 0x00);
+                g2Dict[ptr].Unknown8 = BitConverter.ToInt32(fileRaw, ptr + 0x20);
                 for (int i = 0x28; i < 0x40; i = i + 4)
                     StrangeIsntIt(fileRaw, ptr + i, 0x00);
 
@@ -107,7 +107,12 @@ namespace AMAEditor
                 g2Dict[ptr].Unknown6 = BitConverter.ToInt32(fileRaw, ptr2 + 0x08);
                 g2Dict[ptr].Unknown7 = BitConverter.ToSingle(fileRaw, ptr2 + 0x0C);
 
-                for (int i = 0x54; i < 0x70; i = i + 4)
+                g2Dict[ptr].Unknown8 = BitConverter.ToInt32(fileRaw, ptr + 0x54);
+                g2Dict[ptr].Unknown9 = BitConverter.ToInt32(fileRaw, ptr + 0x58);
+                g2Dict[ptr].Unknown10 = BitConverter.ToInt32(fileRaw, ptr + 0x5C);
+                g2Dict[ptr].Unknown11 = BitConverter.ToInt32(fileRaw, ptr + 0x60);
+
+                for (int i = 0x64; i < 0x70; i = i + 4)
                     StrangeIsntIt(fileRaw, ptr + i, 0x00);
                 StrangeIsntIt(fileRaw, ptr + 0x74, 0x00);
 
@@ -213,6 +218,10 @@ namespace AMAEditor
         public int Unknown5;
         public int Unknown6;
         public float Unknown7;
+        public int Unknown8;
+        public int Unknown9;
+        public int Unknown10;
+        public int Unknown11;
     }
 
     class MainClass
@@ -275,7 +284,11 @@ namespace AMAEditor
                 Console.Write(ama.Group2[i].Unknown4 + " ");
                 Console.Write(ama.Group2[i].Unknown5 + " ");
                 Console.Write(ama.Group2[i].Unknown6 + " ");
-                Console.Write(ama.Group2[i].Unknown7 + "\n\n");
+                Console.Write(ama.Group2[i].Unknown7 + " ");
+                Console.Write(ama.Group2[i].Unknown8 + " ");
+                Console.Write(ama.Group2[i].Unknown9 + " ");
+                Console.Write(ama.Group2[i].Unknown10 + " ");
+                Console.Write(ama.Group2[i].Unknown11 + "\n\n");
             }
 
             if (ama.Strange)
