@@ -47,9 +47,9 @@ Address | Description
 
 Address | Description
 ------- | ------------
-  0x00  | 0x09
+  0x00  | Unknown12
   0x04  | Object order number (int32)
-  0x08  | 0x01
+  0x08  | Unknown13
   0x0C  | 0x00
   0x10  | X position (float)
   0x14  | Y position (float)
@@ -57,6 +57,10 @@ Address | Description
   0x1C  | Y size (float)
   0x20  | ptr3
   0x24  | ptr0
+  0x28  | Unknown15
+  0x2C  | Unknown16
+  0x30  | Unknown18
+  0x34  | Unknown19
    ...  | Lots of 0x00
 ptr0 (0x40)| Unknown0
   0x44  | Unknown1 (int)
@@ -67,9 +71,11 @@ ptr0 (0x40)| Unknown0
   0x58  | Unknown9
   0x5C  | Unknown10
   0x60  | Unknown11
-   ...  | Lots of 0x00
+  0x64  | Unknown14
+  0x68  | Unknown20
+  0x6C  | Unknown21
 ptr1 (0x70)| Unknown3
-  0x74  | 0x00
+  0x74  | Unknown17
 ptr2 (0x78)| Unknown4
   0x7C  | Unknown5 (int)
   0x80  | Unknown6 (int)

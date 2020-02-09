@@ -76,9 +76,9 @@ namespace AMAEditor
 
             foreach (int ptr in g2Dict.Keys)
             {
-                StrangeIsntIt(fileRaw, ptr, 0x09);
+                g2Dict[ptr].Unknown12 = BitConverter.ToInt32(fileRaw, ptr);
                 StrangeIsntIt(fileRaw, ptr + 0x04, Group2.IndexOf(g2Dict[ptr]));
-                StrangeIsntIt(fileRaw, ptr + 0x08, 0x01);
+                g2Dict[ptr].Unknown13 = BitConverter.ToInt32(fileRaw, ptr + 0x08);
                 StrangeIsntIt(fileRaw, ptr + 0x0C, 0x00);
 
                 g2Dict[ptr].PositionX = BitConverter.ToSingle(fileRaw, ptr + 0x10);
@@ -87,7 +87,11 @@ namespace AMAEditor
                 g2Dict[ptr].SizeY = BitConverter.ToSingle(fileRaw, ptr + 0x1C);
 
                 g2Dict[ptr].Unknown8 = BitConverter.ToInt32(fileRaw, ptr + 0x20);
-                for (int i = 0x28; i < 0x40; i = i + 4)
+                g2Dict[ptr].Unknown15 = BitConverter.ToInt32(fileRaw, ptr + 0x28);
+                g2Dict[ptr].Unknown16 = BitConverter.ToInt32(fileRaw, ptr + 0x2C);
+                g2Dict[ptr].Unknown18 = BitConverter.ToInt32(fileRaw, ptr + 0x30);
+                g2Dict[ptr].Unknown19 = BitConverter.ToInt32(fileRaw, ptr + 0x34);
+                for (int i = 0x38; i < 0x40; i = i + 4)
                     StrangeIsntIt(fileRaw, ptr + i, 0x00);
 
                 int ptr0 = BitConverter.ToInt32(fileRaw, ptr + 0x24);
@@ -111,10 +115,13 @@ namespace AMAEditor
                 g2Dict[ptr].Unknown9 = BitConverter.ToInt32(fileRaw, ptr + 0x58);
                 g2Dict[ptr].Unknown10 = BitConverter.ToInt32(fileRaw, ptr + 0x5C);
                 g2Dict[ptr].Unknown11 = BitConverter.ToInt32(fileRaw, ptr + 0x60);
+                g2Dict[ptr].Unknown14 = BitConverter.ToInt32(fileRaw, ptr + 0x64);
 
-                for (int i = 0x64; i < 0x70; i = i + 4)
+                for (int i = 0x68; i < 0x68; i = i + 4)
                     StrangeIsntIt(fileRaw, ptr + i, 0x00);
-                StrangeIsntIt(fileRaw, ptr + 0x74, 0x00);
+                g2Dict[ptr].Unknown20 = BitConverter.ToInt32(fileRaw, ptr + 0x68);
+                g2Dict[ptr].Unknown21 = BitConverter.ToInt32(fileRaw, ptr + 0x6C);
+                g2Dict[ptr].Unknown17 = BitConverter.ToInt32(fileRaw, ptr + 0x74);
 
                 g2Dict[ptr].UVLeftEdge = BitConverter.ToSingle(fileRaw, ptr2 + 0x10);
                 g2Dict[ptr].UVUpperEdge = BitConverter.ToSingle(fileRaw, ptr2 + 0x14);
@@ -222,6 +229,16 @@ namespace AMAEditor
         public int Unknown9;
         public int Unknown10;
         public int Unknown11;
+        public int Unknown12;
+        public int Unknown13;
+        public int Unknown14;
+        public int Unknown15;
+        public int Unknown16;
+        public int Unknown17;
+        public int Unknown18;
+        public int Unknown19;
+        public int Unknown20;
+        public int Unknown21;
     }
 
     class MainClass
@@ -288,7 +305,17 @@ namespace AMAEditor
                 Console.Write(ama.Group2[i].Unknown8 + " ");
                 Console.Write(ama.Group2[i].Unknown9 + " ");
                 Console.Write(ama.Group2[i].Unknown10 + " ");
-                Console.Write(ama.Group2[i].Unknown11 + "\n\n");
+                Console.Write(ama.Group2[i].Unknown11 + " ");
+                Console.Write(ama.Group2[i].Unknown12 + " ");
+                Console.Write(ama.Group2[i].Unknown13 + " ");
+                Console.Write(ama.Group2[i].Unknown14 + " ");
+                Console.Write(ama.Group2[i].Unknown15 + " ");
+                Console.Write(ama.Group2[i].Unknown16 + " ");
+                Console.Write(ama.Group2[i].Unknown17 + " ");
+                Console.Write(ama.Group2[i].Unknown18 + " ");
+                Console.Write(ama.Group2[i].Unknown19 + " ");
+                Console.Write(ama.Group2[i].Unknown20 + " ");
+                Console.Write(ama.Group2[i].Unknown21 + "\n\n");
             }
 
             if (ama.Strange)
