@@ -91,8 +91,21 @@ namespace AMAEditor
                     StrangeIsntIt(fileRaw, ptr + i, 0x00);
 
                 int ptr0 = BitConverter.ToInt32(fileRaw, ptr + 0x24);
+
+                g2Dict[ptr].Unknown0 = BitConverter.ToInt32(fileRaw, ptr0);
+                g2Dict[ptr].Unknown1 = BitConverter.ToInt32(fileRaw, ptr0 + 4);
+                g2Dict[ptr].Unknown2 = BitConverter.ToInt32(fileRaw, ptr0 + 8);
+
                 int ptr1 = BitConverter.ToInt32(fileRaw, ptr0 + 0xC);
+
+                g2Dict[ptr].Unknown3 = BitConverter.ToInt32(fileRaw, ptr1);
+
                 int ptr2 = BitConverter.ToInt32(fileRaw, ptr0 + 0x10);
+
+                g2Dict[ptr].Unknown4 = BitConverter.ToInt32(fileRaw, ptr2);
+                g2Dict[ptr].Unknown5 = BitConverter.ToInt32(fileRaw, ptr2 + 0x04);
+                g2Dict[ptr].Unknown6 = BitConverter.ToInt32(fileRaw, ptr2 + 0x08);
+                g2Dict[ptr].Unknown7 = BitConverter.ToSingle(fileRaw, ptr2 + 0x0C);
 
                 for (int i = 0x54; i < 0x70; i = i + 4)
                     StrangeIsntIt(fileRaw, ptr + i, 0x00);
