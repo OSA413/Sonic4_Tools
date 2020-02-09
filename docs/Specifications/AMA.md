@@ -36,10 +36,10 @@ Address | Description
 ------- | ------------
   0x00  | 0x00
   0x04  | Objcect order number (int32)
-  0x08  | Group 1 child object pointer
-  0x0C  | Group 2 child object 0 pointer
+  0x08  | Group 1 child object 0 pointer
+  0x0C  | Group 1 child object 1 pointer
   0x10  | Parent object pointer
-  0x14  | Group 2 child object 1 pointer
+  0x14  | Group 2 child object pointer
   0x18  | 0x00
   0x1C  | 0x00
 

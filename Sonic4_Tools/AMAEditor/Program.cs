@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace AMAEditor
 {
@@ -72,21 +73,44 @@ namespace AMAEditor
 
             foreach (int ptr in g1Dict.Keys)
             {
+                g1Dict[ptr].G1Children = new List<Group1>();
+                g1Dict[ptr].G2Children = new List<Group2>();
+
                 int ptrG1Child = BitConverter.ToInt32(fileRaw, ptr + 0x8);
                 if (ptrG1Child != 0)
-                    g1Dict[ptr].G1Child = g1Dict[ptrG1Child];
+                    g1Dict[ptr].G1Children.Add(g1Dict[ptrG1Child]);
 
-                int ptrG2Child = BitConverter.ToInt32(fileRaw, ptr + 0xC);
-                if (ptrG2Child != 0)
-                    g1Dict[ptr].G2Children.Add(g2Dict[ptrG2Child]);
+                ptrG1Child = BitConverter.ToInt32(fileRaw, ptr + 0xC);
+                if (ptrG1Child != 0)
+                    g1Dict[ptr].G1Children.Add(g1Dict[ptrG1Child]);
 
                 int ptrParent = BitConverter.ToInt32(fileRaw, ptr + 0x10);
                 if (ptrParent != 0)
                     g1Dict[ptr].Parent = g1Dict[ptrParent];
 
-                ptrG2Child = BitConverter.ToInt32(fileRaw, ptr + 0x14);
+                int ptrG2Child = BitConverter.ToInt32(fileRaw, ptr + 0x14);
                 if (ptrG2Child != 0)
                     g1Dict[ptr].G2Children.Add(g2Dict[ptrG2Child]);
+            }
+
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < g1Number; i++)
+            {
+                int ptr = BitConverter.ToInt32(fileRaw, g1NameListPointer + 4*i);
+                for (; fileRaw[ptr] != 0x00; ptr++)
+                    sb.Append((char)fileRaw[ptr]);
+                Group1[i].Name = sb.ToString();
+                sb.Clear();
+            }
+
+            for (int i = 0; i < g2Number; i++)
+            {
+                int ptr = BitConverter.ToInt32(fileRaw, g2NameListPointer + 4 * i);
+                for (; fileRaw[ptr] != 0x00; ptr++)
+                    sb.Append(fileRaw[ptr]);
+                Group2[i].Name = sb.ToString();
+                sb.Clear();
             }
         }
 
@@ -111,7 +135,7 @@ namespace AMAEditor
     {
         public string       Name;
         public Group1       Parent;
-        public Group1       G1Child;
+        public List<Group1> G1Children;
         public List<Group2> G2Children;
     }
 
@@ -144,7 +168,24 @@ namespace AMAEditor
     {
         public static void Main(string[] args)
         {
+            var ama = new AMA();
 
+            if (args.Length > 0)
+            {
+                ama.Read(args[0]);
+            }
+            else
+            {
+                ama.Read(Console.ReadLine());
+            }
+
+            foreach (var a in ama.Group1)
+            {
+                Console.WriteLine(a.Name);
+            }
+
+            if (args.Length == 0)
+                Console.Read();
         }
     }
 }
