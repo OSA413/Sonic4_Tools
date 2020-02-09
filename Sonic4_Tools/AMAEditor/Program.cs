@@ -7,9 +7,11 @@ namespace AMAEditor
 {
     public class AMA
     {
+        //https://github.com/OSA413/Sonic4_Tools/blob/master/docs/Specifications/AMA.md
         public List<Group1> Group1;
         public List<Group2> Group2;
         public bool Strange;
+        public List<int>    StrangeList;
 
         public static bool IsAMA(byte[] fileRaw)
         {
@@ -20,13 +22,31 @@ namespace AMAEditor
                 && fileRaw[3] == 'A';
         }
 
+        private void StrangeIsntIt(byte[] fileRaw, int ptr, int intendedValue)
+        {
+            StrangeIsntIt(BitConverter.ToInt32(fileRaw, ptr), ptr, intendedValue);
+        }
+
+        private void StrangeIsntIt(int actualValue, int ptr, int intendedValue)
+        {
+            if (actualValue != intendedValue)
+            {
+                Strange = true;
+                StrangeList.Add(ptr);
+            }
+        }
+
         public void Read(byte[] fileRaw)
         {
             Group1 = new List<Group1>();
             Group2 = new List<Group2>();
+            Strange = false;
+            StrangeList = new List<int>();
 
             if (!AMA.IsAMA(fileRaw))
                 return;
+
+            StrangeIsntIt(fileRaw, 0x4, 0);
 
             int g1Number = BitConverter.ToInt32(fileRaw, 0x8);
             int g2Number = BitConverter.ToInt32(fileRaw, 0xC);
@@ -56,14 +76,25 @@ namespace AMAEditor
 
             foreach (int ptr in g2Dict.Keys)
             {
+                StrangeIsntIt(fileRaw, ptr, 0x09);
+                StrangeIsntIt(fileRaw, ptr + 4, Group2.IndexOf(g2Dict[ptr]));
+
                 g2Dict[ptr].PositionX = BitConverter.ToSingle(fileRaw, ptr + 0x10);
                 g2Dict[ptr].PositionY = BitConverter.ToSingle(fileRaw, ptr + 0x14);
                 g2Dict[ptr].SizeX = BitConverter.ToSingle(fileRaw, ptr + 0x18);
                 g2Dict[ptr].SizeY = BitConverter.ToSingle(fileRaw, ptr + 0x1C);
 
+                StrangeIsntIt(fileRaw, ptr + 0x20, 0x00);
+                for (int i = 0x28; i < 0x40; i = i + 4)
+                    StrangeIsntIt(fileRaw, ptr + i, 0x00);
+
                 int ptr0 = BitConverter.ToInt32(fileRaw, ptr + 0x24);
                 int ptr1 = BitConverter.ToInt32(fileRaw, ptr0 + 0xC);
                 int ptr2 = BitConverter.ToInt32(fileRaw, ptr0 + 0x10);
+
+                for (int i = 0x54; i < 0x70; i = i + 4)
+                    StrangeIsntIt(fileRaw, ptr + i, 0x00);
+                StrangeIsntIt(fileRaw, ptr + 0x74, 0x00);
 
                 g2Dict[ptr].UVLeftEdge = BitConverter.ToSingle(fileRaw, ptr2 + 0x10);
                 g2Dict[ptr].UVUpperEdge = BitConverter.ToSingle(fileRaw, ptr2 + 0x14);
@@ -75,6 +106,9 @@ namespace AMAEditor
             {
                 g1Dict[ptr].G1Children = new List<Group1>();
                 g1Dict[ptr].G2Children = new List<Group2>();
+
+                StrangeIsntIt(fileRaw, ptr, 0x00);
+                StrangeIsntIt(fileRaw, ptr + 4, Group1.IndexOf(g1Dict[ptr]));
 
                 int ptrG1Child = BitConverter.ToInt32(fileRaw, ptr + 0x8);
                 if (ptrG1Child != 0)
@@ -91,6 +125,9 @@ namespace AMAEditor
                 int ptrG2Child = BitConverter.ToInt32(fileRaw, ptr + 0x14);
                 if (ptrG2Child != 0)
                     g1Dict[ptr].G2Children.Add(g2Dict[ptrG2Child]);
+
+                StrangeIsntIt(fileRaw, ptr + 0x18, 0x00);
+                StrangeIsntIt(fileRaw, ptr + 0x1C, 0x00);
             }
 
             var sb = new StringBuilder();
@@ -229,7 +266,13 @@ namespace AMAEditor
             }
 
             if (ama.Strange)
+            {
                 Console.WriteLine("This AMA file is strange");
+                Console.WriteLine("Strange values at:");
+                foreach (int i in ama.StrangeList)
+                    Console.Write("0x" + i.ToString("X") + " ");
+                Console.WriteLine();
+            }
 
             if (args.Length == 0)
                 Console.Read();
