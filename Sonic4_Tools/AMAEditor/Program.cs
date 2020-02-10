@@ -10,7 +10,7 @@ namespace AMAEditor
         //https://github.com/OSA413/Sonic4_Tools/blob/master/docs/Specifications/AMA.md
         public List<Group1> Group1;
         public List<Group2> Group2;
-        public bool Strange;
+        public bool         Strange;
         public List<int>    StrangeList;
 
         public static bool IsAMA(byte[] fileRaw)
@@ -34,6 +34,25 @@ namespace AMAEditor
                 Strange = true;
                 StrangeList.Add(ptr);
             }
+        }
+
+        public static List<int> SanityCheck(byte[] orig, byte[] recreation)
+        {
+            var dif = new List<int>();
+
+            if (orig.Length == recreation.Length)
+            {
+                for (int i = 0; i < orig.Length; i++)
+                    if (orig[i] != recreation[i])
+                        dif.Add(i);
+            }
+            else
+                dif.Add(-1);
+
+            Console.WriteLine(orig.Length);
+            Console.WriteLine(recreation.Length);
+
+            return dif;
         }
 
         public void Read(byte[] fileRaw)
@@ -185,7 +204,44 @@ namespace AMAEditor
 
         public byte[] Write()
         {
-            return new byte[0];
+            int fileLength = 0;
+
+            int headerLength = 0x20;
+            int g1objLength = 8 * 4;
+            int g2objLength = 38 * 4;
+
+            fileLength += headerLength;
+            fileLength += Group1.Count * (4 * 2 + g1objLength);
+            fileLength += Group2.Count * (4 * 2 + g2objLength);
+
+            foreach (var obj in Group1)
+                fileLength += obj.Name.Length + 1;
+            foreach (var obj in Group2)
+                fileLength += obj.Name.Length + 1;
+
+            var fileRaw = new byte[fileLength];
+
+            ////Header////
+            Array.Copy(Encoding.ASCII.GetBytes("#AMA"), 0, fileRaw, 0, 4);
+
+            //Object number
+            Array.Copy(BitConverter.GetBytes(Group1.Count), 0, fileRaw, 0x08, 4);
+            Array.Copy(BitConverter.GetBytes(Group2.Count), 0, fileRaw, 0x0C, 4);
+
+            //Object list pointers
+            int g1listPointer = 0;
+            if (Group1.Count != 0)
+                g1listPointer = headerLength;
+            Array.Copy(BitConverter.GetBytes(g1listPointer), 0, fileRaw, 0x10, 4);
+
+            int g2listPointer = 0;
+            if (Group2.Count != 0)
+                g2listPointer = headerLength + Group1.Count * (g1objLength + 4);
+            Array.Copy(BitConverter.GetBytes(g2listPointer), 0, fileRaw, 0x14, 4);
+
+
+
+            return fileRaw;
         }
 
         public void Write(string fileName)
@@ -247,14 +303,17 @@ namespace AMAEditor
         {
             var ama = new AMA();
 
+            string file;
             if (args.Length > 0)
             {
-                ama.Read(args[0]);
+                file = args[0];
             }
             else
             {
-                ama.Read(Console.ReadLine());
+                file = Console.ReadLine();
             }
+
+            ama.Read(file);
 
             Console.WriteLine("Group 1 objects:");
             Console.WriteLine("Number of objects: " + ama.Group1.Count + "\n");
@@ -323,6 +382,19 @@ namespace AMAEditor
                 Console.WriteLine("This AMA file is strange");
                 Console.WriteLine("Strange values at:");
                 foreach (int i in ama.StrangeList)
+                    Console.Write("0x" + i.ToString("X") + " ");
+                Console.WriteLine();
+            }
+
+            var sanity = AMA.SanityCheck(File.ReadAllBytes(file), ama.Write());
+
+            Console.Write("Sanity check ");
+            if (sanity.Count == 0)
+                Console.WriteLine("passed");
+            else
+            {
+                Console.WriteLine("failed");
+                foreach (int i in sanity)
                     Console.Write("0x" + i.ToString("X") + " ");
                 Console.WriteLine();
             }
