@@ -263,18 +263,18 @@ namespace AMAEditor
             //Group 1
             for (int i = 0; i < Group1.Count; i++)
             {
-                //Body
+                var obj = Group1[i];
+                int objPtr = g1listPointer + 4 * i;
 
-                int objPointer = g1listPointer + 4 * i;
                 //Name list pointer
                 Array.Copy(BitConverter.GetBytes(g1listPointer + Group1.Count * 4 + g1objLength * i), 0, fileRaw,
-                    objPointer, 4);
+                    objPtr, 4);
 
-                //Object data
+                //Body
                 //0x00
-                Array.Copy(BitConverter.GetBytes(i), 0, fileRaw, objPointer + 0x04, 4);
+                Array.Copy(BitConverter.GetBytes(i), 0, fileRaw, objPtr + 0x04, 4);
 
-                var G1Children = Group1[i].G1Children;
+                var G1Children = obj.G1Children;
                 //Somehow make pointers relationship
                 //for (int iChild = 0; iChild < G1Children.Count; iChild++)
                 //Array.Copy(BitConverter.GetBytes(i), 0, fileRaw, objPointer + 0x08, 4);
@@ -284,6 +284,65 @@ namespace AMAEditor
 
                 //Names
                 int curNamePtr = 0;
+
+                Array.Copy(Encoding.ASCII.GetBytes(obj.Name), 0, fileRaw, g1nameListPointer + curNamePtr, obj.Name.Length);
+                curNamePtr += obj.Name.Length + 1;
+            }
+
+            //Group 2
+            for (int i = 0; i < Group2.Count; i++)
+            {
+                var obj = Group2[i];
+                int objPtr = g2listPointer + 4 * Group2.Count + g2objLength * i;
+
+                //Object list pointer
+                Array.Copy(BitConverter.GetBytes(objPtr), 0, fileRaw, g2listPointer + 4 * i, 4);
+
+                //Body
+                Array.Copy(BitConverter.GetBytes(obj.Unknown12), 0, fileRaw, objPtr, 4);
+                Array.Copy(BitConverter.GetBytes(i), 0, fileRaw, objPtr + 0x04, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown13), 0, fileRaw, objPtr + 0x08, 4);
+                //0x0C
+                Array.Copy(BitConverter.GetBytes(obj.PositionX), 0, fileRaw, objPtr + 0x10, 4);
+                Array.Copy(BitConverter.GetBytes(obj.PositionY), 0, fileRaw, objPtr + 0x14, 4);
+                Array.Copy(BitConverter.GetBytes(obj.SizeX), 0, fileRaw, objPtr + 0x18, 4);
+                Array.Copy(BitConverter.GetBytes(obj.SizeY), 0, fileRaw, objPtr + 0x1C, 4);
+                //0x20, ptr3 in the specification
+                Array.Copy(BitConverter.GetBytes(objPtr + 0x40), 0, fileRaw, objPtr + 0x24, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown15), 0, fileRaw, objPtr + 0x28, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown16), 0, fileRaw, objPtr + 0x2C, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown18), 0, fileRaw, objPtr + 0x30, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown19), 0, fileRaw, objPtr + 0x34, 4);
+                //Lots of 0x00
+                Array.Copy(BitConverter.GetBytes(obj.Unknown0), 0, fileRaw, objPtr + 0x40, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown1), 0, fileRaw, objPtr + 0x44, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown2), 0, fileRaw, objPtr + 0x48, 4);
+                Array.Copy(BitConverter.GetBytes(objPtr + 0x70), 0, fileRaw, objPtr + 0x4C, 4);
+                Array.Copy(BitConverter.GetBytes(objPtr + 0x78), 0, fileRaw, objPtr + 0x50, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown8), 0, fileRaw, objPtr + 0x54, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown9), 0, fileRaw, objPtr + 0x58, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown10), 0, fileRaw, objPtr + 0x5C, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown11), 0, fileRaw, objPtr + 0x60, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown14), 0, fileRaw, objPtr + 0x64, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown20), 0, fileRaw, objPtr + 0x68, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown21), 0, fileRaw, objPtr + 0x6C, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown3), 0, fileRaw, objPtr + 0x70, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown17), 0, fileRaw, objPtr + 0x74, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown4), 0, fileRaw, objPtr + 0x78, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown5), 0, fileRaw, objPtr + 0x7C, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown6), 0, fileRaw, objPtr + 0x80, 4);
+                Array.Copy(BitConverter.GetBytes(obj.Unknown7), 0, fileRaw, objPtr + 0x84, 4);
+                Array.Copy(BitConverter.GetBytes(obj.UVLeftEdge), 0, fileRaw, objPtr + 0x88, 4);
+                Array.Copy(BitConverter.GetBytes(obj.UVUpperEdge), 0, fileRaw, objPtr + 0x8C, 4);
+                Array.Copy(BitConverter.GetBytes(obj.UVRightEdge), 0, fileRaw, objPtr + 0x90, 4);
+                Array.Copy(BitConverter.GetBytes(obj.UVBottomEdge), 0, fileRaw, objPtr + 0x94, 4);
+
+                //Names
+                int curNamePtr = g2nameListPointer + Group2.Count * 4;
+                Array.Copy(BitConverter.GetBytes(curNamePtr), 0, fileRaw, g2nameListPointer + 4 * i, 4);
+
+                Array.Copy(Encoding.ASCII.GetBytes(obj.Name), 0, fileRaw, curNamePtr, obj.Name.Length);
+                curNamePtr += obj.Name.Length + 1;
             }
 
             return fileRaw;
@@ -438,7 +497,7 @@ namespace AMAEditor
                 Console.WriteLine("passed");
             else
             {
-                Console.WriteLine("failed");
+                Console.WriteLine("failed (" + sanity.Count + ")");
                 foreach (int i in sanity)
                     Console.Write("0x" + i.ToString("X") + " ");
                 Console.WriteLine();
