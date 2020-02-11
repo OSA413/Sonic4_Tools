@@ -210,14 +210,19 @@ namespace AMAEditor
             int g1objLength = 8 * 4;
             int g2objLength = 38 * 4;
 
+            int g1objNamesLength = 0;
+            foreach (var obj in Group1)
+                g1objNamesLength += obj.Name.Length + 1;
+            int g2objNamesLength = 0;
+            foreach (var obj in Group2)
+                g2objNamesLength += obj.Name.Length + 1;
+
             fileLength += headerLength;
             fileLength += Group1.Count * (4 * 2 + g1objLength);
             fileLength += Group2.Count * (4 * 2 + g2objLength);
 
-            foreach (var obj in Group1)
-                fileLength += obj.Name.Length + 1;
-            foreach (var obj in Group2)
-                fileLength += obj.Name.Length + 1;
+            fileLength += g1objNamesLength;
+            fileLength += g2objNamesLength;
 
             var fileRaw = new byte[fileLength];
 
@@ -239,7 +244,47 @@ namespace AMAEditor
                 g2listPointer = headerLength + Group1.Count * (g1objLength + 4);
             Array.Copy(BitConverter.GetBytes(g2listPointer), 0, fileRaw, 0x14, 4);
 
+            //Object name list pointers
+            int g1nameListPointer = 0;
+            if (Group1.Count != 0)
+                g1nameListPointer = g2listPointer + (4 + g2objLength) * Group2.Count;
+            Array.Copy(BitConverter.GetBytes(g1nameListPointer), 0, fileRaw, 0x18, 4);
 
+            int g2nameListPointer = 0;
+            if (Group2.Count != 0)
+            {
+                if (g1nameListPointer != 0)
+                    g2nameListPointer = g1nameListPointer + 4 * Group1.Count + g1objNamesLength;
+                else
+                    g2nameListPointer = g2listPointer + (4 + g2objLength) * Group2.Count;
+            }
+            Array.Copy(BitConverter.GetBytes(g2nameListPointer), 0, fileRaw, 0x1C, 4);
+
+            //Group 1
+            for (int i = 0; i < Group1.Count; i++)
+            {
+                //Body
+
+                int objPointer = g1listPointer + 4 * i;
+                //Name list pointer
+                Array.Copy(BitConverter.GetBytes(g1listPointer + Group1.Count * 4 + g1objLength * i), 0, fileRaw,
+                    objPointer, 4);
+
+                //Object data
+                //0x00
+                Array.Copy(BitConverter.GetBytes(i), 0, fileRaw, objPointer + 0x04, 4);
+
+                var G1Children = Group1[i].G1Children;
+                //Somehow make pointers relationship
+                //for (int iChild = 0; iChild < G1Children.Count; iChild++)
+                //Array.Copy(BitConverter.GetBytes(i), 0, fileRaw, objPointer + 0x08, 4);
+
+                //0x18
+                //0x1C
+
+                //Names
+                int curNamePtr = 0;
+            }
 
             return fileRaw;
         }
