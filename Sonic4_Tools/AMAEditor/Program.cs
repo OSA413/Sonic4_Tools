@@ -264,11 +264,10 @@ namespace AMAEditor
             for (int i = 0; i < Group1.Count; i++)
             {
                 var obj = Group1[i];
-                int objPtr = g1listPointer + 4 * i;
+                int objPtr = g2listPointer + 4 * Group2.Count + g2objLength * i;
 
                 //Name list pointer
-                Array.Copy(BitConverter.GetBytes(g1listPointer + Group1.Count * 4 + g1objLength * i), 0, fileRaw,
-                    objPtr, 4);
+                Array.Copy(BitConverter.GetBytes(objPtr), 0, fileRaw, g2listPointer + 4 * i, 4);
 
                 //Body
                 //0x00
@@ -283,9 +282,10 @@ namespace AMAEditor
                 //0x1C
 
                 //Names
-                int curNamePtr = 0;
+                int curNamePtr = g1nameListPointer + Group1.Count * 4;
+                Array.Copy(BitConverter.GetBytes(curNamePtr), 0, fileRaw, g1nameListPointer + 4 * i, 4);
 
-                Array.Copy(Encoding.ASCII.GetBytes(obj.Name), 0, fileRaw, g1nameListPointer + curNamePtr, obj.Name.Length);
+                Array.Copy(Encoding.ASCII.GetBytes(obj.Name), 0, fileRaw, curNamePtr, obj.Name.Length);
                 curNamePtr += obj.Name.Length + 1;
             }
 
