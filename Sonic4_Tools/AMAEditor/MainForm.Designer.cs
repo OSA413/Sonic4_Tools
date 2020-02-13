@@ -29,49 +29,51 @@
         private void InitializeComponent()
         {
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.tbFileName = new System.Windows.Forms.TextBox();
+            this.bOpenFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabGroup1 = new System.Windows.Forms.TabPage();
             this.listBoxGroup1 = new System.Windows.Forms.ListBox();
             this.tabGroup2 = new System.Windows.Forms.TabPage();
             this.listBoxGroup2 = new System.Windows.Forms.ListBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button4 = new System.Windows.Forms.Button();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.VName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button4 = new System.Windows.Forms.Button();
+            this.cbUnknowValues = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabGroup1.SuspendLayout();
             this.tabGroup2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip
             // 
-            this.statusStrip.Location = new System.Drawing.Point(0, 205);
+            this.statusStrip.Location = new System.Drawing.Point(0, 228);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(358, 22);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip";
             // 
-            // textBox1
+            // tbFileName
             // 
-            this.textBox1.Location = new System.Drawing.Point(20, 25);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(192, 20);
-            this.textBox1.TabIndex = 1;
+            this.tbFileName.Location = new System.Drawing.Point(20, 25);
+            this.tbFileName.Name = "tbFileName";
+            this.tbFileName.ReadOnly = true;
+            this.tbFileName.Size = new System.Drawing.Size(202, 20);
+            this.tbFileName.TabIndex = 1;
             // 
-            // button1
+            // bOpenFile
             // 
-            this.button1.Location = new System.Drawing.Point(218, 22);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(32, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
+            this.bOpenFile.Location = new System.Drawing.Point(228, 22);
+            this.bOpenFile.Name = "bOpenFile";
+            this.bOpenFile.Size = new System.Drawing.Size(32, 23);
+            this.bOpenFile.TabIndex = 2;
+            this.bOpenFile.Text = "...";
+            this.bOpenFile.UseVisualStyleBackColor = true;
+            this.bOpenFile.Click += new System.EventHandler(this.bOpenFile_Click);
             // 
             // label1
             // 
@@ -90,7 +92,7 @@
             this.tabControl.Location = new System.Drawing.Point(12, 52);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(128, 150);
+            this.tabControl.Size = new System.Drawing.Size(128, 173);
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl.TabIndex = 4;
             // 
@@ -100,7 +102,7 @@
             this.tabGroup1.Location = new System.Drawing.Point(4, 22);
             this.tabGroup1.Name = "tabGroup1";
             this.tabGroup1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGroup1.Size = new System.Drawing.Size(120, 124);
+            this.tabGroup1.Size = new System.Drawing.Size(120, 147);
             this.tabGroup1.TabIndex = 0;
             this.tabGroup1.Text = "Group 1";
             this.tabGroup1.UseVisualStyleBackColor = true;
@@ -111,8 +113,9 @@
             this.listBoxGroup1.FormattingEnabled = true;
             this.listBoxGroup1.Location = new System.Drawing.Point(3, 3);
             this.listBoxGroup1.Name = "listBoxGroup1";
-            this.listBoxGroup1.Size = new System.Drawing.Size(114, 118);
+            this.listBoxGroup1.Size = new System.Drawing.Size(114, 141);
             this.listBoxGroup1.TabIndex = 5;
+            this.listBoxGroup1.SelectedIndexChanged += new System.EventHandler(this.listBoxGroup1_SelectedIndexChanged);
             // 
             // tabGroup2
             // 
@@ -120,7 +123,7 @@
             this.tabGroup2.Location = new System.Drawing.Point(4, 22);
             this.tabGroup2.Name = "tabGroup2";
             this.tabGroup2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGroup2.Size = new System.Drawing.Size(120, 124);
+            this.tabGroup2.Size = new System.Drawing.Size(120, 147);
             this.tabGroup2.TabIndex = 1;
             this.tabGroup2.Text = "Group 2";
             this.tabGroup2.UseVisualStyleBackColor = true;
@@ -131,30 +134,27 @@
             this.listBoxGroup2.FormattingEnabled = true;
             this.listBoxGroup2.Location = new System.Drawing.Point(3, 3);
             this.listBoxGroup2.Name = "listBoxGroup2";
-            this.listBoxGroup2.Size = new System.Drawing.Size(114, 118);
+            this.listBoxGroup2.Size = new System.Drawing.Size(114, 141);
             this.listBoxGroup2.TabIndex = 5;
+            this.listBoxGroup2.SelectedIndexChanged += new System.EventHandler(this.listBoxGroup2_SelectedIndexChanged);
             // 
-            // dataGridView1
+            // dataGridView
             // 
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AllowUserToResizeColumns = false;
+            this.dataGridView.AllowUserToResizeRows = false;
+            this.dataGridView.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.VName,
             this.Value});
-            this.dataGridView1.Location = new System.Drawing.Point(146, 52);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(200, 150);
-            this.dataGridView1.TabIndex = 5;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(282, 22);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(64, 23);
-            this.button4.TabIndex = 8;
-            this.button4.Text = "Save";
-            this.button4.UseVisualStyleBackColor = true;
+            this.dataGridView.Location = new System.Drawing.Point(146, 52);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.RowHeadersVisible = false;
+            this.dataGridView.ShowEditingIcon = false;
+            this.dataGridView.Size = new System.Drawing.Size(200, 150);
+            this.dataGridView.TabIndex = 5;
             // 
             // VName
             // 
@@ -172,17 +172,38 @@
             this.Value.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Value.Width = 75;
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(282, 22);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(64, 23);
+            this.button4.TabIndex = 8;
+            this.button4.Text = "Save";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // cbUnknowValues
+            // 
+            this.cbUnknowValues.AutoSize = true;
+            this.cbUnknowValues.Location = new System.Drawing.Point(146, 208);
+            this.cbUnknowValues.Name = "cbUnknowValues";
+            this.cbUnknowValues.Size = new System.Drawing.Size(134, 17);
+            this.cbUnknowValues.TabIndex = 9;
+            this.cbUnknowValues.Text = "Show unknown values";
+            this.cbUnknowValues.UseVisualStyleBackColor = true;
+            this.cbUnknowValues.CheckedChanged += new System.EventHandler(this.cbUnknowValues_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(358, 227);
+            this.ClientSize = new System.Drawing.Size(358, 250);
+            this.Controls.Add(this.cbUnknowValues);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.bOpenFile);
+            this.Controls.Add(this.tbFileName);
             this.Controls.Add(this.statusStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
@@ -190,7 +211,7 @@
             this.tabControl.ResumeLayout(false);
             this.tabGroup1.ResumeLayout(false);
             this.tabGroup2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -199,17 +220,18 @@
         #endregion
 
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox tbFileName;
+        private System.Windows.Forms.Button bOpenFile;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabGroup1;
         private System.Windows.Forms.TabPage tabGroup2;
         private System.Windows.Forms.ListBox listBoxGroup1;
         private System.Windows.Forms.ListBox listBoxGroup2;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.DataGridViewTextBoxColumn VName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.CheckBox cbUnknowValues;
     }
 }
