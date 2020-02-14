@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace AMAEditor
@@ -17,9 +18,19 @@ namespace AMAEditor
 
         public void OpenAmaFile(string fileName)
         {
+            statusBar.Text = "";
+
             tbFileName.Text = fileName;
             amaFile = new AMA();
             amaFile.Read(fileName);
+
+            var sanity = AMA.SanityCheck(File.ReadAllBytes(fileName), amaFile.Write());
+
+            if (sanity.Count > 0)
+            {
+                Console.WriteLine("Sanity check failed");
+                statusBar.Text = "Warning! File won't be saved properly!";
+            }
 
             listBoxGroup1.Items.Clear();
             foreach (var obj in amaFile.Group1)

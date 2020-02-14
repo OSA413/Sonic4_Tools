@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusBar = new System.Windows.Forms.ToolStripStatusLabel();
             this.tbFileName = new System.Windows.Forms.TextBox();
             this.bOpenFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -51,12 +52,20 @@
             // 
             // statusStrip
             // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusBar});
             this.statusStrip.Location = new System.Drawing.Point(0, 228);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(358, 22);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip";
+            // 
+            // statusBar
+            // 
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(59, 17);
+            this.statusBar.Text = "";
             // 
             // tbFileName
             // 
@@ -224,6 +233,7 @@
         #endregion
 
         private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel statusBar;
         private System.Windows.Forms.TextBox tbFileName;
         private System.Windows.Forms.Button bOpenFile;
         private System.Windows.Forms.Label label1;
