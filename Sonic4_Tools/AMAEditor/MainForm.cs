@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace AMAEditor
 {
@@ -42,6 +43,11 @@ namespace AMAEditor
             }
         }
 
+        public void SaveAmaFile(string fileName)
+        {
+            amaFile.Write(fileName);
+        }
+
         private void bOpenFile_Click(object sender, System.EventArgs e)
         {
             using (var ofd = new OpenFileDialog())
@@ -71,7 +77,7 @@ namespace AMAEditor
                 return;
 
             var obj = amaFile.Group2[listBoxGroup2.SelectedIndex];
-            
+
             dataGridView.Rows.Add("Position X", obj.PositionX);
             dataGridView.Rows.Add("Position Y", obj.PositionY);
             dataGridView.Rows.Add("Size X", obj.SizeX);
@@ -112,6 +118,71 @@ namespace AMAEditor
                 listBoxGroup1_SelectedIndexChanged(null, null);
             else if (amaFile.Group2.Count > 0)
                 listBoxGroup2_SelectedIndexChanged(null, null);
+        }
+
+        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex != 1)
+                return;
+
+            var cell = dataGridView[1, e.RowIndex];
+
+            if (listBoxGroup1.SelectedIndices.Count > 0)
+            {
+                //TODO
+            }
+            else if (listBoxGroup2.SelectedIndices.Count > 0)
+            {
+                var ind = listBoxGroup2.SelectedIndex;
+                
+                switch (e.RowIndex)
+                {
+                    case 0: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].PositionX); break;
+                    case 1: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].PositionY); break;
+                    case 2: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].SizeX); break;
+                    case 3: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].SizeY); break;
+                    case 4: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown0); break;
+                    case 5: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown1); break;
+                    case 6: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown2); break;
+                    case 7: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown3); break;
+                    case 8: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown4); break;
+                    case 9: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown5); break;
+                    case 10: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown6); break;
+                    case 11: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown7); break;
+                    case 12: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown8); break;
+                    case 13: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown9); break;
+                    case 14: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown10); break;
+                    case 15: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown11); break;
+                    case 16: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown12); break;
+                    case 17: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown13); break;
+                    case 18: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown14); break;
+                    case 19: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown15); break;
+                    case 20: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown16); break;
+                    case 21: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown17); break;
+                    case 22: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown18); break;
+                    case 23: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown19); break;
+                    case 24: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown20); break;
+                    case 25: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown21); break;
+                }
+            }
+        }
+
+        public void TryConvertApplyUpdate(DataGridViewCell cell, ref float result)
+        {
+            Single.TryParse(cell.Value.ToString(), out result);
+            cell.Value = result;
+        }
+
+        public void TryConvertApplyUpdate(DataGridViewCell cell, ref int result)
+        {
+            Int32.TryParse(cell.Value.ToString(), out result);
+            cell.Value = result;
+        }
+
+        private void bSave_Click(object sender, EventArgs e)
+        {
+            if (amaFile != null)
+                amaFile.Write(tbFileName.Text);
         }
     }
 }

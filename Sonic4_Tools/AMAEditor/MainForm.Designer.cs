@@ -40,7 +40,7 @@
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.VName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button4 = new System.Windows.Forms.Button();
+            this.bSave = new System.Windows.Forms.Button();
             this.cbUnknowValues = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabGroup1.SuspendLayout();
@@ -155,6 +155,7 @@
             this.dataGridView.ShowEditingIcon = false;
             this.dataGridView.Size = new System.Drawing.Size(200, 150);
             this.dataGridView.TabIndex = 5;
+            this.dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEndEdit);
             // 
             // VName
             // 
@@ -172,14 +173,15 @@
             this.Value.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Value.Width = 75;
             // 
-            // button4
+            // bSave
             // 
-            this.button4.Location = new System.Drawing.Point(282, 22);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(64, 23);
-            this.button4.TabIndex = 8;
-            this.button4.Text = "Save";
-            this.button4.UseVisualStyleBackColor = true;
+            this.bSave.Location = new System.Drawing.Point(282, 22);
+            this.bSave.Name = "bSave";
+            this.bSave.Size = new System.Drawing.Size(64, 23);
+            this.bSave.TabIndex = 8;
+            this.bSave.Text = "Save";
+            this.bSave.UseVisualStyleBackColor = true;
+            this.bSave.Click += new System.EventHandler(this.bSave_Click);
             // 
             // cbUnknowValues
             // 
@@ -198,7 +200,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(358, 250);
             this.Controls.Add(this.cbUnknowValues);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.bSave);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.label1);
@@ -229,7 +231,7 @@
         private System.Windows.Forms.ListBox listBoxGroup1;
         private System.Windows.Forms.ListBox listBoxGroup2;
         private System.Windows.Forms.DataGridView dataGridView;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button bSave;
         private System.Windows.Forms.DataGridViewTextBoxColumn VName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.CheckBox cbUnknowValues;
