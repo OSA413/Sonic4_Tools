@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tbFileName = new System.Windows.Forms.TextBox();
             this.bOpenFile = new System.Windows.Forms.Button();
@@ -208,6 +209,7 @@
             this.Controls.Add(this.tbFileName);
             this.Controls.Add(this.statusStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "AMA Editor";
             this.tabControl.ResumeLayout(false);
