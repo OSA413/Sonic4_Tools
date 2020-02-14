@@ -263,6 +263,7 @@ namespace AMAEditor
             Array.Copy(BitConverter.GetBytes(g2nameListPointer), 0, fileRaw, 0x1C, 4);
 
             //Group 1
+            int curNamePtr = g1nameListPointer + Group1.Count * 4;
             for (int i = 0; i < Group1.Count; i++)
             {
                 var obj = Group1[i];
@@ -284,14 +285,15 @@ namespace AMAEditor
                 //0x1C
 
                 //Names
-                int curNamePtr = g1nameListPointer + Group1.Count * 4;
                 Array.Copy(BitConverter.GetBytes(curNamePtr), 0, fileRaw, g1nameListPointer + 4 * i, 4);
 
                 Array.Copy(Encoding.ASCII.GetBytes(obj.Name), 0, fileRaw, curNamePtr, obj.Name.Length);
                 curNamePtr += obj.Name.Length + 1;
             }
 
+
             //Group 2
+            curNamePtr = g2nameListPointer + Group2.Count * 4;
             for (int i = 0; i < Group2.Count; i++)
             {
                 var obj = Group2[i];
@@ -340,7 +342,6 @@ namespace AMAEditor
                 Array.Copy(BitConverter.GetBytes(obj.UVBottomEdge), 0, fileRaw, objPtr + 0x94, 4);
 
                 //Names
-                int curNamePtr = g2nameListPointer + Group2.Count * 4;
                 Array.Copy(BitConverter.GetBytes(curNamePtr), 0, fileRaw, g2nameListPointer + 4 * i, 4);
 
                 Array.Copy(Encoding.ASCII.GetBytes(obj.Name), 0, fileRaw, curNamePtr, obj.Name.Length);
