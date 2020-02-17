@@ -152,19 +152,16 @@ namespace AMAEditor
 
             foreach (int ptr in g1Dict.Keys)
             {
-                g1Dict[ptr].G1Children = new List<Group1>();
-                g1Dict[ptr].G2Children = new List<Group2>();
-
                 StrangeIsntIt(fileRaw, ptr, 0x00);
                 StrangeIsntIt(fileRaw, ptr + 4, Group1.IndexOf(g1Dict[ptr]));
 
                 int ptrG1Child = BitConverter.ToInt32(fileRaw, ptr + 0x8);
                 if (ptrG1Child != 0)
-                    g1Dict[ptr].G1Children.Add(g1Dict[ptrG1Child]);
+                    g1Dict[ptr].G1Child0 = g1Dict[ptrG1Child];
 
                 ptrG1Child = BitConverter.ToInt32(fileRaw, ptr + 0xC);
                 if (ptrG1Child != 0)
-                    g1Dict[ptr].G1Children.Add(g1Dict[ptrG1Child]);
+                    g1Dict[ptr].G1Child1 = g1Dict[ptrG1Child];
 
                 int ptrParent = BitConverter.ToInt32(fileRaw, ptr + 0x10);
                 if (ptrParent != 0)
@@ -172,7 +169,7 @@ namespace AMAEditor
 
                 int ptrG2Child = BitConverter.ToInt32(fileRaw, ptr + 0x14);
                 if (ptrG2Child != 0)
-                    g1Dict[ptr].G2Children.Add(g2Dict[ptrG2Child]);
+                    g1Dict[ptr].G2Child0 = g2Dict[ptrG2Child];
 
                 StrangeIsntIt(fileRaw, ptr + 0x18, 0x00);
                 StrangeIsntIt(fileRaw, ptr + 0x1C, 0x00);
@@ -277,55 +274,46 @@ namespace AMAEditor
                 Array.Copy(BitConverter.GetBytes(i), 0, fileRaw, objPtr + 0x04, 4);
 
                 //Group 1 children objects
-                var G1Children = new List<int>();
-                foreach (var child in obj.G1Children)
+                int G1Child0 = -1;
+                int G1Child1 = -1;
+                int G1Parent = -1;
+
+                for (int objNum = 0; objNum < Group1.Count; objNum++)
                 {
-                    for (int objNum = 0; objNum < Group1.Count; objNum++)
-                    {
-                        if (Group1[objNum].Name == child.Name)
-                        {
-                            G1Children.Add(objNum);
-                            break;
-                        }
-                    }
+                    if (obj.G1Child0 != null && Group1[objNum].Name == obj.G1Child0.Name)
+                        G1Child0 = objNum;
+                    if (obj.G1Child1 != null && Group1[objNum].Name == obj.G1Child1.Name)
+                        G1Child1 = objNum;
+                    if (obj.Parent != null && Group1[objNum].Name == obj.Parent.Name)
+                        G1Parent = objNum;
+
+                    if ((G1Child0 >= 0 || obj.G1Child0 == null)
+                    && (G1Child1 >= 0 || obj.G1Child1 == null)
+                    && (G1Parent >= 0 || obj.Parent == null))
+                        break;
                 }
 
-                for (int j = 0; j < G1Children.Count; j++)
-                    Array.Copy(BitConverter.GetBytes(g1listPointer + 4 * Group1.Count + g1objLength * G1Children[j]), 0, fileRaw, objPtr + 8 + 4 * j, 4);
-
-                var g1ParentNumber = -1;
-                if (obj.Parent != null)
-                {
-                    for (int objNum = 0; objNum < Group1.Count; objNum++)
-                    {
-                        if (Group1[objNum].Name == obj.Parent.Name)
-                        {
-                            g1ParentNumber = objNum;
-                            break;
-                        }
-                    }
-                }
-
-                if (g1ParentNumber != -1)
-                    Array.Copy(BitConverter.GetBytes(g1listPointer + 4 * Group1.Count + g1objLength * g1ParentNumber), 0, fileRaw, objPtr + 0x10, 4);
+                if (G1Child0 >= 0)
+                    Array.Copy(BitConverter.GetBytes(g1listPointer + 4 * Group1.Count + g1objLength * G1Child0), 0, fileRaw, objPtr + 0x8, 4);
+                if (G1Child1 >= 0)
+                    Array.Copy(BitConverter.GetBytes(g1listPointer + 4 * Group1.Count + g1objLength * G1Child1), 0, fileRaw, objPtr + 0xC, 4);
+                if (G1Parent >= 0)
+                    Array.Copy(BitConverter.GetBytes(g1listPointer + 4 * Group1.Count + g1objLength * G1Parent), 0, fileRaw, objPtr + 0x10, 4);
 
                 //Group 2 children objects
-                var G2Children = new List<int>();
-                foreach (var child in obj.G2Children)
+                int G2Child0 = -1;
+                for (int objNum = 0; objNum < Group2.Count; objNum++)
                 {
-                    for (int objNum = 0; objNum < Group2.Count; objNum++)
-                    {
-                        if (Group2[objNum].Name == child.Name)
-                        {
-                            G2Children.Add(objNum);
-                            break;
-                        }
-                    }
+                    if (obj.G2Child0 != null && Group2[objNum].Name == obj.G2Child0.Name)
+                        G2Child0 = objNum;
+
+                    if (G2Child0 >= 0 || obj.G2Child0 == null)
+                        break;
                 }
 
-                for (int j = 0; j < G2Children.Count; j++)
-                    Array.Copy(BitConverter.GetBytes(g2listPointer + 4 * Group2.Count + g2objLength * G2Children[j]), 0, fileRaw, objPtr + 0x14 + 4 * j, 4);
-                
+                if (G2Child0 >= 0)
+                    Array.Copy(BitConverter.GetBytes(g2listPointer + 4 * Group2.Count + g2objLength * G2Child0), 0, fileRaw, objPtr + 0x14, 4);
+
                 //0x18
                 //0x1C
 
@@ -407,8 +395,11 @@ namespace AMAEditor
     {
         public string       Name;
         public Group1       Parent;
-        public List<Group1> G1Children;
-        public List<Group2> G2Children;
+
+        //Children
+        public Group1 G1Child0;
+        public Group1 G1Child1;
+        public Group2 G2Child0;
     }
 
     public class Group2
@@ -479,13 +470,14 @@ namespace AMAEditor
                     if (ama.Group1[i].Parent != null)
                         Console.WriteLine("Parent name: " + ama.Group1[i].Parent.Name);
 
-                    Console.WriteLine("Group 1 child number: " + ama.Group1[i].G1Children.Count);
-                    for (int j = 0; j < ama.Group1[i].G1Children.Count; j++)
-                        Console.WriteLine("\tChild #" + j + "'s name: " + ama.Group1[i].G1Children[j].Name);
+                    if (ama.Group1[i].G1Child0 != null)
+                        Console.WriteLine("\tGroup 1 Child #0's name: " + ama.Group1[i].G1Child0.Name);
 
-                    Console.WriteLine("Group 2 child number: " + ama.Group1[i].G2Children.Count);
-                    for (int j = 0; j < ama.Group1[i].G2Children.Count; j++)
-                        Console.WriteLine("\tChild #" + j + "'s name: " + ama.Group1[i].G2Children[j].Name);
+                    if (ama.Group1[i].G1Child1 != null)
+                        Console.WriteLine("\tGroup 1 Child #1's name: " + ama.Group1[i].G1Child1.Name);
+
+                    if (ama.Group1[i].G2Child0 != null)
+                        Console.WriteLine("\tGroup 2 Child #0's name: " + ama.Group1[i].G2Child0.Name);
 
                     Console.WriteLine();
                 }
