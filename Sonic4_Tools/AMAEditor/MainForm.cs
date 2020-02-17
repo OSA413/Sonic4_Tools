@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace AMAEditor
 {
@@ -74,11 +75,38 @@ namespace AMAEditor
 
         private void listBoxGroup1_SelectedIndexChanged(object sender, System.EventArgs e)
         {
+            dataGridView.Rows.Clear();
             if (listBoxGroup1.SelectedIndices.Count == 0)
                 return;
 
             var obj = amaFile.Group1[listBoxGroup1.SelectedIndex];
-            //todo
+
+            var G1List = new string[amaFile.Group1.Count + 1];
+            G1List[0] = "(None)";
+            for (int i = 0; i < amaFile.Group1.Count; i++)
+                G1List[i + 1] = amaFile.Group1[i].Name;
+
+            var comboboxG1 = new DataGridViewComboBoxCell();
+            comboboxG1.Items.AddRange(G1List);
+            comboboxG1.Value = "(None)";
+
+            var G2List = new string[amaFile.Group2.Count];
+            G2List[0] = "(None)";
+            for (int i = 0; i < amaFile.Group2.Count; i++)
+                G2List[i] = amaFile.Group2[i].Name;
+
+            var comboboxG2 = new DataGridViewComboBoxCell();
+            comboboxG2.Items.AddRange(G2List);
+            comboboxG2.Value = "(None)";
+
+            dataGridView.Rows.Add("Group 1 Child 0", "");
+            dataGridView[1, 0] = (DataGridViewCell)comboboxG1.Clone();
+            dataGridView.Rows.Add("Group 1 Child 1", "");
+            dataGridView[1, 1] = (DataGridViewCell)comboboxG1.Clone();
+            dataGridView.Rows.Add("Group 1 Parent", "");
+            dataGridView[1, 2] = (DataGridViewCell)comboboxG1.Clone();
+            dataGridView.Rows.Add("Group 2 Child 0", "");
+            dataGridView[1, 3] = (DataGridViewCell)comboboxG2.Clone();
         }
 
         private void listBoxGroup2_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -141,6 +169,7 @@ namespace AMAEditor
             if (listBoxGroup1.SelectedIndices.Count > 0)
             {
                 //TODO
+                //TODO next
             }
             else if (listBoxGroup2.SelectedIndices.Count > 0)
             {
