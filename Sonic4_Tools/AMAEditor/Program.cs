@@ -267,20 +267,65 @@ namespace AMAEditor
             for (int i = 0; i < Group1.Count; i++)
             {
                 var obj = Group1[i];
-                int objPtr = g2listPointer + 4 * Group2.Count + g2objLength * i;
+                int objPtr = g1listPointer + 4 * Group1.Count + g1objLength * i;
 
-                //Name list pointer
-                Array.Copy(BitConverter.GetBytes(objPtr), 0, fileRaw, g2listPointer + 4 * i, 4);
+                //Object list pointer
+                Array.Copy(BitConverter.GetBytes(objPtr), 0, fileRaw, g1listPointer + 4 * i, 4);
 
                 //Body
                 //0x00
                 Array.Copy(BitConverter.GetBytes(i), 0, fileRaw, objPtr + 0x04, 4);
 
-                var G1Children = obj.G1Children;
-                //Somehow make pointers relationship
-                //for (int iChild = 0; iChild < G1Children.Count; iChild++)
-                //Array.Copy(BitConverter.GetBytes(i), 0, fileRaw, objPointer + 0x08, 4);
+                //Group 1 children objects
+                var G1Children = new List<int>();
+                foreach (var child in obj.G1Children)
+                {
+                    for (int objNum = 0; objNum < Group1.Count; objNum++)
+                    {
+                        if (Group1[objNum].Name == child.Name)
+                        {
+                            G1Children.Add(objNum);
+                            break;
+                        }
+                    }
+                }
 
+                for (int j = 0; j < G1Children.Count; j++)
+                    Array.Copy(BitConverter.GetBytes(g1listPointer + 4 * Group1.Count + g1objLength * G1Children[j]), 0, fileRaw, objPtr + 8 + 4 * j, 4);
+
+                var g1ParentNumber = -1;
+                if (obj.Parent != null)
+                {
+                    for (int objNum = 0; objNum < Group1.Count; objNum++)
+                    {
+                        if (Group1[objNum].Name == obj.Parent.Name)
+                        {
+                            g1ParentNumber = objNum;
+                            break;
+                        }
+                    }
+                }
+
+                if (g1ParentNumber != -1)
+                    Array.Copy(BitConverter.GetBytes(g1listPointer + 4 * Group1.Count + g1objLength * g1ParentNumber), 0, fileRaw, objPtr + 0x10, 4);
+
+                //Group 2 children objects
+                var G2Children = new List<int>();
+                foreach (var child in obj.G2Children)
+                {
+                    for (int objNum = 0; objNum < Group2.Count; objNum++)
+                    {
+                        if (Group2[objNum].Name == child.Name)
+                        {
+                            G2Children.Add(objNum);
+                            break;
+                        }
+                    }
+                }
+
+                for (int j = 0; j < G2Children.Count; j++)
+                    Array.Copy(BitConverter.GetBytes(g2listPointer + 4 * Group2.Count + g2objLength * G2Children[j]), 0, fileRaw, objPtr + 0x14 + 4 * j, 4);
+                
                 //0x18
                 //0x1C
 
@@ -496,7 +541,8 @@ namespace AMAEditor
                     Console.WriteLine();
                 }
 
-                var sanity = AMA.SanityCheck(File.ReadAllBytes(file), ama.Write());
+                var newAMA = ama.Write();
+                var sanity = AMA.SanityCheck(File.ReadAllBytes(file), newAMA);
 
                 Console.Write("Sanity check ");
                 if (sanity.Count == 0)
@@ -507,6 +553,7 @@ namespace AMAEditor
                     foreach (int i in sanity)
                         Console.Write("0x" + i.ToString("X") + " ");
                     Console.WriteLine();
+                    File.WriteAllBytes("/home/osa413/test.ama", newAMA);
                 }
 
                 if (args.Length == 0)
