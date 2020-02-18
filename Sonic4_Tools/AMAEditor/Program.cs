@@ -545,7 +545,6 @@ namespace AMAEditor
                     foreach (int i in sanity)
                         Console.Write("0x" + i.ToString("X") + " ");
                     Console.WriteLine();
-                    File.WriteAllBytes("/home/osa413/test.ama", newAMA);
                 }
 
                 if (args.Length == 0)

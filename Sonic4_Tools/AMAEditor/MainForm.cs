@@ -78,6 +78,7 @@ namespace AMAEditor
             dataGridView.Rows.Clear();
             if (listBoxGroup1.SelectedIndices.Count == 0)
                 return;
+            listBoxGroup2.ClearSelected();
 
             var obj = amaFile.Group1[listBoxGroup1.SelectedIndex];
 
@@ -90,10 +91,10 @@ namespace AMAEditor
             comboboxG1.Items.AddRange(G1List);
             comboboxG1.Value = "(None)";
 
-            var G2List = new string[amaFile.Group2.Count];
+            var G2List = new string[amaFile.Group2.Count + 1];
             G2List[0] = "(None)";
             for (int i = 0; i < amaFile.Group2.Count; i++)
-                G2List[i] = amaFile.Group2[i].Name;
+                G2List[i + 1] = amaFile.Group2[i].Name;
 
             var comboboxG2 = new DataGridViewComboBoxCell();
             comboboxG2.Items.AddRange(G2List);
@@ -101,12 +102,20 @@ namespace AMAEditor
 
             dataGridView.Rows.Add("Group 1 Child 0", "");
             dataGridView[1, 0] = (DataGridViewCell)comboboxG1.Clone();
+            if (obj.G1Child0 != null)
+                dataGridView[1, 0].Value = G1List[Array.IndexOf(G1List, obj.G1Child0.Name) + 1];
             dataGridView.Rows.Add("Group 1 Child 1", "");
             dataGridView[1, 1] = (DataGridViewCell)comboboxG1.Clone();
+            if (obj.G1Child1 != null)
+                dataGridView[1, 1].Value = G1List[Array.IndexOf(G1List, obj.G1Child1.Name) + 1];
             dataGridView.Rows.Add("Group 1 Parent", "");
             dataGridView[1, 2] = (DataGridViewCell)comboboxG1.Clone();
+            if (obj.Parent != null)
+                dataGridView[1, 2].Value = G1List[Array.IndexOf(G1List, obj.Parent.Name) + 1];
             dataGridView.Rows.Add("Group 2 Child 0", "");
             dataGridView[1, 3] = (DataGridViewCell)comboboxG2.Clone();
+            if (obj.G2Child0 != null)
+                dataGridView[1, 3].Value = G2List[Array.IndexOf(G2List, obj.G2Child0.Name) + 1];
         }
 
         private void listBoxGroup2_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -114,6 +123,7 @@ namespace AMAEditor
             dataGridView.Rows.Clear();
             if (listBoxGroup2.SelectedIndices.Count == 0)
                 return;
+            listBoxGroup1.ClearSelected();
 
             var obj = amaFile.Group2[listBoxGroup2.SelectedIndex];
 
@@ -153,9 +163,9 @@ namespace AMAEditor
         {
             if (amaFile == null)
                 return;
-            if (amaFile.Group1.Count > 0)
+            if (listBoxGroup1.SelectedIndices.Count > 0)
                 listBoxGroup1_SelectedIndexChanged(null, null);
-            else if (amaFile.Group2.Count > 0)
+            else if (listBoxGroup2.SelectedIndices.Count > 0)
                 listBoxGroup2_SelectedIndexChanged(null, null);
         }
 
@@ -166,15 +176,22 @@ namespace AMAEditor
 
             var cell = dataGridView[1, e.RowIndex];
 
-            if (listBoxGroup1.SelectedIndices.Count > 0)
+            if (((Control)sender).Name == "listBoxGroup1")
             {
-                //TODO
-                //TODO next
+                var ind = listBoxGroup1.SelectedIndex;
+
+                switch (e.RowIndex)
+                {
+                    case 0: TryConvertApplyUpdate(cell, ref amaFile.Group1[ind].G1Child0.Name); break;
+                    case 1: TryConvertApplyUpdate(cell, ref amaFile.Group1[ind].G1Child1.Name); break;
+                    case 2: TryConvertApplyUpdate(cell, ref amaFile.Group1[ind].Parent.Name);   break;
+                    case 3: TryConvertApplyUpdate(cell, ref amaFile.Group1[ind].G2Child0.Name); break;
+                }
             }
-            else if (listBoxGroup2.SelectedIndices.Count > 0)
+            else if (((Control)sender).Name == "listBoxGroup2")
             {
                 var ind = listBoxGroup2.SelectedIndex;
-                
+
                 switch (e.RowIndex)
                 {
                     case 0: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].PositionX); break;
@@ -217,6 +234,13 @@ namespace AMAEditor
         {
             Int32.TryParse(cell.Value.ToString(), out result);
             cell.Value = result;
+        }
+
+        public void TryConvertApplyUpdate(DataGridViewCell cell, ref string result)
+        {
+            if (cell.Value.ToString() != "(None)")
+                result = cell.Value.ToString();
+            result = null;
         }
 
         private void bSave_Click(object sender, EventArgs e)
