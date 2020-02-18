@@ -103,19 +103,19 @@ namespace AMAEditor
             dataGridView.Rows.Add("Group 1 Child 0", "");
             dataGridView[1, 0] = (DataGridViewCell)comboboxG1.Clone();
             if (obj.G1Child0 != null)
-                dataGridView[1, 0].Value = G1List[Array.IndexOf(G1List, obj.G1Child0.Name) + 1];
+                dataGridView[1, 0].Value = G1List[Array.IndexOf(G1List, obj.G1Child0.Name)];
             dataGridView.Rows.Add("Group 1 Child 1", "");
             dataGridView[1, 1] = (DataGridViewCell)comboboxG1.Clone();
             if (obj.G1Child1 != null)
-                dataGridView[1, 1].Value = G1List[Array.IndexOf(G1List, obj.G1Child1.Name) + 1];
+                dataGridView[1, 1].Value = G1List[Array.IndexOf(G1List, obj.G1Child1.Name)];
             dataGridView.Rows.Add("Group 1 Parent", "");
             dataGridView[1, 2] = (DataGridViewCell)comboboxG1.Clone();
             if (obj.Parent != null)
-                dataGridView[1, 2].Value = G1List[Array.IndexOf(G1List, obj.Parent.Name) + 1];
+                dataGridView[1, 2].Value = G1List[Array.IndexOf(G1List, obj.Parent.Name)];
             dataGridView.Rows.Add("Group 2 Child 0", "");
             dataGridView[1, 3] = (DataGridViewCell)comboboxG2.Clone();
             if (obj.G2Child0 != null)
-                dataGridView[1, 3].Value = G2List[Array.IndexOf(G2List, obj.G2Child0.Name) + 1];
+                dataGridView[1, 3].Value = G2List[Array.IndexOf(G2List, obj.G2Child0.Name)];
         }
 
         private void listBoxGroup2_SelectedIndexChanged(object sender, System.EventArgs e)

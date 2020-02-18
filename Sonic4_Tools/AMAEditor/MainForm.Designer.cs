@@ -74,6 +74,7 @@
             this.tbFileName.ReadOnly = true;
             this.tbFileName.Size = new System.Drawing.Size(202, 20);
             this.tbFileName.TabIndex = 1;
+            this.tbFileName.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // bOpenFile
             // 
