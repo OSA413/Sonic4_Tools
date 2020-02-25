@@ -12,12 +12,12 @@
 Address | Description
 ------- | ---------------------
   G1P0  | List of pointers (`G1P1_0`, `G1P1_1`, ..., up to G1C)
- G1P1_0 | Some 8 values
- G1P1_1 | Some other 8 values
+ G1P1_0 | Group 1 Object#0
+ G1P1_1 | Group 1 Object#1
    ...  | So on
   G2P0  | List of pointers (`G2P1_0`, `G2P1_1`, ..., up to G2C)
- G2P1_0 | Some 38 values
- G2P1_1 | Some other 38 values
+ G2P1_0 | Group 2 Object#0
+ G2P1_1 | Group 2 Object#1
    ...  | So on
   G1NP  | List of name pointers (`G1NP_0`, `G1NP_1`, ..., up to G1C)
  G1NP_0 | Name of object0 of group 1 (string)
