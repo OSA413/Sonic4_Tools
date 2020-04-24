@@ -21,11 +21,9 @@ jobs:
     - name: Upload artifact (Main)
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: Main
         path: dist/Sonic4_Tools.7z
 
     - name: Upload artifact (SHA256 sums)
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: SHA256 sums
         path: dist/SHA256SUMS
