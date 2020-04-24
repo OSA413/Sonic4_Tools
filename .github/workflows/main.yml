@@ -22,13 +22,7 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: Main
-        path: dist/Sonic4ModLoader.7z
-
-    - name: Upload artifact (Main (without 7-Zip))
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: Main
-        path: dist/Sonic4ModLoader_7zip-less.7z
+        path: dist/Sonic4_Tools.7z
 
     - name: Upload artifact (SHA256 sums)
       uses: actions/upload-artifact@v1.0.0
