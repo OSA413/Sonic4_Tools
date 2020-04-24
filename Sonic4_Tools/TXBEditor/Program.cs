@@ -19,6 +19,26 @@ namespace AMAEditor
                 && fileRaw[3] == 'B';
         }
 
+        public static void ReverseEndianness(byte[] fileRaw)
+        {
+            //Проверка на порядок байт в файле
+            if (true)
+            {
+
+            }
+
+            Array.Reverse(fileRaw, 0x10, 4);
+            Array.Reverse(fileRaw, 0x14, 4);
+
+            int fileNubmer = BitConverter.ToInt32(fileRaw, 0x10);
+            int objectPointer = BitConverter.ToInt32(fileRaw, 0x14);
+
+            for (int i = objectPointer; i < fileNubmer * 5 * 4 + objectPointer; i = i + 4)
+            {
+                Array.Reverse(fileRaw, i, 4);
+            }
+        }
+
         private void StrangeIsntIt(byte[] fileRaw, int ptr, int intendedValue)
         {
             StrangeIsntIt(BitConverter.ToInt32(fileRaw, ptr), ptr, intendedValue);
@@ -78,13 +98,21 @@ namespace AMAEditor
     public class TXBObject
     {
         public string Name;
+        public int Unknown0;
+        public int Unknown1;
+        public int Unknown2;
+        public int Unknown3;
     }
 
     class MainClass
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello world!");
+            var file = File.ReadAllBytes("/home/osa413/Документы/Episode 1 extracted/DEMO/BUY_SCREEN/D_BUY_SCREEN_FR.AMB/TEX.AMB/D_BUY_SCREEN.TXB");
+
+            TXB.ReverseEndianness(file);
+
+            File.WriteAllBytes("/home/osa413/Документы/Episode 1 extracted/DEMO/BUY_SCREEN/D_BUY_SCREEN_FR.AMB/TEX.AMB/D_BUY_SCREEN.TXB_", file);
         }
     }
 }
