@@ -451,13 +451,9 @@ namespace AMAEditor
 
                 string file;
                 if (args.Length > 0)
-                {
-                    file = args[0];
-                }
+                    file = args[1];
                 else
-                {
                     file = Console.ReadLine();
-                }
 
                 ama.Read(file);
 
