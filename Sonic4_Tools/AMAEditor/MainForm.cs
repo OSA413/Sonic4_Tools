@@ -25,9 +25,9 @@ namespace AMAEditor
             amaFile = new AMA();
             amaFile.Read(fileName);
 
-            var sanity = AMA.SanityCheck(File.ReadAllBytes(fileName), amaFile.Write());
+            amaFile.SanityCheck(fileName);
 
-            if (sanity.Count > 0)
+            if (amaFile.WrongValues.Count > 0)
             {
                 Console.WriteLine("Sanity check failed");
                 statusBar.Text = "Warning! File won't be saved properly!";

@@ -5,9 +5,11 @@ using System.Text;
 using System.Linq;
 using System.Windows.Forms;
 
+using SanityChecker;
+
 namespace AMAEditor
 {
-    public class AMA
+    public class AMA: SanityCheckable
     {
         //https://github.com/OSA413/Sonic4_Tools/blob/master/docs/Specifications/AMA.md
         public List<Group1> Group1;
@@ -36,25 +38,6 @@ namespace AMAEditor
                 Strange = true;
                 StrangeList.Add(ptr);
             }
-        }
-
-        public static List<int> SanityCheck(byte[] orig, byte[] recreation)
-        {
-            var dif = new List<int>();
-
-            if (orig.Length == recreation.Length)
-            {
-                for (int i = 0; i < orig.Length; i++)
-                    if (orig[i] != recreation[i])
-                        dif.Add(i);
-            }
-            else
-                dif.Add(-1);
-
-            Console.WriteLine(orig.Length);
-            Console.WriteLine(recreation.Length);
-
-            return dif;
         }
 
         public void Read(byte[] fileRaw)
@@ -201,7 +184,7 @@ namespace AMAEditor
             this.Read(File.ReadAllBytes(fileName));
         }
 
-        public byte[] Write()
+        public override byte[] Write()
         {
             int fileLength = 0;
 
@@ -529,16 +512,15 @@ namespace AMAEditor
                     Console.WriteLine();
                 }
 
-                var newAMA = ama.Write();
-                var sanity = AMA.SanityCheck(File.ReadAllBytes(file), newAMA);
+                ama.SanityCheck(file);
 
                 Console.Write("Sanity check ");
-                if (sanity.Count == 0)
+                if (ama.WrongValues.Count == 0)
                     Console.WriteLine("passed");
                 else
                 {
-                    Console.WriteLine("failed (" + sanity.Count + ")");
-                    foreach (int i in sanity)
+                    Console.WriteLine("failed (" + ama.WrongValues.Count + ")");
+                    foreach (int i in ama.WrongValues)
                         Console.Write("0x" + i.ToString("X") + " ");
                     Console.WriteLine();
                 }

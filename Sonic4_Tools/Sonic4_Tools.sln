@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMAEditor", "AMAEditor\AMAE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TXBEditor", "TXBEditor\TXBEditor.csproj", "{BFB9C28A-60A5-407B-A060-3E088BB96452}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanityChecker", "SanityChecker\SanityChecker.csproj", "{8A5E4278-A300-464C-845A-1D445AA76F29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BFB9C28A-60A5-407B-A060-3E088BB96452}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFB9C28A-60A5-407B-A060-3E088BB96452}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFB9C28A-60A5-407B-A060-3E088BB96452}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A5E4278-A300-464C-845A-1D445AA76F29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A5E4278-A300-464C-845A-1D445AA76F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A5E4278-A300-464C-845A-1D445AA76F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A5E4278-A300-464C-845A-1D445AA76F29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

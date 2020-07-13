@@ -54,5 +54,11 @@
   <ItemGroup>
     <Content Include="icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SanityChecker\SanityChecker.csproj">
+      <Project>{8A5E4278-A300-464C-845A-1D445AA76F29}</Project>
+      <Name>SanityChecker</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
