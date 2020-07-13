@@ -31,6 +31,7 @@ namespace AMAEditor
             {
                 Console.WriteLine("Sanity check failed");
                 statusBar.Text = "Warning! File won't be saved properly!";
+                File.WriteAllText(fileName + "_check.txt", String.Join(" ", amaFile.StrangeList));
             }
 
             listBoxGroup1.Items.Clear();
