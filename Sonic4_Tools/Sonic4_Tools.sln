@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMAEditor", "AMAEditor\AMAE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TXBEditor", "TXBEditor\TXBEditor.csproj", "{BFB9C28A-60A5-407B-A060-3E088BB96452}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{23779AAC-CD75-4626-B10E-9AA61682BA63}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{EC45BCA5-2369-4612-9D3C-F6B54D015410}"
 	ProjectSection(SolutionItems) = preProject
 		SanityChecker.cs = SanityChecker.cs
 	EndProjectSection
