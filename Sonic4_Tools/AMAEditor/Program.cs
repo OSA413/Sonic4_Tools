@@ -372,6 +372,71 @@ namespace AMAEditor
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
             File.WriteAllBytes(fileName, this.Write());
         }
+
+        public string InfoToString()
+        {
+            var info = "";
+
+            info += "Group 1 objects:\n";
+            info += "Number of objects: " + Group1.Count + "\n\n";
+            for (int i = 0; i < Group1.Count; i++)
+            {
+                info += "Object #" + i + "\n";
+                info += "Name: " + Group1[i].Name + "\n";
+                if (Group1[i].Parent != null)
+                    info += "Parent name: " + Group1[i].Parent.Name + "\n";
+                if (Group1[i].G1Child0 != null)
+                    info += "\tGroup 1 Child #0's name: " + Group1[i].G1Child0.Name + "\n";
+                if (Group1[i].G1Child1 != null)
+                    info += "\tGroup 1 Child #1's name: " + Group1[i].G1Child1.Name + "\n";
+                if (Group1[i].G2Child0 != null)
+                    info += "\tGroup 2 Child #0's name: " + Group1[i].G2Child0.Name + "\n";
+                info += "\n";
+            }
+
+            info += "Group 2 objects:\n";
+            info += "Number of objects: " + Group2.Count + "\n";
+            for (int i = 0; i < Group2.Count; i++)
+            {
+                info += "Object #" + i + "\n";
+                info += "Name: " + Group2[i].Name + "\n";
+
+                info += "PositionX: " + Group2[i].PositionX + "\n";
+                info += "PositionY: " + Group2[i].PositionY + "\n";
+                info += "SizeX: " + Group2[i].SizeX + "\n";
+                info += "SizeY: " + Group2[i].SizeY + "\n";
+
+                info += "UVLeftEdge: " + Group2[i].UVLeftEdge + "\n";
+                info += "UVUpperEdge: " + Group2[i].UVUpperEdge + "\n";
+                info += "UVRightEdge: " + Group2[i].UVRightEdge + "\n";
+                info += "UVBottomEdge: " + Group2[i].UVBottomEdge + "\n";
+
+                info += "Unknown values:" + "\n";
+                info += Group2[i].Unknown0 + " ";
+                info += Group2[i].Unknown1 + " ";
+                info += Group2[i].Unknown2 + " ";
+                info += Group2[i].Unknown3 + " ";
+                info += Group2[i].Unknown4 + " ";
+                info += Group2[i].Unknown5 + " ";
+                info += Group2[i].Unknown6 + " ";
+                info += Group2[i].Unknown7 + " ";
+                info += Group2[i].Unknown8 + " ";
+                info += Group2[i].Unknown9 + " ";
+                info += Group2[i].Unknown10 + " ";
+                info += Group2[i].Unknown11 + " ";
+                info += Group2[i].Unknown12 + " ";
+                info += Group2[i].Unknown13 + " ";
+                info += Group2[i].Unknown14 + " ";
+                info += Group2[i].Unknown15 + " ";
+                info += Group2[i].Unknown16 + " ";
+                info += Group2[i].Unknown17 + " ";
+                info += Group2[i].Unknown18 + " ";
+                info += Group2[i].Unknown19 + " ";
+                info += Group2[i].Unknown20 + " ";
+                info += Group2[i].Unknown21 + "\n\n";
+            }
+            return info;
+        }
     }
 
     public class Group1
@@ -428,105 +493,61 @@ namespace AMAEditor
         [STAThread]
         public static void Main(string[] args)
         {
-            if (args.Contains("--check"))
+            if (args[0] == "--check")
             {
+                var sanityOnly = false;
+                if (args[1] == "--sanity-only")
+                    sanityOnly = true;
+
                 var ama = new AMA();
 
                 string file;
                 if (args.Length > 0)
-                    file = args[1];
+                    file = args[1 + (sanityOnly ? 1 : 0)];
                 else
                     file = Console.ReadLine();
 
                 ama.Read(file);
-
-                Console.WriteLine("Group 1 objects:");
-                Console.WriteLine("Number of objects: " + ama.Group1.Count + "\n");
-                for (int i = 0; i < ama.Group1.Count; i++)
-                {
-                    Console.WriteLine("Object #" + i);
-                    Console.WriteLine("Name: " + ama.Group1[i].Name);
-                    if (ama.Group1[i].Parent != null)
-                        Console.WriteLine("Parent name: " + ama.Group1[i].Parent.Name);
-
-                    if (ama.Group1[i].G1Child0 != null)
-                        Console.WriteLine("\tGroup 1 Child #0's name: " + ama.Group1[i].G1Child0.Name);
-
-                    if (ama.Group1[i].G1Child1 != null)
-                        Console.WriteLine("\tGroup 1 Child #1's name: " + ama.Group1[i].G1Child1.Name);
-
-                    if (ama.Group1[i].G2Child0 != null)
-                        Console.WriteLine("\tGroup 2 Child #0's name: " + ama.Group1[i].G2Child0.Name);
-
-                    Console.WriteLine();
-                }
-
-                Console.WriteLine("Group 2 objects:");
-                Console.WriteLine("Number of objects: " + ama.Group2.Count + "\n");
-                for (int i = 0; i < ama.Group2.Count; i++)
-                {
-                    Console.WriteLine("Object #" + i);
-                    Console.WriteLine("Name: " + ama.Group2[i].Name);
-
-                    Console.WriteLine("PositionX: " + ama.Group2[i].PositionX);
-                    Console.WriteLine("PositionY: " + ama.Group2[i].PositionY);
-                    Console.WriteLine("SizeX: " + ama.Group2[i].SizeX);
-                    Console.WriteLine("SizeY: " + ama.Group2[i].SizeY);
-
-                    Console.WriteLine("UVLeftEdge: " + ama.Group2[i].UVLeftEdge);
-                    Console.WriteLine("UVUpperEdge: " + ama.Group2[i].UVUpperEdge);
-                    Console.WriteLine("UVRightEdge: " + ama.Group2[i].UVRightEdge);
-                    Console.WriteLine("UVBottomEdge: " + ama.Group2[i].UVBottomEdge);
-
-                    Console.WriteLine("Unknown values:");
-                    Console.Write(ama.Group2[i].Unknown0 + " ");
-                    Console.Write(ama.Group2[i].Unknown1 + " ");
-                    Console.Write(ama.Group2[i].Unknown2 + " ");
-                    Console.Write(ama.Group2[i].Unknown3 + " ");
-                    Console.Write(ama.Group2[i].Unknown4 + " ");
-                    Console.Write(ama.Group2[i].Unknown5 + " ");
-                    Console.Write(ama.Group2[i].Unknown6 + " ");
-                    Console.Write(ama.Group2[i].Unknown7 + " ");
-                    Console.Write(ama.Group2[i].Unknown8 + " ");
-                    Console.Write(ama.Group2[i].Unknown9 + " ");
-                    Console.Write(ama.Group2[i].Unknown10 + " ");
-                    Console.Write(ama.Group2[i].Unknown11 + " ");
-                    Console.Write(ama.Group2[i].Unknown12 + " ");
-                    Console.Write(ama.Group2[i].Unknown13 + " ");
-                    Console.Write(ama.Group2[i].Unknown14 + " ");
-                    Console.Write(ama.Group2[i].Unknown15 + " ");
-                    Console.Write(ama.Group2[i].Unknown16 + " ");
-                    Console.Write(ama.Group2[i].Unknown17 + " ");
-                    Console.Write(ama.Group2[i].Unknown18 + " ");
-                    Console.Write(ama.Group2[i].Unknown19 + " ");
-                    Console.Write(ama.Group2[i].Unknown20 + " ");
-                    Console.Write(ama.Group2[i].Unknown21 + "\n\n");
-                }
-
-                if (ama.Strange)
-                {
-                    Console.WriteLine("This AMA file is strange");
-                    Console.WriteLine("Strange values at:");
-                    foreach (int i in ama.StrangeList)
-                        Console.Write("0x" + i.ToString("X") + " ");
-                    Console.WriteLine();
-                }
-
                 ama.SanityCheck(file);
 
-                Console.Write("Sanity check ");
-                if (ama.WrongValues.Count == 0)
-                    Console.WriteLine("passed");
+                if (sanityOnly)
+                {
+                    if (ama.WrongValues.Count == 0)
+                        Console.WriteLine("OK");
+                    else
+                    {
+                        foreach (int i in ama.WrongValues)
+                            Console.Write("0x" + i.ToString("X") + " ");
+                        Console.WriteLine();
+                    }
+                }
                 else
                 {
-                    Console.WriteLine("failed (" + ama.WrongValues.Count + ")");
-                    foreach (int i in ama.WrongValues)
-                        Console.Write("0x" + i.ToString("X") + " ");
-                    Console.WriteLine();
-                }
+                    Console.WriteLine(ama.InfoToString());
 
-                if (args.Length == 0)
-                    Console.Read();
+                    if (ama.Strange)
+                    {
+                        Console.WriteLine("This AMA file is strange");
+                        Console.WriteLine("Strange values at:");
+                        foreach (int i in ama.StrangeList)
+                            Console.Write("0x" + i.ToString("X") + " ");
+                        Console.WriteLine();
+                    }
+
+                    Console.Write("Sanity check ");
+                    if (ama.WrongValues.Count == 0)
+                        Console.WriteLine("passed");
+                    else
+                    {
+                        Console.WriteLine("failed (" + ama.WrongValues.Count + ")");
+                        foreach (int i in ama.WrongValues)
+                            Console.Write("0x" + i.ToString("X") + " ");
+                        Console.WriteLine();
+                    }
+
+                    if (args.Length == 0)
+                        Console.Read();
+                }
             }
             else
             {
