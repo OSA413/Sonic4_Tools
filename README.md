@@ -14,9 +14,15 @@ It also can convert **sound and music mods**.
 
 **You need the game to properly convert mods.**
 
+## AMA Editor
+
+A tool for modifying AMA files. It can change relations, possition, size and UV coordinates of 2D sprites (such as buttons and other HUD).
+
+Currently can properly edit only ~10% of all files in both episodes.
+
 ## TXB Editor
 
-An advanced-limited hex-editor for integer and floating-point numbers per byte. Mostly useless at this moment. You can try to use it with other formats as well.
+It can properly edit all TXB files. On the other hand, we have no idea what these values mean.
 
 ------------
 
