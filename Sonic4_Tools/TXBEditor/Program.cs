@@ -86,10 +86,10 @@ namespace TXBEditor
             {
                 var newTXB = new TXBObject();
 
-                newTXB.Unknown0 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4);
+                StrangeIsntIt(fileRaw, objectPointer + i * 5 * 4, 0);
                 newTXB.Unknown1 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4 + 0x8);
-                newTXB.Unknown2 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4 + 0xC);
-                newTXB.Unknown3 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4 + 0x10);
+                StrangeIsntIt(fileRaw, objectPointer + i * 5 * 4 + 0xC, 0);
+                StrangeIsntIt(fileRaw, objectPointer + i * 5 * 4 + 0x10, 0);
 
                 var namePointer = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4 + 4);
                 for (int j = namePointer; fileRaw[j] != 0x00; j++)
@@ -135,10 +135,7 @@ namespace TXBEditor
             {
                 var ptr = 0x18 + i * 5 * 4;
                 var o = TXBObjects[i];
-                Array.Copy(BitConverter.GetBytes(o.Unknown0), 0, fileRaw, ptr, 4);
                 Array.Copy(BitConverter.GetBytes(o.Unknown1), 0, fileRaw, ptr + 0x8, 4);
-                Array.Copy(BitConverter.GetBytes(o.Unknown2), 0, fileRaw, ptr + 0xC, 4);
-                Array.Copy(BitConverter.GetBytes(o.Unknown3), 0, fileRaw, ptr + 0x10, 4);
 
                 //Name pointer
                 Array.Copy(BitConverter.GetBytes(namePointer), 0, fileRaw, ptr + 4, 4);
@@ -167,11 +164,7 @@ namespace TXBEditor
             {
                 info += "Object #" + i + "\n";
                 info += "Name: " + TXBObjects[i].Name + "\n";
-                info += "Unknown values:\n";
-                info += TXBObjects[i].Unknown0 + " ";
-                info += TXBObjects[i].Unknown1 + " ";
-                info += TXBObjects[i].Unknown2 + " ";
-                info += TXBObjects[i].Unknown3 + "\n"; 
+                info += "Unknown value: " + TXBObjects[i].Unknown1 + "\n"; 
                 info += "\n";
             }
             return info;
@@ -181,10 +174,7 @@ namespace TXBEditor
     public class TXBObject
     {
         public string Name;
-        public int Unknown0;
         public int Unknown1;
-        public int Unknown2;
-        public int Unknown3;
     }
 
     class MainClass
@@ -195,14 +185,17 @@ namespace TXBEditor
             if (args.Length > 0 && args[0] == "--check")
             {
                 var sanityOnly = false;
+                var strangeOnly = false;
                 if (args[1] == "--sanity-only")
                     sanityOnly = true;
+                if (args[1] == "--strange-only")
+                    strangeOnly = true;
 
-                var txb = new TXB();
+                    var txb = new TXB();
 
                 string file;
                 if (args.Length > 0)
-                    file = args[1 + (sanityOnly ? 1 : 0)];
+                    file = args[1 + (sanityOnly || strangeOnly ? 1 : 0)];
                 else
                     file = Console.ReadLine();
 
@@ -216,6 +209,17 @@ namespace TXBEditor
                     else
                     {
                         foreach (int i in txb.WrongValues)
+                            Console.Write("0x" + i.ToString("X") + " ");
+                        Console.WriteLine();
+                    }
+                }
+                else if (strangeOnly)
+                {
+                    if (!txb.Strange)
+                        Console.WriteLine("OK");
+                    else
+                    {
+                        foreach (int i in txb.StrangeList)
                             Console.Write("0x" + i.ToString("X") + " ");
                         Console.WriteLine();
                     }

@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TXBEditor
@@ -76,10 +69,7 @@ namespace TXBEditor
 
             var obj = txbFile.TXBObjects[listBoxObjects.SelectedIndex];
 
-            dataGridView.Rows.Add("Unknown0", obj.Unknown0);
             dataGridView.Rows.Add("Unknown1", obj.Unknown1);
-            dataGridView.Rows.Add("Unknown2", obj.Unknown2);
-            dataGridView.Rows.Add("Unknown3", obj.Unknown3);
         }
 
         private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -88,17 +78,11 @@ namespace TXBEditor
                 return;
 
             var cell = dataGridView[1, e.RowIndex];
-
-            Console.WriteLine(((Control)sender).Name);
-
-                var ind = listBoxObjects.SelectedIndex;
+            var ind = listBoxObjects.SelectedIndex;
 
             switch (e.RowIndex)
             {
-                case 0: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown0); break;
-                case 1: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown1); break;
-                case 2: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown2); break;
-                case 3: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown3); break;
+                case 0: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown1); break;
             }
         }
 
