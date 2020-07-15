@@ -27,7 +27,7 @@ namespace AMAEditor
 
         public static bool IsLittleEndian(byte[] fileRaw)
         {
-            return BitConverter.ToInt32(fileRaw, 0x14) < 0xFFFF;
+            return BitConverter.ToInt32(fileRaw, 4) < 0xFFFF;
         }
 
         public static void ReverseEndianness(byte[] fileRaw)
@@ -36,6 +36,7 @@ namespace AMAEditor
 
             if (!littleEndiann)
             {
+                Array.Reverse(fileRaw, 4, 4);
                 Array.Reverse(fileRaw, 0x10, 4);
                 Array.Reverse(fileRaw, 0x14, 4);
             }
@@ -44,12 +45,11 @@ namespace AMAEditor
             int objectPointer = BitConverter.ToInt32(fileRaw, 0x14);
 
             for (int i = objectPointer; i < fileNubmer * 5 * 4 + objectPointer; i = i + 4)
-            {
                 Array.Reverse(fileRaw, i, 4);
-            }
 
             if (littleEndiann)
             {
+                Array.Reverse(fileRaw, 4, 4);
                 Array.Reverse(fileRaw, 0x10, 4);
                 Array.Reverse(fileRaw, 0x14, 4);
             }
@@ -79,7 +79,6 @@ namespace AMAEditor
 
             var objectNumber = BitConverter.ToInt32(fileRaw, 0x10);
             var objectPointer = BitConverter.ToInt32(fileRaw, 0x14);
-            StrangeIsntIt(fileRaw, 0x14, 0x18);
 
             var sb = new StringBuilder();
 
@@ -88,7 +87,7 @@ namespace AMAEditor
                 var newTXB = new TXBObject();
 
                 newTXB.Unknown0 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4);
-                newTXB.Unknown1 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4 + 8);
+                newTXB.Unknown1 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4 + 0x8);
                 newTXB.Unknown2 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4 + 0xC);
                 newTXB.Unknown3 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4 + 0x10);
 
@@ -110,7 +109,45 @@ namespace AMAEditor
 
         public override byte[] Write()
         {
-            var fileRaw = new byte[0];
+            var fileLength = 0;
+
+            //Header
+            fileLength += 0x18;
+
+            foreach (var o in TXBObjects)
+            {
+                fileLength += 5 * 4;
+                fileLength += o.Name.Length + 1;
+            }
+
+            var fileRaw = new byte[fileLength];
+
+            //Header
+            Array.Copy(Encoding.ASCII.GetBytes("#TXB"), 0, fileRaw, 0, 4);
+            Array.Copy(BitConverter.GetBytes(0x10), 0, fileRaw, 4, 4);
+            Array.Copy(BitConverter.GetBytes(TXBObjects.Count), 0, fileRaw, 0x10, 4);
+            if (TXBObjects.Count > 0)
+                Array.Copy(BitConverter.GetBytes(0x18), 0, fileRaw, 0x14, 4);
+
+            //Body
+            var namePointer = 0x18 + TXBObjects.Count * 5 * 4;
+            for (int i = 0; i < TXBObjects.Count; i++)
+            {
+                var ptr = 0x18 + i * 5 * 4;
+                var o = TXBObjects[i];
+                Array.Copy(BitConverter.GetBytes(o.Unknown0), 0, fileRaw, ptr, 4);
+                Array.Copy(BitConverter.GetBytes(o.Unknown1), 0, fileRaw, ptr + 0x8, 4);
+                Array.Copy(BitConverter.GetBytes(o.Unknown2), 0, fileRaw, ptr + 0xC, 4);
+                Array.Copy(BitConverter.GetBytes(o.Unknown3), 0, fileRaw, ptr + 0x10, 4);
+
+                //Name pointer
+                Array.Copy(BitConverter.GetBytes(namePointer), 0, fileRaw, ptr + 4, 4);
+                foreach (char c in o.Name)
+                    fileRaw[namePointer++] = (byte)c;
+                namePointer++;
+            }
+
+            ReverseEndianness(fileRaw);
 
             return fileRaw;
         }
