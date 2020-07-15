@@ -31,7 +31,7 @@ PSH | Compiled HLSL | ??? | EP1 EP2
 :star: PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
 RG  | ??? | ??? | EP1 EP2
 SSS | ??? | ??? | EP2
-:zzz::hammer_and_wrench: TXB | ??? (probably TeXture Boundary) | ??? | EP1 EP2
+:zzz: TXB | ??? (probably TeXture Boundary) | [TXBEditor][tools_link] | EP1 EP2
 VSH | Compiled HLSL | ??? | EP1 EP2
 YSD | This one holds in-game credits | ??? | EP1 EP2
 ENO/ENM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
