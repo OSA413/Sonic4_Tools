@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 using SanityChecker;
 
-namespace AMAEditor
+namespace TXBEditor
 {
     public class TXB: SanityCheckable
     {
@@ -192,7 +192,7 @@ namespace AMAEditor
         [STAThread]
         public static void Main(string[] args)
         {
-            if (args[0] == "--check")
+            if (args.Length > 0 && args[0] == "--check")
             {
                 var sanityOnly = false;
                 if (args[1] == "--sanity-only")
@@ -252,7 +252,7 @@ namespace AMAEditor
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                //Application.Run(new MainForm(args));
+                Application.Run(new MainForm(args));
             }
         }
     }

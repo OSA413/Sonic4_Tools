@@ -493,7 +493,7 @@ namespace AMAEditor
         [STAThread]
         public static void Main(string[] args)
         {
-            if (args[0] == "--check")
+            if (args.Length > 0 && args[0] == "--check")
             {
                 var sanityOnly = false;
                 if (args[1] == "--sanity-only")
