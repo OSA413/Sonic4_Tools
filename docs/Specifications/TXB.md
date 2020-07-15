@@ -27,10 +27,11 @@ OP_0 + 5*4 | Beginning of Object#1
 
 Address | Description
 ------- | ---------------------
-  0x00  | ???
+  0x00  | Unknown0
   0x04  | File name pointer (NPX)
-  0x08  | ???
-  0x0C  | ???
-  0x10  | ???
+  0x08  | Unknown1
+  0x0C  | Unknown2
+  0x10  | Unknown3
 
 This is big-endiann
+
