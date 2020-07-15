@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BFB9C28A-60A5-407B-A060-3E088BB96452}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>TXBEditor</RootNamespace>
     <AssemblyName>TXBEditor</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>

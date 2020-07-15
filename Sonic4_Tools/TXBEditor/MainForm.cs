@@ -82,14 +82,6 @@ namespace TXBEditor
             dataGridView.Rows.Add("Unknown3", obj.Unknown3);
         }
 
-        private void cbUnknowValues_CheckedChanged(object sender, System.EventArgs e)
-        {
-            if (txbFile == null)
-                return;
-            if (listBoxObjects.SelectedIndices.Count > 0)
-                listBoxObjects_SelectedIndexChanged(null, null);
-        }
-
         private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex != 1)
@@ -97,17 +89,16 @@ namespace TXBEditor
 
             var cell = dataGridView[1, e.RowIndex];
 
-            if (((Control)sender).Name == "listBoxObjects")
-            {
+            Console.WriteLine(((Control)sender).Name);
+
                 var ind = listBoxObjects.SelectedIndex;
 
-                switch (e.RowIndex)
-                {
-                    case 0: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown0); break;
-                    case 1: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown1); break;
-                    case 2: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown2); break;
-                    case 3: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown3); break;
-                }
+            switch (e.RowIndex)
+            {
+                case 0: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown0); break;
+                case 1: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown1); break;
+                case 2: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown2); break;
+                case 3: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown3); break;
             }
         }
 
