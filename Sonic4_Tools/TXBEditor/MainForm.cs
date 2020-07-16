@@ -6,6 +6,7 @@ namespace TXBEditor
 {
     public partial class MainForm : Form
     {
+        string filePath;
         TXB txbFile;
 
         public MainForm(string[] args)
@@ -13,14 +14,15 @@ namespace TXBEditor
             InitializeComponent();
 
             if (args.Length > 0)
-                OpenAmaFile(args[0]);
+                OpenTXBFile(args[0]);
         }
 
-        public void OpenAmaFile(string fileName)
+        public void OpenTXBFile(string fileName)
         {
+            filePath = fileName;
             statusBar.Text = "";
+            saveToolStripMenuItem.Enabled = true;
 
-            tbFileName.Text = fileName;
             txbFile = new TXB();
             txbFile.Read(fileName);
 
@@ -33,63 +35,20 @@ namespace TXBEditor
                 File.WriteAllText(fileName + "_check.txt", String.Join(" ", txbFile.StrangeList));
             }
 
-            listBoxObjects.Items.Clear();
-            foreach (var obj in txbFile.TXBObjects)
-                listBoxObjects.Items.Add(obj.Name);
+            UpdateTable();
+        }
 
-            if (txbFile.TXBObjects.Count > 0)
+        public void UpdateTable()
+        {
+            listView.Items.Clear();
+            for (int i = 0; i < txbFile.TXBObjects.Count; i++)
             {
-                tabControl.SelectedIndex = 0;
-                listBoxObjects.Select();
-                listBoxObjects.SelectedIndex = 0;
+                ListViewItem item = new ListViewItem(i.ToString());
+                item.SubItems.Add(txbFile.TXBObjects[i].Name);
+                item.SubItems.Add(txbFile.TXBObjects[i].Unknown1.ToString());
+
+                listView.Items.Add(item);
             }
-        }
-
-        public void SaveAmaFile(string fileName)
-        {
-            txbFile.Write(fileName);
-        }
-
-        private void bOpenFile_Click(object sender, System.EventArgs e)
-        {
-            using (var ofd = new OpenFileDialog())
-            {
-                ofd.Filter = "TXB files|*.TXB|All files (*.*)|*.*";
-
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    OpenAmaFile(ofd.FileName);
-                }
-            }
-        }
-
-        private void listBoxObjects_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            dataGridView.Rows.Clear();
-
-            var obj = txbFile.TXBObjects[listBoxObjects.SelectedIndex];
-
-            dataGridView.Rows.Add("Unknown1", obj.Unknown1);
-        }
-
-        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex != 1)
-                return;
-
-            var cell = dataGridView[1, e.RowIndex];
-            var ind = listBoxObjects.SelectedIndex;
-
-            switch (e.RowIndex)
-            {
-                case 0: TryConvertApplyUpdate(cell, ref txbFile.TXBObjects[ind].Unknown1); break;
-            }
-        }
-
-        public void TryConvertApplyUpdate(DataGridViewCell cell, ref float result)
-        {
-            Single.TryParse(cell.Value.ToString(), out result);
-            cell.Value = result;
         }
 
         public void TryConvertApplyUpdate(DataGridViewCell cell, ref int result)
@@ -98,17 +57,48 @@ namespace TXBEditor
             cell.Value = result;
         }
 
-        public void TryConvertApplyUpdate(DataGridViewCell cell, ref string result)
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cell.Value.ToString() != "(None)")
-                result = cell.Value.ToString();
-            result = null;
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "TXB files|*.TXB|All files (*.*)|*.*";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    OpenTXBFile(ofd.FileName);
+            }
         }
 
-        private void bSave_Click(object sender, EventArgs e)
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (txbFile != null)
-                txbFile.Write(tbFileName.Text);
+                txbFile.Write(filePath);
+        }
+
+        private void bMoveUp_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bMoveDown_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var ind = listView.SelectedIndices[0];
+            tbName.Text = txbFile.TXBObjects[ind].Name;
+            tbValue.Text = txbFile.TXBObjects[ind].Unknown1.ToString();
+        }
+
+        private void bAdd_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bRemove_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

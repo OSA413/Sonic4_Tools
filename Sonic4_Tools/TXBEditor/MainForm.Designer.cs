@@ -28,32 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusBar = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tbFileName = new System.Windows.Forms.TextBox();
-            this.bOpenFile = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.listView = new System.Windows.Forms.ListView();
+            this.cIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.bMoveDown = new System.Windows.Forms.Button();
+            this.bMoveUp = new System.Windows.Forms.Button();
+            this.bAdd = new System.Windows.Forms.Button();
+            this.bRemove = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.VName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bSave = new System.Windows.Forms.Button();
-            this.tabGroup1 = new System.Windows.Forms.TabPage();
-            this.listBoxObjects = new System.Windows.Forms.ListBox();
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tbName = new System.Windows.Forms.TextBox();
+            this.tbValue = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.tabGroup1.SuspendLayout();
-            this.tabControl.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 228);
+            this.statusStrip.Location = new System.Drawing.Point(0, 283);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(358, 22);
+            this.statusStrip.Size = new System.Drawing.Size(448, 22);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip";
@@ -63,132 +69,173 @@
             this.statusBar.Name = "statusBar";
             this.statusBar.Size = new System.Drawing.Size(0, 17);
             // 
-            // tbFileName
+            // menuStrip1
             // 
-            this.tbFileName.Location = new System.Drawing.Point(20, 25);
-            this.tbFileName.Name = "tbFileName";
-            this.tbFileName.ReadOnly = true;
-            this.tbFileName.Size = new System.Drawing.Size(202, 20);
-            this.tbFileName.TabIndex = 1;
-            this.tbFileName.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(448, 24);
+            this.menuStrip1.TabIndex = 5;
+            this.menuStrip1.Text = "menuStrip1";
             // 
-            // bOpenFile
+            // fileToolStripMenuItem
             // 
-            this.bOpenFile.Location = new System.Drawing.Point(228, 22);
-            this.bOpenFile.Name = "bOpenFile";
-            this.bOpenFile.Size = new System.Drawing.Size(32, 23);
-            this.bOpenFile.TabIndex = 2;
-            this.bOpenFile.Text = "...";
-            this.bOpenFile.UseVisualStyleBackColor = true;
-            this.bOpenFile.Click += new System.EventHandler(this.bOpenFile_Click);
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem,
+            this.saveToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Enabled = false;
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // listView
+            // 
+            this.listView.AllowColumnReorder = true;
+            this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.cIndex,
+            this.cName,
+            this.cValue});
+            this.listView.HideSelection = false;
+            this.listView.Location = new System.Drawing.Point(12, 27);
+            this.listView.MultiSelect = false;
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size(389, 197);
+            this.listView.TabIndex = 6;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
+            this.listView.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
+            // 
+            // cIndex
+            // 
+            this.cIndex.Text = "#";
+            this.cIndex.Width = 26;
+            // 
+            // cName
+            // 
+            this.cName.Text = "File name";
+            this.cName.Width = 281;
+            // 
+            // bMoveDown
+            // 
+            this.bMoveDown.Location = new System.Drawing.Point(407, 175);
+            this.bMoveDown.Name = "bMoveDown";
+            this.bMoveDown.Size = new System.Drawing.Size(29, 23);
+            this.bMoveDown.TabIndex = 7;
+            this.bMoveDown.Text = "\\/";
+            this.bMoveDown.UseVisualStyleBackColor = true;
+            this.bMoveDown.Click += new System.EventHandler(this.bMoveDown_Click);
+            // 
+            // bMoveUp
+            // 
+            this.bMoveUp.Location = new System.Drawing.Point(407, 146);
+            this.bMoveUp.Name = "bMoveUp";
+            this.bMoveUp.Size = new System.Drawing.Size(29, 23);
+            this.bMoveUp.TabIndex = 8;
+            this.bMoveUp.Text = "/\\";
+            this.bMoveUp.UseVisualStyleBackColor = true;
+            this.bMoveUp.Click += new System.EventHandler(this.bMoveUp_Click);
+            // 
+            // bAdd
+            // 
+            this.bAdd.Location = new System.Drawing.Point(407, 59);
+            this.bAdd.Name = "bAdd";
+            this.bAdd.Size = new System.Drawing.Size(29, 23);
+            this.bAdd.TabIndex = 9;
+            this.bAdd.Text = "+";
+            this.bAdd.UseVisualStyleBackColor = true;
+            this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
+            // 
+            // bRemove
+            // 
+            this.bRemove.Location = new System.Drawing.Point(407, 88);
+            this.bRemove.Name = "bRemove";
+            this.bRemove.Size = new System.Drawing.Size(29, 23);
+            this.bRemove.TabIndex = 10;
+            this.bRemove.Text = "-";
+            this.bRemove.UseVisualStyleBackColor = true;
+            this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 9);
+            this.label1.Location = new System.Drawing.Point(12, 233);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 3;
+            this.label1.TabIndex = 11;
             this.label1.Text = "File name:";
             // 
-            // dataGridView
+            // tbName
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AllowUserToResizeColumns = false;
-            this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.VName,
-            this.Value});
-            this.dataGridView.Location = new System.Drawing.Point(146, 52);
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.RowHeadersVisible = false;
-            this.dataGridView.ShowEditingIcon = false;
-            this.dataGridView.Size = new System.Drawing.Size(200, 169);
-            this.dataGridView.TabIndex = 5;
-            this.dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEndEdit);
+            this.tbName.Location = new System.Drawing.Point(103, 230);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(298, 20);
+            this.tbName.TabIndex = 12;
             // 
-            // VName
+            // tbValue
             // 
-            this.VName.HeaderText = "Name";
-            this.VName.Name = "VName";
-            this.VName.ReadOnly = true;
-            this.VName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.VName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.tbValue.Location = new System.Drawing.Point(103, 256);
+            this.tbValue.Name = "tbValue";
+            this.tbValue.Size = new System.Drawing.Size(92, 20);
+            this.tbValue.TabIndex = 15;
             // 
-            // Value
+            // label2
             // 
-            this.Value.HeaderText = "Value";
-            this.Value.Name = "Value";
-            this.Value.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Value.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Value.Width = 75;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 259);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(85, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Unknown value:";
             // 
-            // bSave
+            // cValue
             // 
-            this.bSave.Location = new System.Drawing.Point(282, 22);
-            this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(64, 23);
-            this.bSave.TabIndex = 8;
-            this.bSave.Text = "Save";
-            this.bSave.UseVisualStyleBackColor = true;
-            this.bSave.Click += new System.EventHandler(this.bSave_Click);
-            // 
-            // tabGroup1
-            // 
-            this.tabGroup1.Controls.Add(this.listBoxObjects);
-            this.tabGroup1.Location = new System.Drawing.Point(4, 22);
-            this.tabGroup1.Name = "tabGroup1";
-            this.tabGroup1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGroup1.Size = new System.Drawing.Size(120, 147);
-            this.tabGroup1.TabIndex = 0;
-            this.tabGroup1.Text = "Objects";
-            this.tabGroup1.UseVisualStyleBackColor = true;
-            // 
-            // listBoxObjects
-            // 
-            this.listBoxObjects.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxObjects.FormattingEnabled = true;
-            this.listBoxObjects.Location = new System.Drawing.Point(3, 3);
-            this.listBoxObjects.Name = "listBoxObjects";
-            this.listBoxObjects.Size = new System.Drawing.Size(114, 141);
-            this.listBoxObjects.TabIndex = 5;
-            this.listBoxObjects.SelectedIndexChanged += new System.EventHandler(this.listBoxObjects_SelectedIndexChanged);
-            // 
-            // tabControl
-            // 
-            this.tabControl.Controls.Add(this.tabGroup1);
-            this.tabControl.ItemSize = new System.Drawing.Size(62, 18);
-            this.tabControl.Location = new System.Drawing.Point(12, 52);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(128, 173);
-            this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl.TabIndex = 4;
+            this.cValue.Text = "Value";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(358, 250);
-            this.Controls.Add(this.bSave);
-            this.Controls.Add(this.dataGridView);
-            this.Controls.Add(this.tabControl);
+            this.ClientSize = new System.Drawing.Size(448, 305);
+            this.Controls.Add(this.tbValue);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.tbName);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.bOpenFile);
-            this.Controls.Add(this.tbFileName);
+            this.Controls.Add(this.bRemove);
+            this.Controls.Add(this.bAdd);
+            this.Controls.Add(this.bMoveUp);
+            this.Controls.Add(this.bMoveDown);
+            this.Controls.Add(this.listView);
             this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "TXB Editor";
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.tabGroup1.ResumeLayout(false);
-            this.tabControl.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -198,15 +245,22 @@
 
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel statusBar;
-        private System.Windows.Forms.TextBox tbFileName;
-        private System.Windows.Forms.Button bOpenFile;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ListView listView;
+        private System.Windows.Forms.Button bMoveDown;
+        private System.Windows.Forms.Button bMoveUp;
+        private System.Windows.Forms.Button bAdd;
+        private System.Windows.Forms.Button bRemove;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dataGridView;
-        private System.Windows.Forms.Button bSave;
-        private System.Windows.Forms.DataGridViewTextBoxColumn VName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-        private System.Windows.Forms.TabPage tabGroup1;
-        private System.Windows.Forms.ListBox listBoxObjects;
-        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TextBox tbName;
+        private System.Windows.Forms.TextBox tbValue;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ColumnHeader cIndex;
+        private System.Windows.Forms.ColumnHeader cName;
+        private System.Windows.Forms.ColumnHeader cValue;
     }
 }
