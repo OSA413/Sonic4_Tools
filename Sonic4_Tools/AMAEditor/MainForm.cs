@@ -132,6 +132,10 @@ namespace AMAEditor
             dataGridView.Rows.Add("Position Y", obj.PositionY);
             dataGridView.Rows.Add("Size X", obj.SizeX);
             dataGridView.Rows.Add("Size Y", obj.SizeY);
+            dataGridView.Rows.Add("Size Y", obj.UVLeftEdge);
+            dataGridView.Rows.Add("Size Y", obj.UVUpperEdge);
+            dataGridView.Rows.Add("Size Y", obj.UVRightEdge);
+            dataGridView.Rows.Add("Size Y", obj.UVBottomEdge);
 
             if (cbUnknowValues.Checked)
             {
@@ -199,28 +203,32 @@ namespace AMAEditor
                     case 1: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].PositionY); break;
                     case 2: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].SizeX); break;
                     case 3: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].SizeY); break;
-                    case 4: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown0); break;
-                    case 5: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown1); break;
-                    case 6: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown2); break;
-                    case 7: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown3); break;
-                    case 8: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown4); break;
-                    case 9: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown5); break;
-                    case 10: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown6); break;
-                    case 11: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown7); break;
-                    case 12: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown8); break;
-                    case 13: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown9); break;
-                    case 14: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown10); break;
-                    case 15: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown11); break;
-                    case 16: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown12); break;
-                    case 17: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown13); break;
-                    case 18: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown14); break;
-                    case 19: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown15); break;
-                    case 20: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown16); break;
-                    case 21: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown17); break;
-                    case 22: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown18); break;
-                    case 23: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown19); break;
-                    case 24: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown20); break;
-                    case 25: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown21); break;
+                    case 4: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].UVLeftEdge); break;
+                    case 5: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].UVUpperEdge); break;
+                    case 6: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].UVRightEdge); break;
+                    case 7: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].UVBottomEdge); break;
+                    case 8: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown0); break;
+                    case 9: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown1); break;
+                    case 10: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown2); break;
+                    case 11: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown3); break;
+                    case 12: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown4); break;
+                    case 13: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown5); break;
+                    case 14: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown6); break;
+                    case 15: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown7); break;
+                    case 16: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown8); break;
+                    case 17: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown9); break;
+                    case 18: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown10); break;
+                    case 19: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown11); break;
+                    case 20: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown12); break;
+                    case 21: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown13); break;
+                    case 22: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown14); break;
+                    case 23: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown15); break;
+                    case 24: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown16); break;
+                    case 25: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown17); break;
+                    case 26: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown18); break;
+                    case 27: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown19); break;
+                    case 28: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown20); break;
+                    case 29: TryConvertApplyUpdate(cell, ref amaFile.Group2[ind].Unknown21); break;
                 }
             }
         }
