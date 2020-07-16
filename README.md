@@ -22,7 +22,11 @@ Currently can properly edit only ~10% of all files in both episodes.
 
 ## TXB Editor
 
-It can properly edit all TXB files. On the other hand, we have no idea what these values mean.
+TeXture Bank Editor.
+
+It can change order of textures, their names and the unknown value. It can also add and remove textures in TXB files.
+
+It can properly edit all TXB files.
 
 ------------
 
