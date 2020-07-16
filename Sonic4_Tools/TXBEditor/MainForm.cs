@@ -142,7 +142,6 @@ namespace TXBEditor
         {
             if (listView.SelectedIndices.Count == 0) return;
             var ind = listView.SelectedIndices[0];
-            Console.WriteLine(ind);
             Int32.TryParse(tbValue.Text, out txbFile.TXBObjects[ind].Unknown1);
             listView.Items[ind].SubItems[2].Text = txbFile.TXBObjects[ind].Unknown1.ToString();
         }
