@@ -40,6 +40,7 @@
             this.listView = new System.Windows.Forms.ListView();
             this.cIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.bMoveDown = new System.Windows.Forms.Button();
             this.bMoveUp = new System.Windows.Forms.Button();
             this.bAdd = new System.Windows.Forms.Button();
@@ -48,7 +49,6 @@
             this.tbName = new System.Windows.Forms.TextBox();
             this.tbValue = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.cValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -112,8 +112,8 @@
             // 
             this.listView.AllowColumnReorder = true;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.cIndex,
             this.cName,
+            this.cIndex,
             this.cValue});
             this.listView.HideSelection = false;
             this.listView.Location = new System.Drawing.Point(12, 27);
@@ -127,13 +127,19 @@
             // 
             // cIndex
             // 
+            this.cIndex.DisplayIndex = 0;
             this.cIndex.Text = "#";
             this.cIndex.Width = 26;
             // 
             // cName
             // 
+            this.cName.DisplayIndex = 1;
             this.cName.Text = "File name";
             this.cName.Width = 281;
+            // 
+            // cValue
+            // 
+            this.cValue.Text = "Value";
             // 
             // bMoveDown
             // 
@@ -190,6 +196,7 @@
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(298, 20);
             this.tbName.TabIndex = 12;
+            this.tbName.TextChanged += new System.EventHandler(this.tbName_TextChanged);
             // 
             // tbValue
             // 
@@ -197,6 +204,7 @@
             this.tbValue.Name = "tbValue";
             this.tbValue.Size = new System.Drawing.Size(92, 20);
             this.tbValue.TabIndex = 15;
+            this.tbValue.TextChanged += new System.EventHandler(this.tbValue_TextChanged);
             // 
             // label2
             // 
@@ -206,10 +214,6 @@
             this.label2.Size = new System.Drawing.Size(85, 13);
             this.label2.TabIndex = 14;
             this.label2.Text = "Unknown value:";
-            // 
-            // cValue
-            // 
-            this.cValue.Text = "Value";
             // 
             // MainForm
             // 
