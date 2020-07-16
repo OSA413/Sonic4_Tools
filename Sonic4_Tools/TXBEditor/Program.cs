@@ -53,8 +53,7 @@ namespace TXBEditor
 
         public override void Read(byte[] fileRaw)
         {
-            Strange = false;
-            StrangeList.Clear();
+            base.Read(fileRaw);
             TXBObjects.Clear();
             if (!IsLittleEndian(fileRaw))
                 ReverseEndianness(fileRaw);

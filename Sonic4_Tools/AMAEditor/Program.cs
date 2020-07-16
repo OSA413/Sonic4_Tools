@@ -14,8 +14,6 @@ namespace AMAEditor
         //https://github.com/OSA413/Sonic4_Tools/blob/master/docs/Specifications/AMA.md
         public List<Group1> Group1;
         public List<Group2> Group2;
-        public bool         Strange;
-        public List<int>    StrangeList;
 
         public static bool IsAMA(byte[] fileRaw)
         {
@@ -26,26 +24,11 @@ namespace AMAEditor
                 && fileRaw[3] == 'A';
         }
 
-        private void StrangeIsntIt(byte[] fileRaw, int ptr, int intendedValue)
-        {
-            StrangeIsntIt(BitConverter.ToInt32(fileRaw, ptr), ptr, intendedValue);
-        }
-
-        private void StrangeIsntIt(int actualValue, int ptr, int intendedValue)
-        {
-            if (actualValue != intendedValue)
-            {
-                Strange = true;
-                StrangeList.Add(ptr);
-            }
-        }
-
-        public void Read(byte[] fileRaw)
+        public override void Read(byte[] fileRaw)
         {
             Group1 = new List<Group1>();
             Group2 = new List<Group2>();
-            Strange = false;
-            StrangeList = new List<int>();
+            base.Read(fileRaw);
 
             if (!AMA.IsAMA(fileRaw))
                 return;
@@ -177,11 +160,6 @@ namespace AMAEditor
                 Group2[i].Name = sb.ToString();
                 sb.Clear();
             }
-        }
-
-        public void Read(string fileName)
-        {
-            this.Read(File.ReadAllBytes(fileName));
         }
 
         public override byte[] Write()
@@ -367,13 +345,7 @@ namespace AMAEditor
             return fileRaw;
         }
 
-        public void Write(string fileName)
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-            File.WriteAllBytes(fileName, this.Write());
-        }
-
-        public string InfoToString()
+        public override string InfoToString()
         {
             var info = "";
 
@@ -493,63 +465,7 @@ namespace AMAEditor
         [STAThread]
         public static void Main(string[] args)
         {
-            if (args.Length > 0 && args[0] == "--check")
-            {
-                var sanityOnly = false;
-                if (args[1] == "--sanity-only")
-                    sanityOnly = true;
-
-                var ama = new AMA();
-
-                string file;
-                if (args.Length > 0)
-                    file = args[1 + (sanityOnly ? 1 : 0)];
-                else
-                    file = Console.ReadLine();
-
-                ama.Read(file);
-                ama.SanityCheck(file);
-
-                if (sanityOnly)
-                {
-                    if (ama.WrongValues.Count == 0)
-                        Console.WriteLine("OK");
-                    else
-                    {
-                        foreach (int i in ama.WrongValues)
-                            Console.Write("0x" + i.ToString("X") + " ");
-                        Console.WriteLine();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine(ama.InfoToString());
-
-                    if (ama.Strange)
-                    {
-                        Console.WriteLine("This AMA file is strange");
-                        Console.WriteLine("Strange values at:");
-                        foreach (int i in ama.StrangeList)
-                            Console.Write("0x" + i.ToString("X") + " ");
-                        Console.WriteLine();
-                    }
-
-                    Console.Write("Sanity check ");
-                    if (ama.WrongValues.Count == 0)
-                        Console.WriteLine("passed");
-                    else
-                    {
-                        Console.WriteLine("failed (" + ama.WrongValues.Count + ")");
-                        foreach (int i in ama.WrongValues)
-                            Console.Write("0x" + i.ToString("X") + " ");
-                        Console.WriteLine();
-                    }
-
-                    if (args.Length == 0)
-                        Console.Read();
-                }
-            }
-            else
+            if (!SanityCheckable.PrintChecksIfNecessary<AMA>(args))
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);

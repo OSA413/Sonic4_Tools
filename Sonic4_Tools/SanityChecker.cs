@@ -128,7 +128,12 @@ namespace SanityChecker
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
             File.WriteAllBytes(fileName, this.Write());
         }
-        public virtual void Read(byte[] fileRaw) { }
+        public virtual void Read(byte[] fileRaw)
+        {
+            Strange = false;
+            StrangeList.Clear();
+            WrongValues.Clear();
+        }
         public virtual void Read(string fileName) => Read(File.ReadAllBytes(fileName));
         public virtual string InfoToString() => "";
     }
