@@ -7,6 +7,8 @@ PATH_TO_EDITOR = #path to one of the editors
 #--sanity-only   -  shows if converter can properly recreate input file
 FLAG = "--sanity-only"
 
+print(FILE_EXTENSION + " with " + FLAG)
+
 import glob, subprocess
 
 a = []
