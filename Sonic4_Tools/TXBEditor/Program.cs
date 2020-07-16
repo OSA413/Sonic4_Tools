@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -11,9 +10,6 @@ namespace TXBEditor
     public class TXB: SanityCheckable
     {
         //https://github.com/OSA413/Sonic4_Tools/blob/master/docs/Specifications/TXB.md
-        public bool Strange;
-        public List<int> StrangeList = new List<int>();
-
         public List<TXBObject> TXBObjects = new List<TXBObject>();
 
         public static bool IsTXB(byte[] fileRaw)
@@ -55,21 +51,7 @@ namespace TXBEditor
             }
         }
 
-        private void StrangeIsntIt(byte[] fileRaw, int ptr, int intendedValue)
-        {
-            StrangeIsntIt(BitConverter.ToInt32(fileRaw, ptr), ptr, intendedValue);
-        }
-
-        private void StrangeIsntIt(int actualValue, int ptr, int intendedValue)
-        {
-            if (actualValue != intendedValue)
-            {
-                Strange = true;
-                StrangeList.Add(ptr);
-            }
-        }
-
-        public void Read(byte[] fileRaw)
+        public override void Read(byte[] fileRaw)
         {
             Strange = false;
             StrangeList.Clear();
@@ -100,11 +82,6 @@ namespace TXBEditor
 
                 TXBObjects.Add(newTXB);
             }
-        }
-
-        public void Read(string fileName)
-        {
-            this.Read(File.ReadAllBytes(fileName));
         }
 
         public override byte[] Write()
@@ -149,13 +126,7 @@ namespace TXBEditor
             return fileRaw;
         }
 
-        public void Write(string fileName)
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-            File.WriteAllBytes(fileName, this.Write());
-        }
-
-        public string InfoToString()
+        public override string InfoToString()
         {
             var info = "";
 
@@ -182,77 +153,7 @@ namespace TXBEditor
         [STAThread]
         public static void Main(string[] args)
         {
-            if (args.Length > 0 && args[0] == "--check")
-            {
-                var sanityOnly = false;
-                var strangeOnly = false;
-                if (args[1] == "--sanity-only")
-                    sanityOnly = true;
-                if (args[1] == "--strange-only")
-                    strangeOnly = true;
-
-                    var txb = new TXB();
-
-                string file;
-                if (args.Length > 0)
-                    file = args[1 + (sanityOnly || strangeOnly ? 1 : 0)];
-                else
-                    file = Console.ReadLine();
-
-                txb.Read(file);
-                txb.SanityCheck(file);
-
-                if (sanityOnly)
-                {
-                    if (txb.WrongValues.Count == 0)
-                        Console.WriteLine("OK");
-                    else
-                    {
-                        foreach (int i in txb.WrongValues)
-                            Console.Write("0x" + i.ToString("X") + " ");
-                        Console.WriteLine();
-                    }
-                }
-                else if (strangeOnly)
-                {
-                    if (!txb.Strange)
-                        Console.WriteLine("OK");
-                    else
-                    {
-                        foreach (int i in txb.StrangeList)
-                            Console.Write("0x" + i.ToString("X") + " ");
-                        Console.WriteLine();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine(txb.InfoToString());
-
-                    if (txb.Strange)
-                    {
-                        Console.WriteLine("This TXB file is strange");
-                        Console.WriteLine("Strange values at:");
-                        foreach (int i in txb.StrangeList)
-                            Console.Write("0x" + i.ToString("X") + " ");
-                        Console.WriteLine();
-                    }
-
-                    Console.Write("Sanity check ");
-                    if (txb.WrongValues.Count == 0)
-                        Console.WriteLine("passed");
-                    else
-                    {
-                        Console.WriteLine("failed (" + txb.WrongValues.Count + ")");
-                        foreach (int i in txb.WrongValues)
-                            Console.Write("0x" + i.ToString("X") + " ");
-                        Console.WriteLine();
-                    }
-
-                    if (args.Length == 0)
-                        Console.Read();
-                }
-            }
-            else
+            if (!SanityCheckable.PrintChecksIfNecessary<TXB>(args))
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
