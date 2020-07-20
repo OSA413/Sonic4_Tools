@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 
 echo "Compiling..."
-msbuild ./Sonic4_Tools/Sonic4_Tools.sln /p:Configuration=Release
+msbuild ./Sonic4_Tools/Sonic4_Tools.sln /p:Configuration=Release -m
 
 EXIT_CODE="$?"
 if [ "$EXIT_CODE" != "0" ]; then
