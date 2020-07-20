@@ -68,7 +68,8 @@ namespace TXBEditor
                 var newTXB = new TXBObject();
 
                 StrangeIsntIt(fileRaw, objectPointer + i * 5 * 4, 0);
-                newTXB.Unknown1 = BitConverter.ToInt32(fileRaw, objectPointer + i * 5 * 4 + 0x8);
+                newTXB.minFilter = (GL_TEXTURE_MIN_FILTER)BitConverter.ToInt16(fileRaw, objectPointer + i * 5 * 4 + 0x8);
+                newTXB.magFilter = (GL_TEXTURE_MAG_FILTER)BitConverter.ToInt16(fileRaw, objectPointer + i * 5 * 4 + 0xA);
                 StrangeIsntIt(fileRaw, objectPointer + i * 5 * 4 + 0xC, 0);
                 StrangeIsntIt(fileRaw, objectPointer + i * 5 * 4 + 0x10, 0);
 
@@ -111,7 +112,8 @@ namespace TXBEditor
             {
                 var ptr = 0x18 + i * 5 * 4;
                 var o = TXBObjects[i];
-                Array.Copy(BitConverter.GetBytes(o.Unknown1), 0, fileRaw, ptr + 0x8, 4);
+                Array.Copy(BitConverter.GetBytes((int)o.minFilter), 0, fileRaw, ptr + 0x8, 2);
+                Array.Copy(BitConverter.GetBytes((int)o.magFilter), 0, fileRaw, ptr + 0xA, 2);
 
                 //Name pointer
                 Array.Copy(BitConverter.GetBytes(namePointer), 0, fileRaw, ptr + 4, 4);
@@ -134,7 +136,8 @@ namespace TXBEditor
             {
                 info += "Object #" + i + "\n";
                 info += "Name: " + TXBObjects[i].Name + "\n";
-                info += "Unknown value: " + TXBObjects[i].Unknown1 + "\n"; 
+                info += "GL_TEXTURE_MIN_FILTER: " + TXBObjects[i].minFilter + "\n"; 
+                info += "GL_TEXTURE_MAG_FILTER: " + TXBObjects[i].magFilter + "\n"; 
                 info += "\n";
             }
             return info;
@@ -144,7 +147,33 @@ namespace TXBEditor
     public class TXBObject
     {
         public string Name;
-        public int Unknown1;
+        public GL_TEXTURE_MIN_FILTER minFilter;
+        public GL_TEXTURE_MAG_FILTER magFilter;
+
+        public TXBObject()
+        {
+            Name = "";
+            //According to the OpenGL's specification
+            minFilter = GL_TEXTURE_MIN_FILTER.GL_NEAREST_MIPMAP_LINEAR;
+            magFilter = GL_TEXTURE_MAG_FILTER.GL_LINEAR;
+        }
+    }
+
+    //https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glTexParameter.xml
+    public enum GL_TEXTURE_MIN_FILTER
+    {
+        GL_NEAREST,
+        GL_LINEAR,
+        GL_NEAREST_MIPMAP_NEAREST,
+        GL_LINEAR_MIPMAP_NEAREST,
+        GL_NEAREST_MIPMAP_LINEAR,
+        GL_LINEAR_MIPMAP_LINEAR
+    }
+
+    public enum GL_TEXTURE_MAG_FILTER
+    {
+        GL_NEAREST,
+        GL_LINEAR
     }
 
     class MainClass
