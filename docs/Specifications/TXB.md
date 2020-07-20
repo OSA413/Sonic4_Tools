@@ -29,10 +29,12 @@ OP_0 + 5*4 | Beginning of Object#1
 Address | Description
 ------- | ---------------------
   0x00  | 0x00
-  0x04  | File name pointer (NPX)
-  0x08  | Unknown1
+  0x04  | (uint32) File name pointer (NPX)
+  0x08  | (uint16) [GL_TEXTURE_MIN_FILTER][glTexParameter]
+  0x0A  | (uing16) [GL_TEXTURE_MAG_FILTER][glTexParameter]
   0x0C  | 0x00
   0x10  | 0x00
 
 This is big-endiann
 
+[glTexParameter]: https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glTexParameter.xml
