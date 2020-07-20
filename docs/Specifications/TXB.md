@@ -31,7 +31,7 @@ Address | Description
   0x00  | 0x00
   0x04  | (uint32) File name pointer (NPX)
   0x08  | (uint16) [GL_TEXTURE_MIN_FILTER][glTexParameter]
-  0x0A  | (uing16) [GL_TEXTURE_MAG_FILTER][glTexParameter]
+  0x0A  | (uint16) [GL_TEXTURE_MAG_FILTER][glTexParameter]
   0x0C  | 0x00
   0x10  | 0x00
 
