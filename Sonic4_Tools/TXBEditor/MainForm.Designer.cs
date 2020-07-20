@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusBar = new System.Windows.Forms.ToolStripStatusLabel();
@@ -36,19 +35,21 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.listView = new System.Windows.Forms.ListView();
-            this.cIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.cValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cMin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cMag = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.bMoveDown = new System.Windows.Forms.Button();
             this.bMoveUp = new System.Windows.Forms.Button();
             this.bAdd = new System.Windows.Forms.Button();
             this.bRemove = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tbName = new System.Windows.Forms.TextBox();
-            this.tbValue = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.cbMin = new System.Windows.Forms.ComboBox();
+            this.cbMag = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -59,7 +60,7 @@
             this.statusBar});
             this.statusStrip.Location = new System.Drawing.Point(0, 283);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(448, 22);
+            this.statusStrip.Size = new System.Drawing.Size(524, 22);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip";
@@ -75,7 +76,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(448, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(524, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -103,27 +104,29 @@
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
             // listView
             // 
             this.listView.AllowColumnReorder = true;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.cName,
             this.cIndex,
-            this.cValue});
+            this.cMin,
+            this.cMag});
             this.listView.HideSelection = false;
             this.listView.Location = new System.Drawing.Point(12, 27);
             this.listView.MultiSelect = false;
             this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size(389, 197);
+            this.listView.Size = new System.Drawing.Size(465, 197);
             this.listView.TabIndex = 6;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
             this.listView.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
+            // 
+            // cName
+            // 
+            this.cName.DisplayIndex = 1;
+            this.cName.Text = "File name";
+            this.cName.Width = 208;
             // 
             // cIndex
             // 
@@ -131,19 +134,19 @@
             this.cIndex.Text = "#";
             this.cIndex.Width = 26;
             // 
-            // cName
+            // cMin
             // 
-            this.cName.DisplayIndex = 1;
-            this.cName.Text = "File name";
-            this.cName.Width = 281;
+            this.cMin.Text = "Minifying";
+            this.cMin.Width = 128;
             // 
-            // cValue
+            // cMag
             // 
-            this.cValue.Text = "Value";
+            this.cMag.Text = "Magnification";
+            this.cMag.Width = 78;
             // 
             // bMoveDown
             // 
-            this.bMoveDown.Location = new System.Drawing.Point(407, 175);
+            this.bMoveDown.Location = new System.Drawing.Point(483, 175);
             this.bMoveDown.Name = "bMoveDown";
             this.bMoveDown.Size = new System.Drawing.Size(29, 23);
             this.bMoveDown.TabIndex = 7;
@@ -153,7 +156,7 @@
             // 
             // bMoveUp
             // 
-            this.bMoveUp.Location = new System.Drawing.Point(407, 146);
+            this.bMoveUp.Location = new System.Drawing.Point(483, 146);
             this.bMoveUp.Name = "bMoveUp";
             this.bMoveUp.Size = new System.Drawing.Size(29, 23);
             this.bMoveUp.TabIndex = 8;
@@ -163,7 +166,7 @@
             // 
             // bAdd
             // 
-            this.bAdd.Location = new System.Drawing.Point(407, 59);
+            this.bAdd.Location = new System.Drawing.Point(483, 59);
             this.bAdd.Name = "bAdd";
             this.bAdd.Size = new System.Drawing.Size(29, 23);
             this.bAdd.TabIndex = 9;
@@ -173,7 +176,7 @@
             // 
             // bRemove
             // 
-            this.bRemove.Location = new System.Drawing.Point(407, 88);
+            this.bRemove.Location = new System.Drawing.Point(483, 88);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(29, 23);
             this.bRemove.TabIndex = 10;
@@ -192,35 +195,56 @@
             // 
             // tbName
             // 
-            this.tbName.Location = new System.Drawing.Point(103, 230);
+            this.tbName.Location = new System.Drawing.Point(73, 230);
             this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(298, 20);
+            this.tbName.Size = new System.Drawing.Size(404, 20);
             this.tbName.TabIndex = 12;
             this.tbName.TextChanged += new System.EventHandler(this.tbName_TextChanged);
-            // 
-            // tbValue
-            // 
-            this.tbValue.Location = new System.Drawing.Point(103, 256);
-            this.tbValue.Name = "tbValue";
-            this.tbValue.Size = new System.Drawing.Size(92, 20);
-            this.tbValue.TabIndex = 15;
-            this.tbValue.TextChanged += new System.EventHandler(this.tbValue_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 259);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(85, 13);
+            this.label2.Size = new System.Drawing.Size(48, 13);
             this.label2.TabIndex = 14;
-            this.label2.Text = "Unknown value:";
+            this.label2.Text = "Minifying";
+            // 
+            // cbMin
+            // 
+            this.cbMin.FormattingEnabled = true;
+            this.cbMin.Location = new System.Drawing.Point(73, 256);
+            this.cbMin.Name = "cbMin";
+            this.cbMin.Size = new System.Drawing.Size(160, 21);
+            this.cbMin.TabIndex = 16;
+            this.cbMin.SelectedIndexChanged += new System.EventHandler(this.cbMin_SelectedIndexChanged);
+            // 
+            // cbMag
+            // 
+            this.cbMag.FormattingEnabled = true;
+            this.cbMag.Location = new System.Drawing.Point(317, 256);
+            this.cbMag.Name = "cbMag";
+            this.cbMag.Size = new System.Drawing.Size(160, 21);
+            this.cbMag.TabIndex = 18;
+            this.cbMag.SelectedIndexChanged += new System.EventHandler(this.cbMag_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(241, 259);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(70, 13);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "Magnification";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(448, 305);
-            this.Controls.Add(this.tbValue);
+            this.ClientSize = new System.Drawing.Size(524, 305);
+            this.Controls.Add(this.cbMag);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cbMin);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbName);
             this.Controls.Add(this.label1);
@@ -253,7 +277,6 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ListView listView;
         private System.Windows.Forms.Button bMoveDown;
         private System.Windows.Forms.Button bMoveUp;
@@ -261,10 +284,13 @@
         private System.Windows.Forms.Button bRemove;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbName;
-        private System.Windows.Forms.TextBox tbValue;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ColumnHeader cIndex;
         private System.Windows.Forms.ColumnHeader cName;
-        private System.Windows.Forms.ColumnHeader cValue;
+        private System.Windows.Forms.ColumnHeader cMin;
+        private System.Windows.Forms.ComboBox cbMin;
+        private System.Windows.Forms.ComboBox cbMag;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ColumnHeader cMag;
     }
 }

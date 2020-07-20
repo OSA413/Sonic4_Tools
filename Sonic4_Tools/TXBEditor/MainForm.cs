@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
 
 namespace TXBEditor
@@ -9,9 +8,25 @@ namespace TXBEditor
         string filePath;
         TXB txbFile;
 
+        private string[] parameterName = 
+        {
+            "Nearest",
+            "Linear",
+            "Nearest, Mipmap Nearest",
+            "Linear, Mipmap Nearest",
+            "Nearest, Mipmap Linear",
+            "Linear, Mipmap Linear",
+        };
+
         public MainForm(string[] args)
         {
             InitializeComponent();
+
+            for (int i = 0; i < Enum.GetNames(typeof(GL_TEXTURE_MIN_FILTER)).Length; i++)
+                cbMin.Items.Add(parameterName[i]);
+
+            for (int i = 0; i < Enum.GetNames(typeof(GL_TEXTURE_MAG_FILTER)).Length; i++)
+                cbMag.Items.Add(parameterName[i]);
 
             if (args.Length > 0)
                 OpenTXBFile(args[0]);
@@ -43,7 +58,8 @@ namespace TXBEditor
             {
                 ListViewItem item = new ListViewItem(txbFile.TXBObjects[i].Name);
                 item.SubItems.Add(i.ToString());
-                item.SubItems.Add(txbFile.TXBObjects[i].Unknown1.ToString());
+                item.SubItems.Add(parameterName[(int)txbFile.TXBObjects[i].minFilter]);
+                item.SubItems.Add(parameterName[(int)txbFile.TXBObjects[i].magFilter]);
 
                 listView.Items.Add(item);
             }
@@ -101,7 +117,8 @@ namespace TXBEditor
             if (listView.SelectedIndices.Count == 0) return;
             var ind = listView.SelectedIndices[0];
             tbName.Text = txbFile.TXBObjects[ind].Name;
-            tbValue.Text = txbFile.TXBObjects[ind].Unknown1.ToString();
+            cbMin.SelectedIndex = (int)txbFile.TXBObjects[ind].minFilter;
+            cbMag.SelectedIndex = (int)txbFile.TXBObjects[ind].magFilter;
         }
 
         private void RecalculateIndexes(int ind = 0, int end = -1)
@@ -116,8 +133,15 @@ namespace TXBEditor
             if (txbFile == null) return;
             if (listView.SelectedIndices.Count == 0) return;
             var ind = listView.SelectedIndices[0] + 1;
-            txbFile.TXBObjects.Insert(ind, new TXBObject { Name = "" });
-            listView.Items.Insert(ind, new ListViewItem(new [] { "", "", "0" }));
+            var newTXBObject = new TXBObject();
+            txbFile.TXBObjects.Insert(ind, newTXBObject);
+            listView.Items.Insert(ind, new ListViewItem(new []
+            {
+                newTXBObject.Name,
+                "",
+                parameterName[(int)newTXBObject.minFilter],
+                parameterName[(int)newTXBObject.magFilter]
+            }));
             RecalculateIndexes(ind);
         }
 
@@ -138,12 +162,20 @@ namespace TXBEditor
             listView.Items[ind].SubItems[0].Text = tbName.Text;
         }
 
-        private void tbValue_TextChanged(object sender, EventArgs e)
+        private void cbMin_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listView.SelectedIndices.Count == 0) return;
             var ind = listView.SelectedIndices[0];
-            Int32.TryParse(tbValue.Text, out txbFile.TXBObjects[ind].Unknown1);
-            listView.Items[ind].SubItems[2].Text = txbFile.TXBObjects[ind].Unknown1.ToString();
+            txbFile.TXBObjects[ind].minFilter = (GL_TEXTURE_MIN_FILTER)cbMin.SelectedIndex;
+            listView.Items[ind].SubItems[2].Text = cbMin.Text;
+        }
+
+        private void cbMag_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listView.SelectedIndices.Count == 0) return;
+            var ind = listView.SelectedIndices[0];
+            txbFile.TXBObjects[ind].magFilter = (GL_TEXTURE_MAG_FILTER)cbMag.SelectedIndex;
+            listView.Items[ind].SubItems[3].Text = cbMag.Text;
         }
     }
 }

@@ -40,8 +40,14 @@ namespace TXBEditor
             int fileNubmer = BitConverter.ToInt32(fileRaw, 0x10);
             int objectPointer = BitConverter.ToInt32(fileRaw, 0x14);
 
-            for (int i = objectPointer; i < fileNubmer * 5 * 4 + objectPointer; i = i + 4)
-                Array.Reverse(fileRaw, i, 4);
+            for (int i = 0; i < fileNubmer; i++)
+            {
+                var ptr = i * 5 * 4 + objectPointer;
+                Array.Reverse(fileRaw, ptr + 0x4, 4);
+                Array.Reverse(fileRaw, ptr + 0x8, 2);
+                Array.Reverse(fileRaw, ptr + 0xA, 2);
+            }
+
 
             if (littleEndiann)
             {
