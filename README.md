@@ -24,7 +24,7 @@ Currently can properly edit only ~10% of all files in both episodes.
 
 TeXture Bank Editor.
 
-It can change order of textures, their names and the unknown value. It can also add and remove textures in TXB files.
+It can change order of textures, their names and filtering functions (magnification and minifying). It can also add and remove textures in TXB files.
 
 It can properly edit all TXB files.
 
