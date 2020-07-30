@@ -132,10 +132,10 @@ namespace AMAEditor
             dataGridView.Rows.Add("Position Y", obj.PositionY);
             dataGridView.Rows.Add("Size X", obj.SizeX);
             dataGridView.Rows.Add("Size Y", obj.SizeY);
-            dataGridView.Rows.Add("Size Y", obj.UVLeftEdge);
-            dataGridView.Rows.Add("Size Y", obj.UVUpperEdge);
-            dataGridView.Rows.Add("Size Y", obj.UVRightEdge);
-            dataGridView.Rows.Add("Size Y", obj.UVBottomEdge);
+            dataGridView.Rows.Add("UV Left Edge", obj.UVLeftEdge);
+            dataGridView.Rows.Add("UV Upper Edge", obj.UVUpperEdge);
+            dataGridView.Rows.Add("UV Right Edge", obj.UVRightEdge);
+            dataGridView.Rows.Add("UV Bottom Edge", obj.UVBottomEdge);
 
             if (cbUnknowValues.Checked)
             {
