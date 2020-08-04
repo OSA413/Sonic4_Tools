@@ -1,9 +1,13 @@
 import sys, os
 
 def byte2int32(array, ptr):
-    return int.from_bytes(array[ptr:ptr+4], byteorder="big")
+    return int.from_bytes(array[ptr:ptr+4], byteorder="little")
 
 dir = sys.argv[1]
+
+SHOW_VALUES = False
+if len(sys.argv) > 2 and sys.argv[2] == "--show-values":
+    SHOW_VALUES = True
 
 files = [dir + "/" + x for x in os.listdir(dir) if not x.endswith("summary.txt")]
 
@@ -31,7 +35,10 @@ for i in range(len(dif)):
     if len(dif[i]) == 1:
         summary += hex(byte2int32(ama, i*4))
     else:
-        summary += str([hex(x) for x in dif[i]])
+        if SHOW_VALUES:
+            summary += str([hex(x) for x in dif[i]])
+        else:
+            summary += str(len(dif[i])) + " different values"
     summary += "\n"
     
 with open(dir + "/summary.txt", "w") as f:
