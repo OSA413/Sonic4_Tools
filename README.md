@@ -10,7 +10,13 @@ More or less suitable for use versions are planned to be published on GitHub's r
 
 ### Linux
 
-Update dependencies, compile tools, and run `bash ./install/linux/install.sh`
+Update dependencies, compile tools, and run installation script.
+
+```
+bash update_dependencies.sh
+bash build_pack.sh
+bash install/linux/install.sh
+```
 
 ## Old Mod Conversion Tool
 
