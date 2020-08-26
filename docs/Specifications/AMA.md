@@ -47,7 +47,7 @@ Address | Description
 
 Address | Description
 ------- | ------------
-  0x00  | Unknown0
+  0x00  | Unknown
   0x04  | Object order number (int32)
   0x08  | Nunber of inner (G2-X) objects
   0x08  | 0x00
@@ -63,6 +63,31 @@ Address | Description
   0x34  | Pointer to G2-5 object
   0x38  | 0x00
   0x3C  | 0x00
+  
+## Group 2 - 0 Object
+
+Address | Description
+------- | ------------
+  0x00  | Unknown
+  0x04  | Number of G2-0-0 objects
+  0x08  | Number of G2-0-1 objects
+  0x0C  | Pointer to G2-0-0 object
+  0x10  | Pointer to G2-0-1 object
+  0x14  | Number of G2-0-2 objects
+  0x18  | Number of G2-0-3 objects
+  0x1C  | Pointer to G2-0-2 object
+  0x20  | Pointer to G2-0-3 object
+  0x24  | 0x00
+  0x28  | 0x00
+  0x2C  | 0x00
+
+## Group 2 - 0 - 0 Object
+
+## Group 2 - 0 - 1 Object
+
+## Group 2 - 0 - 2 Object
+
+## Group 2 - 0 - 3 Object
 
 G1C - Number of object in group 1
 G2C - Number of object in group 2
