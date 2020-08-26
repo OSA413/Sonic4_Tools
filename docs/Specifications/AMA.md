@@ -49,18 +49,18 @@ Address | Description
 ------- | ------------
   0x00  | Unknown0
   0x04  | Object order number (int32)
-  0x08  | Nunber of inner (G2X) objects
+  0x08  | Nunber of inner (G2-X) objects
   0x08  | 0x00
   0x10  | X position (float)
   0x14  | Y position (float)
   0x18  | X size (float)
   0x1C  | Y size (float)
-  0x20  | Pointer to G20 object
-  0x24  | Pointer to G21 object
-  0x28  | Pointer to G22 object
-  0x2C  | Pointer to G23 object
-  0x30  | Pointer to G24 object
-  0x34  | Pointer to G25 object
+  0x20  | Pointer to G2-0 object
+  0x24  | Pointer to G2-1 object
+  0x28  | Pointer to G2-2 object
+  0x2C  | Pointer to G2-3 object
+  0x30  | Pointer to G2-4 object
+  0x34  | Pointer to G2-5 object
   0x38  | 0x00
   0x3C  | 0x00
 
