@@ -45,22 +45,24 @@ Address | Description
 
 ## Group 2 Object
 
-WIP (object length may differ)
-
-*If value is not specified, assume it is 0x00*
-
 Address | Description
 ------- | ------------
   0x00  | Unknown0
   0x04  | Object order number (int32)
+  0x08  | Nunber of inner (G2X) objects
+  0x08  | 0x00
   0x10  | X position (float)
   0x14  | Y position (float)
   0x18  | X size (float)
   0x1C  | Y size (float)
-  0x88  | UV left edge (float)
-  0x8C  | UV upper edge (float)
-  0x90  | UV right edge (float)
-  0x94  | UV bottom edge (float)
+  0x20  | Pointer to G20 object
+  0x24  | Pointer to G21 object
+  0x28  | Pointer to G22 object
+  0x2C  | Pointer to G23 object
+  0x30  | Pointer to G24 object
+  0x34  | Pointer to G25 object
+  0x38  | 0x00
+  0x3C  | 0x00
 
 G1C - Number of object in group 1
 G2C - Number of object in group 2
