@@ -68,26 +68,47 @@ Address | Description
 
 Address | Description
 ------- | ------------
-  0x00  | Unknown
-  0x04  | Number of G2-0-0 objects
-  0x08  | Number of G2-0-1 objects
-  0x0C  | Pointer to G2-0-0 object
-  0x10  | Pointer to G2-0-1 object
-  0x14  | Number of G2-0-2 objects
-  0x18  | Number of G2-0-3 objects
-  0x1C  | Pointer to G2-0-2 object
-  0x20  | Pointer to G2-0-3 object
+  0x00  | Unknown0
+  0x04  | Number of frames
+  0x08  | Unknown1
+  0x0C  | Pointer to Key info
+  0x10  | Pointer to G2-0-0 object
+  0x14  | Number of frames
+  0x18  | Unknown2
+  0x1C  | Pointer to Key info
+  0x20  | Pointer to G2-0-1 object
   0x24  | 0x00
   0x28  | 0x00
   0x2C  | 0x00
 
+## Key frame info
+
+Address | Description
+------- | ------------
+  0x00  | Key frame number
+  0x04  | Interpolation type
+
 ## Group 2 - 0 - 0 Object
+
+Address | Description
+------- | ------------
+  0x00  | Unknown0 (float)
+  0x04  | Unknown1 (float)
+  0x08  | Unknown2 (float)
+  0x0C  | Unknown3 (float)
+  0x10  | Unknown4 (float)
+  0x14  | Unknown5 (float)
+  0x18  | Unknown6 (float)
+  0x1C  | Unknown7 (float)
 
 ## Group 2 - 0 - 1 Object
 
-## Group 2 - 0 - 2 Object
-
-## Group 2 - 0 - 3 Object
+Address | Description
+------- | ------------
+  0x00  | Unknown0 (float)
+  0x04  | Unknown1 (float)
+  0x08  | Unknown2 (float)
+  0x0C  | Unknown3 (float)
 
 G1C - Number of object in group 1
 G2C - Number of object in group 2
