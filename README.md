@@ -44,4 +44,4 @@ It can properly edit all TXB files.
 
 See https://github.com/OSA413/Sonic4_Tools/blob/master/docs/File%20description.md for more tools
 
-[appveyor_artifacts]: https://ci.appveyor.com/project/OSA413/sonic4-tools/build/artifacts
+[appveyor_artifacts]: https://ci.appveyor.com/project/OSA413/sonic4-tools/branch/master/artifacts
