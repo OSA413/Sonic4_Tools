@@ -2,13 +2,16 @@
 
 .    | 0-3  | 4-7  | 8-B  | C-F
 ---- | ---- | ---- | ---- | ----
-0x00 | #AMB | [ED]¹ |  ?¹   |  ?¹  
+0x00 | #AMB | [VE]¹ |  ?¹   |  ?¹  
 0x10 | [FN] | [LP] | [DP] | [NP]
 [LP] | [FP] | [FL] |  0x00 or 0xFF   | 0x00
 
 ## Header
 
-[ED]¹ (Endianness) - This 32-bit integer identifies the endianness of the file.
+[VE]¹ (AMB Version) - This 32-bit integer identifies the endianness of the file.
+
+* 0x20 is PC
+* todo: add others
 
 [FN] (File Number) - Number of files in the archive (may differ from the actual number of files).
 
