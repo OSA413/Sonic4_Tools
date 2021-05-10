@@ -11,8 +11,8 @@ ACB | Audio container | Probably [Skyth's AcbEditor][sonicaudiotools_link]
 AME | Something particles/effects related | ??? | EP1 EP2
 AT  | ??? | ??? | EP1 EP2
 AYK | ??? | ??? | EP2
-:star: CPK | Criware's audio containter | [CsbEditor from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
-:star: CSB | Criware's audio containter | [CsbEditor from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
+:star: CPK | Criware's audio containter | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
+:star: CSB | Criware's audio containter | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
 DC  | ??? | ??? | EP1 EP2
 :star: DDS | DirectDraw Surface (image) | Any image editor that supports DDS (GIMP, PhotoShop, etc) | EP1 EP2
 DF  | ??? | ??? | EP1 EP2
