@@ -17,7 +17,7 @@ DC  | ??? | ??? | EP1 EP2
 :star: DDS | DirectDraw Surface (image) | Any image editor that supports DDS (GIMP, PhotoShop, etc) | EP1 EP2
 DF  | ??? | ??? | EP1 EP2
 DI  | ??? | ??? | EP1 EP2
-EV  | ??? | ??? | EP1 EP2
+:hammer_and_wrench: EV  | ??? | ??? | EP1 EP2
 GPB | ??? | ??? | EP2
 :star: GVR | GVR texture | [Puyo Tools][puyo_tools_link]
 H | Looks like a C(++) header | ???
@@ -29,7 +29,7 @@ MP  | ??? | ??? | EP1 EP2
 MSG | ??? | ??? | EP2
 PSH | Compiled HLSL | ??? | EP1 EP2
 :star: PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
-RG  | ??? | ??? | EP1 EP2
+:hammer_and_wrench: RG  | ??? | ??? | EP1 EP2
 SSS | ??? | ??? | EP2
 :star: TXB | TeXture Bank file | [TXBEditor][tools_link] | EP1 EP2
 VSH | Compiled HLSL | ??? | EP1 EP2
