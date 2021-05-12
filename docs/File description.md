@@ -13,7 +13,7 @@ AT  | ??? | ??? | EP1 EP2
 AYK | ??? | ??? | EP2
 :star: CPK | Criware's audio containter | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
 :star: CSB | Criware's audio containter | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
-DC  | ??? | ??? | EP1 EP2
+:hammer_and_wrench: DC | Stage prop SET(?) | ??? | EP1 EP2
 :star: DDS | DirectDraw Surface (image) | Any image editor that supports DDS (GIMP, PhotoShop, etc) | EP1 EP2
 DF  | ??? | ??? | EP1 EP2
 DI  | ??? | ??? | EP1 EP2
@@ -23,9 +23,9 @@ GPB | ??? | ??? | EP2
 H | Looks like a C(++) header | ???
 HBM | ??? | ???
 :hammer_and_wrench: LTS | Light Settings | ??? | EP2
-MD  | ??? | ??? | EP1 EP2
+:hammer_and_wrench: MD  | ??? | ??? | EP1 EP2
 :hammer_and_wrench: MFS | MAPFAR Settings | ??? | EP2
-MP  | ??? | ??? | EP1 EP2
+:hammer_and_wrench: MP  | ??? | ??? | EP1 EP2
 MSG | ??? | ??? | EP2
 PSH | Compiled HLSL | ??? | EP1 EP2
 :star: PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
@@ -34,12 +34,8 @@ SSS | ??? | ??? | EP2
 :star: TXB | TeXture Bank file | [TXBEditor][tools_link] | EP1 EP2
 VSH | Compiled HLSL | ??? | EP1 EP2
 YSD | This one holds in-game credits | ??? | EP1 EP2
-ENO/ENM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
-INO/INM/INV | Model/animation/??? | [Dario's LibGens][libgens_link] (requires modification)
-GNO/GNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification)
 XNO/XNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification) | EP2
-ZNO/ZNM/ZNV | Model/animation/??? | [Dario's LibGens][libgens_link] (requires modification) | EP1 EP2
-LNO | Model | ???
+ZNO/ZNM/ZNV | Model / Model Animation / Material Animation | [Dario's LibGens][libgens_link] (requires modification) | EP1 EP2
 
 Icon | Legend
 -----|------------
