@@ -20,7 +20,7 @@ DI  | ??? | ??? | EP1 EP2
 :hammer_and_wrench: EV  | Gimmick SET | ??? | EP1 EP2
 :dizzy: GPB | Zone specific environment data | ??? | EP2
 :star: GVR | GVR texture | [Puyo Tools][puyo_tools_link]
-H | C++ header | N/A | Leftover Data
+H | Leftover C++ header | N/A
 HBM | ??? | ???
 :star: LTS | Light Settings | ??? | EP2
 :hammer_and_wrench: MD  | ??? | ??? | EP1 EP2
