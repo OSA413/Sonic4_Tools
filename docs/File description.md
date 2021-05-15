@@ -18,19 +18,19 @@ AYK | ??? | ??? | EP2
 DF  | ??? | ??? | EP1 EP2
 DI  | ??? | ??? | EP1 EP2
 :hammer_and_wrench: EV  | Gimmick SET | ??? | EP1 EP2
-GPB | ??? | ??? | EP2
+:dizzy: GPB | Zone specific environment data | ??? | EP2
 :star: GVR | GVR texture | [Puyo Tools][puyo_tools_link]
-H | Looks like a C(++) header | ???
+H | C++ header | N/A | Leftover Data
 HBM | ??? | ???
-:hammer_and_wrench: LTS | Light Settings | ??? | EP2
+:star: LTS | Light Settings | ??? | EP2
 :hammer_and_wrench: MD  | ??? | ??? | EP1 EP2
-:hammer_and_wrench: MFS | MAPFAR Settings | ??? | EP2
+:star: MFS | MAPFAR Settings | ??? | EP2
 :hammer_and_wrench: MP  | ??? | ??? | EP1 EP2
 MSG | ??? | ??? | EP2
 PSH | Compiled HLSL | ??? | EP1 EP2
 :star: PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
-:hammer_and_wrench: RG  | Ring SET | ??? | EP1 EP2
-SSS | ??? | ??? | EP2
+:star: RG  | Ring SET | ??? | EP1 EP2
+SSS | Special Stage Settings | ??? | EP2
 :star: TXB | TeXture Bank file | [TXBEditor][tools_link] | EP1 EP2
 VSH | Compiled HLSL | ??? | EP1 EP2
 YSD | This one holds in-game credits | ??? | EP1 EP2
