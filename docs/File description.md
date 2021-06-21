@@ -13,11 +13,11 @@ AT  | ??? | ??? | EP1 EP2
 AYK | ??? | ??? | EP2
 :star: CPK | Criware's audio containter | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
 :star: CSB | Criware's audio containter | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
-:hammer_and_wrench: DC | Stage prop SET(?) | ??? | EP1 EP2
+:hammer_and_wrench: DC | Decorate SET | ??? | EP1 EP2
 :star: DDS | DirectDraw Surface (image) | Any image editor that supports DDS (GIMP, PhotoShop, etc) | EP1 EP2
 DF  | ??? | ??? | EP1 EP2
 DI  | ??? | ??? | EP1 EP2
-:hammer_and_wrench: EV  | Gimmick SET | ??? | EP1 EP2
+:hammer_and_wrench: EV  | Event SET | ??? | EP1 EP2
 :dizzy: GPB | Zone specific environment data | ??? | EP2
 :star: GVR | GVR texture | [Puyo Tools][puyo_tools_link]
 H | Leftover C++ header | N/A
@@ -27,12 +27,12 @@ HBM | ??? | ???
 :star: MFS | MAPFAR Settings | ??? | EP2
 :hammer_and_wrench: MP  | ??? | ??? | EP1 EP2
 MSG | ??? | ??? | EP2
-PSH | Compiled HLSL | ??? | EP1 EP2
+PSH | Compiled HLSL | N/A | EP1 EP2
 :star: PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
 :star: RG  | Ring SET | ??? | EP1 EP2
 SSS | Special Stage Settings | ??? | EP2
 :star: TXB | TeXture Bank file | [TXBEditor][tools_link] | EP1 EP2
-VSH | Compiled HLSL | ??? | EP1 EP2
+VSH | Compiled HLSL | N/A | EP1 EP2
 YSD | This one holds in-game credits | ??? | EP1 EP2
 XNO/XNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification) | EP2
 ZNO/ZNM/ZNV | Model / Model Animation / Material Animation | [Dario's LibGens][libgens_link] (requires modification) | EP1 EP2
