@@ -13,7 +13,7 @@ There are also several bytes within the binder that go unused by the actual game
 Console versions are big endian. PC and Mobile are little endian.
 
 ## Header
-The header of an AMB file is unanimous among almost all versions of of the file, with the exception of [Windows Phone AMBs.](https://github.com/OSA413/Sonic4_Tools/blob/master/docs/Specifications/AMB_wp.md "AMB (WP) File Structure")
+The header of an AMB file is unanimous among almost all versions of the file, with the exception of [Windows Phone AMBs.](https://github.com/OSA413/Sonic4_Tools/blob/master/docs/Specifications/AMB_wp.md "Windows Phone AMB File Structure")
 
     Offset     0  1  2  3  4  5  6  7   8  9  A  B  C  D  E  F  123456789ABCDEF
     00000000  23 41 4D 42 20 00 00 00  00 00 04 00 00 00 00 00  #AMB ..........
