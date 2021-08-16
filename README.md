@@ -1,6 +1,6 @@
 # Sonic4_Tools
 
-The latest version of the programs can be found on [AppVeyor][appveyor_artifacts] (including dependencies).
+The latest version of the programs can be found on [GitHub Actions][github_actions] (including dependencies).
 
 More or less suitable for use versions are planned to be published on GitHub's release page.
 
@@ -44,4 +44,4 @@ It can properly edit all TXB files.
 
 See https://github.com/OSA413/Sonic4_Tools/blob/master/docs/File%20description.md for more tools
 
-[appveyor_artifacts]: https://ci.appveyor.com/project/OSA413/sonic4-tools/branch/master/artifacts
+[github_actions]: https://github.com/OSA413/Sonic4_Tools/actions
