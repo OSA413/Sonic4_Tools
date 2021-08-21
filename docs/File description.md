@@ -9,27 +9,27 @@ ACB | Criware's 'Atom Cuesheet Binary' | [Skyth's AcbEditor][sonicaudiotools_lin
 :dizzy: AMA | Something User Interface related | [AMAEditor][tools_link] | EP1 EP2
 :hammer_and_wrench: AMB | Game asset (textures, models...) container | [AMBPatcher][modloader_link] (recommended), [Skyth's AMBPack][skyth_tools] | EP1 EP2
 AME | Something particles/effects related | ??? | EP1 EP2
-AT  | ??? | ??? | EP1 EP2
+:dizzy: AT  | Attribute | ??? | EP1 EP2
 AYK | ??? | ??? | EP2
 :star: CPK | Cri PacKed File | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
 :star: CSB | Criware's audio containter | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
 :hammer_and_wrench: DC | Decorate SET | ??? | EP1 EP2
 :star: DDS | DirectDraw Surface (image) | Any image editor that supports DDS (GIMP, PhotoShop, etc) | EP1 EP2
-DF  | ??? | ??? | EP1 EP2
-DI  | ??? | ??? | EP1 EP2
+:dizzy: DF  | Collision related | ??? | EP1 EP2
+:dizzy: DI  | Collision related | ??? | EP1 EP2
 :hammer_and_wrench: EV  | Event SET | ??? | EP1 EP2
 :dizzy: GPB | Global Parameter Binary | ??? | EP2
 :star: GVR | GVR texture | [Puyo Tools][puyo_tools_link]
 H | Leftover C++ header | N/A
 HBM | ??? | ???
-:star: LTS | Light Settings | ??? | EP2
+:hammer_and_wrench: LTS | Light Settings | ??? | EP2
 :hammer_and_wrench: MD  | ??? | ??? | EP1 EP2
-:star: MFS | MAPFAR Settings | ??? | EP2
+:hammer_and_wrench: MFS | MAPFAR Settings | ??? | EP2
 :hammer_and_wrench: MP  | ??? | ??? | EP1 EP2
 MSG | ??? | ??? | EP2
 PSH | Compiled HLSL | N/A | EP1 EP2
 :star: PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
-:star: RG  | Ring SET | ??? | EP1 EP2
+:hammer_and_wrench: RG  | Ring SET | ??? | EP1 EP2
 SSS | Special Stage Settings | ??? | EP2
 :star: TXB | TeXture Bank file | [TXBEditor][tools_link] | EP1 EP2
 VSH | Compiled HLSL | N/A | EP1 EP2
