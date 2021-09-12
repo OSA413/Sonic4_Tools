@@ -28,7 +28,7 @@ HBM | ??? | ???
 :hammer_and_wrench: MP  | ??? | ??? | EP1 EP2
 MSG | ??? | ??? | EP2
 PSH | Compiled HLSL | N/A | EP1 EP2
-:star: PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link] or [Puyo Tools][puyo_tools_link]
+:star: PVR | PowerVR texture | [PVRTexTool from PowerVR SDK][powervr_sdk_link]
 :hammer_and_wrench: RG  | Ring SET | ??? | EP1 EP2
 SSS | Special Stage Settings | ??? | EP2
 :star: TXB | TeXture Bank file | [TXBEditor][tools_link] | EP1 EP2
