@@ -4,7 +4,7 @@
 
 File extension | Description | Program(s) | Usage
 -------------- | ----------- | ---------- | -----
-ACB | Criware's 'Atom Cuesheet Binary' | [Skyth's AcbEditor][sonicaudiotools_link]
+:star: ACB | Criware's 'Atom Cuesheet Binary' | [Skyth's AcbEditor][sonicaudiotools_link]
 :star: ADX | Criware's audio file | Good ADX converter (e.g. [FFmpeg-based ADX converter][FFmpeg-based_ADX_converter]) | EP1 EP2
 :dizzy: AMA | Something User Interface related | [AMAEditor][tools_link] | EP1 EP2
 :hammer_and_wrench: AMB | Game asset (textures, models...) container | [AMBPatcher][modloader_link] (recommended), [Skyth's AMBPack][skyth_tools] | EP1 EP2
@@ -12,8 +12,8 @@ AME | Something particles/effects related | ??? | EP1 EP2
 :dizzy: AT  | Attribute | ??? | EP1 EP2
 AYK | ??? | ??? | EP2
 :star: CPK | Cri PacKed File | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
-:star: CSB | Criware's audio containter | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
-:hammer_and_wrench: DC | Decorate SET | ??? | EP1 EP2
+:star: CSB | Cri Sound Bank | [CsbEditor and CsbBuilder from Sonic Audio Tools][sonicaudiotools_link] | EP1 EP2
+:hammer_and_wrench: DC | Decoration SET | ??? | EP1 EP2
 :star: DDS | DirectDraw Surface (image) | Any image editor that supports DDS (GIMP, PhotoShop, etc) | EP1 EP2
 :dizzy: DF  | Collision related | ??? | EP1 EP2
 :dizzy: DI  | Collision related | ??? | EP1 EP2
@@ -34,8 +34,7 @@ SSS | Special Stage Settings | ??? | EP2
 :star: TXB | TeXture Bank file | [TXBEditor][tools_link] | EP1 EP2
 VSH | Compiled HLSL | N/A | EP1 EP2
 YSD | This one holds in-game credits | ??? | EP1 EP2
-XNO/XNM | Model/animation | [Dario's LibGens][libgens_link] (requires modification) | EP2
-ZNO/ZNM/ZNV | Model / Model Animation / Material Animation | [Dario's LibGens][libgens_link] (requires modification) | EP1 EP2
+*NO/*NM/*NV | Model / Model Animation / Material Animation | [Dario's LibGens][libgens_link] (requires modification) | EP1 EP2
 
 Icon | Legend
 -----|------------
@@ -51,3 +50,4 @@ Icon | Legend
 [puyo_tools_link]: https://github.com/nickworonekin/puyotools
 [FFmpeg-based_ADX_converter]: https://github.com/OSA413/FFmpeg-based-ADX-converter
 [skyth_tools]: https://github.com/blueskythlikesclouds/SkythTools
+[EditorLink]: https://github.com/RadiantDerg/Sonic4-Editor
