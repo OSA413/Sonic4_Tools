@@ -34,7 +34,7 @@ SSS | Special Stage Settings | ??? | EP2
 :star: TXB | TeXture Bank file | [TXBEditor][tools_link] | EP1 EP2
 VSH | Compiled HLSL | N/A | EP1 EP2
 YSD | This one holds in-game credits | ??? | EP1 EP2
-*NO/*NM/*NV | Model / Model Animation / Material Animation | [Dario's LibGens][libgens_link] (requires modification) | EP1 EP2
+*NO/*NM/*NV | Model / Model Animation / Material Animation | [Dario's LibGens][libgens_link] or [Radfordhound's HedgeLib][hedgelib_link] (requires modification) | EP1 EP2
 
 Icon | Legend
 -----|------------
@@ -46,6 +46,7 @@ Icon | Legend
 [tools_link]: https://github.com/OSA413/Sonic4_Tools
 [sonicaudiotools_link]: https://github.com/blueskythlikesclouds/SonicAudioTools
 [libgens_link]: https://github.com/DarioSamo/libgens-sonicglvl
+[hedgelib_link]: https://github.com/Radfordhound/HedgeLib
 [powervr_sdk_link]: https://www.imgtec.com/developers/powervr-sdk-tools/
 [puyo_tools_link]: https://github.com/nickworonekin/puyotools
 [FFmpeg-based_ADX_converter]: https://github.com/OSA413/FFmpeg-based-ADX-converter
