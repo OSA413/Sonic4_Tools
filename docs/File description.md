@@ -34,7 +34,7 @@ SSS | Special Stage Settings | ??? | EP2
 :star: TXB | TeXture Bank file | [TXBEditor][tools_link] | EP1 EP2
 VSH | Compiled HLSL | N/A | EP1 EP2
 YSD | This one holds in-game credits | ??? | EP1 EP2
-*NO/*NM/*NV | Model / Model Animation / Material Animation | [Dario's LibGens][libgens_link] or [Radfordhound's HedgeLib][hedgelib_link] (requires modification) | EP1 EP2
+:hammer_and_wrench: *NO/*NM/*NV | Model / Model Animation / Material Animation | [Dario's LibGens][libgens_link] or [Radfordhound's HedgeLib][hedgelib_link] (requires modification) | EP1 EP2
 
 Icon | Legend
 -----|------------
