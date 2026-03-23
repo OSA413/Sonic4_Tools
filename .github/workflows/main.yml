@@ -1,4 +1,4 @@
-name: Main
+name: Midday build (Windows)
 
 on:
   push:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-2022
     permissions:
       contents: write
 
@@ -25,6 +25,8 @@ jobs:
 
       - name: Update dependencies
         run: bash update_dependencies.sh
+
+      - run: msbuild ./Sonic4_Tools/Sonic4_Tools.sln /p:Configuration=Release -m
 
       - name: Build
         run: bash build_pack.sh

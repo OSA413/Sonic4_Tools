@@ -1,15 +1,4 @@
 #!/bin/bash
-#please, keep all sh scripts in Unix new line (LF)
-cd "$(dirname "$0")"
-
-echo "Compiling..."
-msbuild ./Sonic4_Tools/Sonic4_Tools.sln /p:Configuration=Release -m
-
-EXIT_CODE="$?"
-if [ "$EXIT_CODE" != "0" ]; then
-    exit $EXIT_CODE
-fi
-
 echo "Removing old distribution package..."
 rm -r "./dist"
 mkdir -p "./dist/Sonic4_Tools/Common/Licenses"
