@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 echo "Removing old distribution package..."
-rm -r "./dist"
+rm -rf "./dist"
 mkdir -p "./dist/Sonic4_Tools/Common/Licenses"
 
 echo "Copying new distribution files..."
