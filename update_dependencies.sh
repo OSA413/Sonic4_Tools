@@ -14,6 +14,8 @@ curl https://raw.githubusercontent.com/OSA413/Sonic4_ModLoader/refs/tags/v0.1.6.
 cp ./AMBPatcher.exe ./../../dependencies/AMBPatcher/AMBPatcher.exe
 cp ./LICENSE ./../../dependencies/AMBPatcher/LICENSE
 
+cd ..
+
 #SonicAudioTools
 mkdir "SonicAudioTools"
 cd "SonicAudioTools"
