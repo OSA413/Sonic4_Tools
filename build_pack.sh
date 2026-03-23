@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 echo "Removing old distribution package..."
 rm -r "./dist"
 mkdir -p "./dist/Sonic4_Tools/Common/Licenses"
