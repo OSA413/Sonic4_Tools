@@ -26,6 +26,9 @@ jobs:
       - name: Update dependencies
         run: bash update_dependencies.sh
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
       - run: msbuild ./Sonic4_Tools/Sonic4_Tools.sln /p:Configuration=Release -m
 
       - name: Build
