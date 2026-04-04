@@ -2,11 +2,12 @@
 
 struct TXBObject {
     u32 unknown1;
-    u32 unknown2;
+    u32 name_pointer;
     u16 minFilter;
     u16 magFilter;
+    u32 unknown2;
     u32 unknown3;
-    u32 unknown4;
+    char name[] @ name_pointer;
 };
 
 struct TXBName {
@@ -21,7 +22,6 @@ struct TXB {
     u32 object_number;
     u32 object_pointer;
     TXBObject objects[object_number];
-    TXBName object_names[object_number];
 };
 
 TXB txb @ 0x0;
