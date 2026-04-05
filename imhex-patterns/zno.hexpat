@@ -57,7 +57,7 @@ struct NZTLStruct
 {
     u32 NumberOfTextures;
     u32 OffsetIndexArray;
-    StringList TexList[];
+    StringList TexList[NumberOfTextures];
     //char *TexList[NumberOfTextures];
 };
 
@@ -145,19 +145,18 @@ struct MeshInfo
 
 struct NZOBOffset
 {
-    TexOffset TexInfoOffset[];
-    VertexOffset VertexInfoOffset[];
-    FaceOffset FaceInfoOffset[];
-    TexInfo TexInfo[];
-    VertexInfo VertexInfo[];
-    FaceInfo FaceInfo[];
-    MeshInfo MeshInfo[];
+    TexOffset TexInfoOffset[parent.ModelInfoStruct.MaterialCount];
+    VertexOffset VertexInfoOffset[parent.ModelInfoStruct.VertexCount];
+    FaceOffset FaceInfoOffset[parent.ModelInfoStruct.FaceCount];
+    TexInfo TexInfo[parent.ModelInfoStruct.MaterialCount];
+    VertexInfo VertexInfo[parent.ModelInfoStruct.VertexCount];
+    FaceInfo FaceInfo[parent.ModelInfoStruct.FaceCount];
+    MeshInfo MeshInfo[parent.ModelInfoStruct.MeshSets];
 };
 
 struct BoneListComplex
 {
-    u32 entries[];
-    //uint32_t entries[BoneCount];
+    u32 entries[parent.ModelInfoStruct.BoneCount];
 };
 
 struct VertexMesh
@@ -183,7 +182,7 @@ struct VertexMesh
 
 struct VertexMeshData
 {
-    VertexMesh entries[];
+    VertexMesh entries[parent.ModelInfoStruct.VertexCount];
 };
 
 struct SubMeshInfo
@@ -201,24 +200,24 @@ struct SubMeshInfo
 
 struct Meshes
 {
-    SubMeshInfo entries[];
+    SubMeshInfo entries[parent.ModelInfoStruct.MeshSets];
 };
 
 struct FaceLensList
 {
-    u16 entries[];
+    u16 entries[parent.ModelInfoStruct.FaceCount];
     //uint16_t entries[FaceLensCount];
 };
 
 struct FaceList
 {
-    u16 entries[];
+    u16 entries[parent.ModelInfoStruct.VertexCount];
     //uint16_t entries[FaceCount];
 };
 
 struct FaceListList
 {
-    FaceList entries[];
+    FaceList entries[parent.ModelInfoStruct.VertexCount];
     //uint16_t entries[FaceCount];
 };
 
@@ -309,17 +308,16 @@ struct NZOB_Section
 {
     NZSectionHeader SectionHeader;
     u32 OffsetToModelInfo; //This offset is added to the start of the DataSection
+    ModelInfo ModelInfoStruct @ OffsetToModelInfo;
     NZOBOffset Offsets;
-    BoneListComplex BoneComplexList[];
-    VertexMeshData Vertex[];
-    Meshes Meshes[];
-    FaceLensList FacesLens[];
-    FaceListList Faces[];
-    Bone Bones[];
-    SubMeshInfoList SubMeshInfoList[];
-    MaterialList MateriaList[];
-    //Bone_t Bones[BoneCount];
-    ModelInfo ModelInfoStruct;
+    BoneListComplex BoneComplexList[ModelInfoStruct.BoneCount];
+    VertexMeshData Vertex[ModelInfoStruct.VertexCount];
+    Meshes Meshes[ModelInfoStruct.MeshSets];
+    FaceLensList FacesLens[ModelInfoStruct.FaceCount];
+    FaceListList Faces[ModelInfoStruct.FaceCount];
+    Bone Bones[ModelInfoStruct.BoneCount];
+    SubMeshInfoList SubMeshInfoList[ModelInfoStruct.MeshSets];
+    MaterialList MateriaList[ModelInfoStruct.MaterialCount];
 };
 
 struct NOF0_Section
@@ -347,24 +345,30 @@ struct NEND_Section
 };
 
 struct ZNO {
-    if (std::mem::find_string(0, "NZIF") >= 0)
-        NZIF_Section nzif @ std::mem::find_string(0, "NZIF");
+    NZIF_Section nzif @ 0x0;
+    
     if (std::mem::find_string(0, "NZTL") >= 0)
         NZTL_Section nztl @ std::mem::find_string(0, "NZTL");
+    
     //if (std::mem::find_string(0, "NZNN") >= 0)
     //    NZNN_Section nznn @ std::mem::find_string(0, "NZNN");
+    
     if (std::mem::find_string(0, "NZOB") >= 0)
         NZOB_Section nzob @ std::mem::find_string(0, "NZOB");
+    
     //if (std::mem::find_string(0, "NZMO") >= 0)
     //    NZMO_Section nzmo @ std::mem::find_string(0, "NZMO");
+    
     //if (std::mem::find_string(0, "NZTN") >= 0)
     //    NZTN_Section nztn @ std::mem::find_string(0, "NZTN");
-    if (std::mem::find_string(0, "NOF0") >= 0)
-        NOF0_Section nof0 @ std::mem::find_string(0, "NOF0");
+    
+    NOF0_Section nof0 @ nzif.OffsetToNOF0Section;
+    
+    // Is optional
     if (std::mem::find_string(0, "NFN0") >= 0)
         NFN0_Section nfn0 @ std::mem::find_string(0, "NFN0");
-    if (std::mem::find_string(0, "NEND") >= 0)
-        NEND_Section nend @ std::mem::find_string(0, "NEND");
+    
+    NEND_Section nend @ std::mem::find_string(0, "NEND");
 };
 
 ZNO zno @ 0x0;
