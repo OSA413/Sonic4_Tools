@@ -346,9 +346,25 @@ struct NEND_Section
     u32 Padding[2];
 };
 
-NZIF_Section nzif @ std::mem::find_string(0, "NZIF");
-NZTL_Section nztl @ std::mem::find_string(0, "NZTL");
-NZOB_Section nzob @ std::mem::find_string(0, "NZOB");
-NOF0_Section nof0 @ std::mem::find_string(0, "NOF0");
-NFN0_Section nfn0 @ std::mem::find_string(0, "NFN0");
-NFN0_Section nend @ std::mem::find_string(0, "NEND");
+struct ZNO {
+    if (std::mem::find_string(0, "NZIF") >= 0)
+        NZIF_Section nzif @ std::mem::find_string(0, "NZIF");
+    if (std::mem::find_string(0, "NZTL") >= 0)
+        NZTL_Section nztl @ std::mem::find_string(0, "NZTL");
+    //if (std::mem::find_string(0, "NZNN") >= 0)
+    //    NZNN_Section nznn @ std::mem::find_string(0, "NZNN");
+    if (std::mem::find_string(0, "NZOB") >= 0)
+        NZOB_Section nzob @ std::mem::find_string(0, "NZOB");
+    //if (std::mem::find_string(0, "NZMO") >= 0)
+    //    NZMO_Section nzmo @ std::mem::find_string(0, "NZMO");
+    //if (std::mem::find_string(0, "NZTN") >= 0)
+    //    NZTN_Section nztn @ std::mem::find_string(0, "NZTN");
+    if (std::mem::find_string(0, "NOF0") >= 0)
+        NOF0_Section nof0 @ std::mem::find_string(0, "NOF0");
+    if (std::mem::find_string(0, "NFN0") >= 0)
+        NFN0_Section nfn0 @ std::mem::find_string(0, "NFN0");
+    if (std::mem::find_string(0, "NEND") >= 0)
+        NEND_Section nend @ std::mem::find_string(0, "NEND");
+};
+
+ZNO zno @ 0x0;
