@@ -1,4 +1,4 @@
-#pragma endian big
+#pragma big endian
 
 struct TXBObject {
     u32 unknown1;

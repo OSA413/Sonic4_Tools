@@ -1,5 +1,5 @@
-#pragma endian big
-import "std/core";
+#pragma big endian
+import std.core;
 
 struct BinaryObject {
     u32 offset;
