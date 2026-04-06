@@ -31,6 +31,7 @@ This particular hexpat is licensed under GNU GPL-3.0 license:
 #define big endian;
 
 import std.mem;
+import std.io;
 
 struct NZSectionHeader
 {
@@ -83,22 +84,34 @@ struct NZTL_Section
     NZTLStruct mainList;
 };
 
-struct TexOffset
+struct Texture
 {
-    u32 ReservedMaybe;
-    u32 Offset;
+    u32 TextureFlags;
+    //This index is an index into the NZTL Texture list.
+    u32 TextureIndex;
+    u32 unk;
+    float TextureAlpha;
+    u32 unk2;
+    u32 unk3;
+    float TextureScale[2];
+    u32 UnusedMaybe[8];
 };
 
-struct VertexOffset
+struct Colour
 {
-    u32 InfoFlags; //If this flag is equal to 4, the VertexInfo struct does not exist.
-    u32 Offset;
+    float Diffuse[4] = {0.75f, 0.75f, 0.75f, 1.0f};
+    float Ambient[4] = {0.75f, 0.75f, 0.75f, 1.0f};
+    float Specular[4] = {0.9f, 0.9f, 0.9f, 1.0f};
+    float Emission[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+    //These aren't embedded in the binary.
+    float Shininess = 0.5;
+    float SpecularValue = 0.5;
 };
 
-struct FaceOffset
+struct MaterialList
 {
-    u32 ReservedMaybe;
-    u32 Offset;
+    Texture Textures[];
+    Colour Colours[];
 };
 
 struct TexInfo
@@ -110,6 +123,54 @@ struct TexInfo
     u32 Reserved4;
     u32 TextureCount;
     u32 TextureOffset;
+};
+
+struct TexOffset
+{
+    u32 ReservedMaybe;
+    u32 Offset;
+    TexInfo info @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + Offset);
+    Texture data[info.TextureCount] @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + info.TextureOffset);
+};
+
+struct VertexOffset
+{
+    u32 InfoFlags; //If this flag is equal to 4, the VertexInfo struct does not exist.
+    u32 Offset;
+    
+};
+
+struct VertexMesh
+{
+    //This is an array of floats but;
+    //If the bit flag for colour short is set, it is an array of colours.
+    //If the bit flag for weight indices or colour bytes is set, it is an array of bytes.
+    //char VertexBuffer[VertexCount * BlockSize];
+    //Each of these fields are independent from one another and depends on the VertexFlags value.
+    //It is not possible to read this structure straight from the VertexBuffer.
+    u64 VertexFlags;
+    float Position[3];
+    float Weights[3];
+    u8 Bones[4];
+    float Normal[3];
+    float UV[2];
+    //This is UV2 in Godot.
+    float WX[2];
+    //It should be noted that colours are stored in the BGRA format.
+    u16 ColourS[4];
+    u8 ColourB[4];
+};
+
+struct VertexMeshData
+{
+    VertexMesh entries[];
+};
+
+struct FaceOffset
+{
+    u32 ReservedMaybe;
+    u32 Offset;
+    VertexMeshData data @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + Offset);
 };
 
 struct VertexInfo
@@ -147,11 +208,11 @@ struct NZOBOffset
 {
     TexOffset TexInfoOffset[parent.ModelInfoStruct.MaterialCount];
     VertexOffset VertexInfoOffset[parent.ModelInfoStruct.VertexCount];
-    FaceOffset FaceInfoOffset[parent.ModelInfoStruct.FaceCount];
-    TexInfo TexInfo[parent.ModelInfoStruct.MaterialCount];
-    VertexInfo VertexInfo[parent.ModelInfoStruct.VertexCount];
-    FaceInfo FaceInfo[parent.ModelInfoStruct.FaceCount];
-    MeshInfo MeshInfo[parent.ModelInfoStruct.MeshSets];
+    //FaceOffset FaceInfoOffset[parent.ModelInfoStruct.FaceCount];
+    //TexInfo TexInfo[parent.ModelInfoStruct.MaterialCount];
+    //VertexInfo VertexInfo[parent.ModelInfoStruct.VertexCount];
+    //FaceInfo FaceInfo[parent.ModelInfoStruct.FaceCount];
+    //MeshInfo MeshInfo[parent.ModelInfoStruct.MeshSets];
 };
 
 struct BoneListComplex
@@ -159,31 +220,6 @@ struct BoneListComplex
     u32 entries[parent.ModelInfoStruct.BoneCount];
 };
 
-struct VertexMesh
-{
-    //This is an array of floats but;
-    //If the bit flag for colour short is set, it is an array of colours.
-    //If the bit flag for weight indices or colour bytes is set, it is an array of bytes.
-    //char VertexBuffer[VertexCount * BlockSize];
-    //Each of these fields are independent from one another and depends on the VertexFlags value.
-    //It is not possible to read this structure straight from the VertexBuffer.
-    u64 VertexFlags;
-    float Position[3];
-    float Weights[3];
-    u8 Bones[4];
-    float Normal[3];
-    float UV[2];
-    //This is UV2 in Godot.
-    float WX[2];
-    //It should be noted that colours are stored in the BGRA format.
-    u16 ColourS[4];
-    u8 ColourB[4];
-};
-
-struct VertexMeshData
-{
-    VertexMesh entries[parent.ModelInfoStruct.VertexCount];
-};
 
 struct SubMeshInfo
 {
@@ -256,36 +292,6 @@ struct SubMeshInfoList
     SubMeshInfo entries[];
 };
 
-struct Texture
-{
-    u32 TextureFlags;
-    //This index is an index into the NZTL Texture list.
-    u32 TextureIndex;
-    u32 unk;
-    float TextureAlpha;
-    u32 unk2;
-    u32 unk3;
-    float TextureScale[2];
-    u32 UnusedMaybe[8];
-};
-
-struct Colour
-{
-    float Diffuse[4] = {0.75f, 0.75f, 0.75f, 1.0f};
-    float Ambient[4] = {0.75f, 0.75f, 0.75f, 1.0f};
-    float Specular[4] = {0.9f, 0.9f, 0.9f, 1.0f};
-    float Emission[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-    //These aren't embedded in the binary.
-    float Shininess = 0.5;
-    float SpecularValue = 0.5;
-};
-
-struct MaterialList
-{
-    Texture Textures[];
-    Colour Colours[];
-};
-
 struct ModelInfo
 {
     float BoundsPosition[3]; //x, y, z
@@ -308,16 +314,19 @@ struct NZOB_Section
 {
     NZSectionHeader SectionHeader;
     u32 OffsetToModelInfo; //This offset is added to the start of the DataSection
-    ModelInfo ModelInfoStruct @ OffsetToModelInfo;
+    ModelInfo ModelInfoStruct @ (parent.nzif.OffsetToStartOfDataSection + OffsetToModelInfo);
     NZOBOffset Offsets;
-    BoneListComplex BoneComplexList[ModelInfoStruct.BoneCount];
-    VertexMeshData Vertex[ModelInfoStruct.VertexCount];
-    Meshes Meshes[ModelInfoStruct.MeshSets];
-    FaceLensList FacesLens[ModelInfoStruct.FaceCount];
-    FaceListList Faces[ModelInfoStruct.FaceCount];
-    Bone Bones[ModelInfoStruct.BoneCount];
-    SubMeshInfoList SubMeshInfoList[ModelInfoStruct.MeshSets];
-    MaterialList MateriaList[ModelInfoStruct.MaterialCount];
+    
+    //EVERYTHING IS IN OFFSET
+    
+    //u32 BoneComplexList[ModelInfoStruct.BoneCount];
+    //VertexMeshData Vertex[ModelInfoStruct.VertexCount];
+    //Meshes Meshes[ModelInfoStruct.MeshSets];
+    //FaceLensList FacesLens[ModelInfoStruct.FaceCount];
+    //FaceListList Faces[ModelInfoStruct.FaceCount];
+    //Bone Bones[ModelInfoStruct.BoneCount];
+    //SubMeshInfoList SubMeshInfoList[ModelInfoStruct.MeshSets];
+    //MaterialList MateriaList[ModelInfoStruct.MaterialCount] @ (parent.nzif.OffsetToStartOfDataSection);
 };
 
 struct NOF0_Section
