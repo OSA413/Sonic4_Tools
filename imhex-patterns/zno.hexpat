@@ -1,4 +1,6 @@
 /*
+Warning: this is a WIP
+
 Found a problem or want to improve the script?
 Just open an issue or send your code via Pull Request.
 It's GNU GPL, baby!
@@ -48,6 +50,36 @@ struct NZIF_Section
     u32 OffsetToNOF0Section;
     u32 SizeOfNOF0Lists;
     u32 version;
+};
+
+struct FaceLensList
+{
+    u16 entries[parent.parent.parent.ModelInfoStruct.FaceCount];
+};
+
+struct FaceList
+{
+    u16 entries[parent.parent.parent.ModelInfoStruct.FaceCount];
+};
+
+struct FaceInfo
+{
+    u32 ReservedMaybe;
+    u32 FaceShortCount;
+    u32 FaceLensCount;
+    u32 FaceLensOffset;
+    u32 FaceOffset;
+    FaceLensList faceLensList[FaceLensCount] @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + FaceLensOffset);
+    FaceList faceList[FaceLensCount] @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + FaceOffset);
+};
+
+struct MeshInfo
+{
+    u32 MeshType;
+    u32 MeshCount;
+    u32 MeshOffset;
+    u32 unk1;
+    u32 unk2;
 };
 
 struct StringList {
@@ -108,12 +140,6 @@ struct Colour
     float SpecularValue = 0.5;
 };
 
-struct MaterialList
-{
-    Texture Textures[];
-    Colour Colours[];
-};
-
 struct TexInfo
 {
     u32 Reserved;
@@ -129,15 +155,18 @@ struct TexOffset
 {
     u32 ReservedMaybe;
     u32 Offset;
-    TexInfo info @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + Offset);
-    Texture data[info.TextureCount] @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + info.TextureOffset);
+    TexInfo info @ (parent.parent.nzif.OffsetToStartOfDataSection + Offset);
+    Texture textures[info.TextureCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + info.TextureOffset);
+    Colour colours[info.TextureCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + info.ColourOffset);
 };
 
-struct VertexOffset
-{
-    u32 InfoFlags; //If this flag is equal to 4, the VertexInfo struct does not exist.
-    u32 Offset;
-    
+struct VertexInfo {
+    u64 VertexFlags;
+    u32 BlockSize;
+    u32 VertexCount;
+    u32 VertexMeshOffset;
+    u32 BoneCount;
+    u32 BoneOffsetComplex;
 };
 
 struct VertexMesh
@@ -158,68 +187,25 @@ struct VertexMesh
     float WX[2];
     //It should be noted that colours are stored in the BGRA format.
     u16 ColourS[4];
-    u8 ColourB[4];
+    //u8 ColourB[4];
 };
 
-struct VertexMeshData
+
+struct VertexOffset
 {
-    VertexMesh entries[];
+    u32 InfoFlags; //If this flag is equal to 4, the VertexInfo struct does not exist.
+    u32 Offset;
+    VertexInfo info @ (parent.parent.nzif.OffsetToStartOfDataSection + Offset);
+    u32 boneComplex[info.BoneCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + info.BoneOffsetComplex);
+    VertexMesh vertexMesh[info.VertexCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + info.VertexMeshOffset);
 };
 
 struct FaceOffset
 {
     u32 ReservedMaybe;
     u32 Offset;
-    VertexMeshData data @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + Offset);
+    FaceInfo data[parent.ModelInfoStruct.FaceCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + Offset);
 };
-
-struct VertexInfo
-{
-    //This value is written in big endian.
-    //It needs to be turned into a little endian value to verify activated flags.
-    u64 VertexFlags;
-
-    u32 BlockSize;
-    u32 VertexCount;
-    u32 VertexMeshOffset;
-    u32 BoneCount;
-    u32 BoneOffsetComplex;
-};
-
-struct FaceInfo
-{
-    u32 ReservedMaybe;
-    u32 FaceShortCount;
-    u32 FaceLensCount;
-    u32 FaceLensOffset;
-    u32 FaceOffset;
-};
-
-struct MeshInfo
-{
-    u32 MeshType;
-    u32 MeshCount;
-    u32 MeshOffset;
-    u32 unk1;
-    u32 unk2;
-};
-
-struct NZOBOffset
-{
-    TexOffset TexInfoOffset[parent.ModelInfoStruct.MaterialCount];
-    VertexOffset VertexInfoOffset[parent.ModelInfoStruct.VertexCount];
-    //FaceOffset FaceInfoOffset[parent.ModelInfoStruct.FaceCount];
-    //TexInfo TexInfo[parent.ModelInfoStruct.MaterialCount];
-    //VertexInfo VertexInfo[parent.ModelInfoStruct.VertexCount];
-    //FaceInfo FaceInfo[parent.ModelInfoStruct.FaceCount];
-    //MeshInfo MeshInfo[parent.ModelInfoStruct.MeshSets];
-};
-
-struct BoneListComplex
-{
-    u32 entries[parent.ModelInfoStruct.BoneCount];
-};
-
 
 struct SubMeshInfo
 {
@@ -232,29 +218,6 @@ struct SubMeshInfo
     u32 Face;
     //According to Sega NN Tools, Shader System -> User -> Shader File being the final index.
     u32 Shader;
-};
-
-struct Meshes
-{
-    SubMeshInfo entries[parent.ModelInfoStruct.MeshSets];
-};
-
-struct FaceLensList
-{
-    u16 entries[parent.ModelInfoStruct.FaceCount];
-    //uint16_t entries[FaceLensCount];
-};
-
-struct FaceList
-{
-    u16 entries[parent.ModelInfoStruct.VertexCount];
-    //uint16_t entries[FaceCount];
-};
-
-struct FaceListList
-{
-    FaceList entries[parent.ModelInfoStruct.VertexCount];
-    //uint16_t entries[FaceCount];
 };
 
 struct Matrix
@@ -315,18 +278,11 @@ struct NZOB_Section
     NZSectionHeader SectionHeader;
     u32 OffsetToModelInfo; //This offset is added to the start of the DataSection
     ModelInfo ModelInfoStruct @ (parent.nzif.OffsetToStartOfDataSection + OffsetToModelInfo);
-    NZOBOffset Offsets;
-    
-    //EVERYTHING IS IN OFFSET
-    
-    //u32 BoneComplexList[ModelInfoStruct.BoneCount];
-    //VertexMeshData Vertex[ModelInfoStruct.VertexCount];
-    //Meshes Meshes[ModelInfoStruct.MeshSets];
-    //FaceLensList FacesLens[ModelInfoStruct.FaceCount];
-    //FaceListList Faces[ModelInfoStruct.FaceCount];
-    //Bone Bones[ModelInfoStruct.BoneCount];
-    //SubMeshInfoList SubMeshInfoList[ModelInfoStruct.MeshSets];
-    //MaterialList MateriaList[ModelInfoStruct.MaterialCount] @ (parent.nzif.OffsetToStartOfDataSection);
+
+    Bone bones[ModelInfoStruct.BoneCount] @ (parent.nzif.OffsetToStartOfDataSection + ModelInfoStruct.BoneOffset);
+    TexOffset textures[ModelInfoStruct.MaterialCount] @ (parent.nzif.OffsetToStartOfDataSection + ModelInfoStruct.MaterialOffset);
+    FaceOffset faces[ModelInfoStruct.FaceCount] @ (parent.nzif.OffsetToStartOfDataSection + ModelInfoStruct.FaceOffset);
+    VertexOffset vertices[ModelInfoStruct.VertexCount] @ (parent.nzif.OffsetToStartOfDataSection + ModelInfoStruct.VertexOffset);
 };
 
 struct NOF0_Section
