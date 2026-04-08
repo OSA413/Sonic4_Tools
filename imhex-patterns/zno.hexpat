@@ -30,7 +30,8 @@ This particular hexpat is licensed under GNU GPL-3.0 license:
 */
 
 
-#define big endian;
+#define little endian;
+u32 nzifOffset = 32;
 
 import std.mem;
 import std.io;
@@ -106,14 +107,23 @@ struct NZTLStructIndexEntry
     u32 Bank; //Used if EAX & 0x800 != 0
 };
 
+struct NZTL_Names
+{
+u8 string[while(std::mem::read_unsigned($, 1) != 0x00)];
+padding[1];
+};
+
 struct NZTL_Section
 {
     NZSectionHeader SectionHeader;
+    u32 BlockSize = (SectionHeader.SectionSize + 8);
+    u32 NZTLStart = $;
     u32 OffsetTexList;
-    u32 Reserved;
-    NZTLStructIndexEntry entries[];
-    //struct NZTLStructIndexEntry entries[NumberOfTextures];
-    NZTLStruct mainList;
+    u32 Reserved; 
+    u32 TextureCount @ (OffsetTexList + nzifOffset);
+    u32 TextureOffset@ (OffsetTexList + nzifOffset + 4);
+    NZTL_Names NZTL_Names[TextureCount] @ (OffsetTexList + nzifOffset + 8);
+    NZTLStructIndexEntry entries[TextureCount] @ (TextureOffset + nzifOffset);
 };
 
 struct Texture
