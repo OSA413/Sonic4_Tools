@@ -53,25 +53,22 @@ struct NZIF_Section
     u32 version;
 };
 
-struct FaceLensList
-{
-    u16 entries[parent.parent.parent.ModelInfoStruct.FaceCount];
-};
-
 struct FaceList
 {
-    u16 entries[parent.parent.parent.ModelInfoStruct.FaceCount];
+    u16 entries[parent.FaceLensList];
 };
 
 struct FaceInfo
 {
-    u32 ReservedMaybe;
+    u32 Flags;  // facewinding
     u32 FaceShortCount;
-    u32 FaceLensCount;
+    u32 FaceLensCount;  // collection of lens that say how long each strip is
     u32 FaceLensOffset;
     u32 FaceOffset;
-    FaceLensList faceLensList[FaceLensCount] @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + FaceLensOffset);
-    FaceList faceList[FaceLensCount] @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + FaceOffset);
+    u32 Reserved[3];
+    u16 FaceLensList[FaceLensCount] @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + FaceLensOffset);
+    // don't think this code is correct, doesn't matter because they only use 1 strip in zno from what i know
+    u16 FaceList[FaceShortCount] @ (parent.parent.parent.nzif.OffsetToStartOfDataSection + FaceOffset);
 };
 
 struct MeshInfo
@@ -131,43 +128,52 @@ struct Texture
     u32 TextureFlags;
     //This index is an index into the NZTL Texture list.
     u32 TextureIndex;
-    u32 unk;
-    float TextureAlpha;
-    u32 unk2;
-    u32 unk3;
+    u32 TextureMapping;
+    float TextureBlend;
+    float TextureOffset[2];
     float TextureScale[2];
+    // theres probably lodbias and custom texture interpolation in here
     u32 UnusedMaybe[8];
 };
 
 struct Colour
 {
-    float Diffuse[4] = {0.75f, 0.75f, 0.75f, 1.0f};
-    float Ambient[4] = {0.75f, 0.75f, 0.75f, 1.0f};
-    float Specular[4] = {0.9f, 0.9f, 0.9f, 1.0f};
-    float Emission[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-    //These aren't embedded in the binary.
-    float Shininess = 0.5;
-    float SpecularValue = 0.5;
+    u32 Flags;
+    float Ambient[4];
+    float Diffuse[4];
+    float Specular[4];
+    float Emission[4];
+    float Shininess;
+    float SpecularValue;
+};
+
+struct Render
+{
+    // haven't looked at this yet
+    float Unknown[7];
 };
 
 struct TexInfo
 {
-    u32 Reserved;
-    u32 Reserved2;
+    u32 MaterialFlags;  // stuff like be unshaded
+    u32 User;  // look who wanted to be included
     u32 ColourOffset;
-    u32 Reserved3;
-    u32 Reserved4;
+    u32 RenderOffest; // flags for rendering, eg.alpha comp
+    u32 TextureFlags; // all texture types
     u32 TextureCount;
     u32 TextureOffset;
 };
 
 struct TexOffset
 {
-    u32 ReservedMaybe;
+    // which datastruct of materials to use. 
+    // Don't have to worry about that bc games don't really use different versions
+    u32 DataType;
     u32 Offset;
     TexInfo info @ (parent.parent.nzif.OffsetToStartOfDataSection + Offset);
     Texture textures[info.TextureCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + info.TextureOffset);
-    Colour colours[info.TextureCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + info.ColourOffset);
+    Colour colours @ (parent.parent.nzif.OffsetToStartOfDataSection + info.ColourOffset);
+    Render render @ (parent.parent.nzif.OffsetToStartOfDataSection + info.RenderOffest);
 };
 
 struct VertexInfo {
@@ -203,18 +209,18 @@ struct VertexMesh
 
 struct VertexOffset
 {
-    u32 InfoFlags; //If this flag is equal to 4, the VertexInfo struct does not exist.
+    u32 DataType; //If this flag is equal to 4, its keyshape data (not used in s4)
     u32 Offset;
     VertexInfo info @ (parent.parent.nzif.OffsetToStartOfDataSection + Offset);
     u32 boneComplex[info.BoneCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + info.BoneOffsetComplex);
-    VertexMesh vertexMesh[info.VertexCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + info.VertexMeshOffset);
+    u8 vertexMesh[(info.VertexCount * info.BlockSize)] @ (parent.parent.nzif.OffsetToStartOfDataSection + info.VertexMeshOffset);
 };
 
 struct FaceOffset
 {
-    u32 ReservedMaybe;
+    u32 DataType;
     u32 Offset;
-    FaceInfo data[parent.ModelInfoStruct.FaceCount] @ (parent.parent.nzif.OffsetToStartOfDataSection + Offset);
+    FaceInfo data @ (parent.parent.nzif.OffsetToStartOfDataSection + Offset);
 };
 
 struct SubMeshInfo
@@ -222,7 +228,7 @@ struct SubMeshInfo
     float boundsPosition[3];
     float boundsScale;
     u32 BoneVisibility;
-    u32 Bone; // 0xFFFF'FFFF means NULL.
+    u32 Bone; // 0xFFFF'FFFF means the mesh uses more than one bone.
     u32 Material;
     u32 Vertex;
     u32 Face;
@@ -254,7 +260,7 @@ struct Bone
     //x0, x1, x2, x3, y0, y1, y2, y3, z0, z1, z2, z3, w0, w1, w2, w3
     //It seems every matrix always represents an homogeneous transform.
     Matrix BoneMatrix;
-    float BoneCenter[3];
+    float BoneCenter[3]; // only used if they have the right bone flags, used for culling
     float BoneRadius; 
     u32 BoneUser;
     float BoneLength[3];
@@ -262,7 +268,14 @@ struct Bone
 
 struct SubMeshInfoList
 {
-    SubMeshInfo entries[];
+    u32 RenderFlags; // transparency and if its one bone or many
+    u32 MeshCount;
+    u32 MeshOffset;
+    u32 TextureCount; // textures used by these meshes
+    u32 TextureOffset;
+    SubMeshInfo entries[MeshCount] @ (nzifOffset + MeshOffset);
+    u32 texture[TextureCount] @ (nzifOffset + TextureOffset);
+    
 };
 
 struct ModelInfo
@@ -276,7 +289,7 @@ struct ModelInfo
     u32 FaceCount;
     u32 FaceOffset;
     u32 BoneCount;
-    u32 ReservedMaybe;
+    u32 BoneDepth;  // Longest parent - child - childs child
     u32 BoneOffset; //This offset should be added to the start of the DataSection.
     u32 BoneUsedCount;
     u32 MeshSets;
@@ -288,11 +301,16 @@ struct NZOB_Section
     NZSectionHeader SectionHeader;
     u32 OffsetToModelInfo; //This offset is added to the start of the DataSection
     ModelInfo ModelInfoStruct @ (parent.nzif.OffsetToStartOfDataSection + OffsetToModelInfo);
+    u32 Unknown; // Might be a version number
+    u32 VertexDataLen;
+    u32 ToVertexData;
+    u64 Padding;
 
     Bone bones[ModelInfoStruct.BoneCount] @ (parent.nzif.OffsetToStartOfDataSection + ModelInfoStruct.BoneOffset);
     TexOffset textures[ModelInfoStruct.MaterialCount] @ (parent.nzif.OffsetToStartOfDataSection + ModelInfoStruct.MaterialOffset);
     FaceOffset faces[ModelInfoStruct.FaceCount] @ (parent.nzif.OffsetToStartOfDataSection + ModelInfoStruct.FaceOffset);
     VertexOffset vertices[ModelInfoStruct.VertexCount] @ (parent.nzif.OffsetToStartOfDataSection + ModelInfoStruct.VertexOffset);
+    SubMeshInfoList buildmesh[ModelInfoStruct.MeshSets] @ (parent.nzif.OffsetToStartOfDataSection + ModelInfoStruct.MeshOffset);
 };
 
 struct NOF0_Section
