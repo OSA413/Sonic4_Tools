@@ -14,6 +14,7 @@ Credits:
 This particular hexpat is licensed under GNU GPL-3.0 license: 
 
     Copyright (C) 2026 OSA413
+    Copyright (C) 2026 Argx2121
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
