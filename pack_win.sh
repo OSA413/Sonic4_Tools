@@ -12,4 +12,4 @@ echo "Creating SHA256SUMS..."
 cd dist
 find * -type f -exec sha256sum {} \; >> "SHA256SUMS_win"
 
-7z a "./Sonic4ModLoader_win.zip" ./* -mx=9
+7z a "./Sonic4Tools_win.zip" ./* -mx=9
