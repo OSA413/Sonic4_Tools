@@ -1,4 +1,9 @@
 [workspace]
 members = [
+    "src/common",
+    "src/common_binary",
+    "src/amb-rs",
+    "src/amb-rs-lib",
+    "src/amb-rs-tests",
 ]
 resolver = "3"
