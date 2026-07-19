@@ -1,0 +1,84 @@
+name: Midday build (Windows)
+
+on:
+  release:
+    types: [published]
+  push:
+    branches:
+     - "**"
+  pull_request:
+    branches:
+     - "**"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+permissions:
+  contents: read
+
+jobs:
+  build-pack-test-win64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Generate version
+        run: bash src/common/src/generate-version.sh
+
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build Rust
+        run: cargo build --release
+
+      - name: Pack
+        run: bash pack_win.sh
+        
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Sonic4Tools_win.zip
+          path: dist/Sonic4Tools_win.zip
+          archive: false
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: SHA256SUMS_win
+          path: dist/SHA256SUMS_win
+          archive: false
+
+      - run: cargo test --no-fail-fast
+
+
+  publish-win64:
+    if: github.ref_type == 'tag'
+    needs: build-pack-test-win64
+    permissions:
+      contents: write
+    runs-on: ubuntu-slim
+    steps:
+      - uses: actions/download-artifact@v8
+        with: 
+          name: SHA256SUMS_win
+          skip-decompress: true
+
+      - uses: actions/download-artifact@v8
+        with: 
+          name: Sonic4Tools_win.zip
+          skip-decompress: true
+
+      - uses: softprops/action-gh-release@v3
+        if: github.ref_type == 'tag'
+        with:
+          files: |
+            SHA256SUMS_win
+            Sonic4Tools_win.zip
