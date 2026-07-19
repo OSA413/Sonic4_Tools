@@ -2,10 +2,11 @@
 set -e
 echo "Removing old distribution package..."
 rm -rf "./dist"
+mkdir -p "./dist/Sonic4Tools"
 
 echo "Copying new distribution files..."
 
-cp ./target/release/amb-rs ./dist/amb-rs
+cp ./target/release/amb-rs ./dist/Sonic4Tools/amb-rs
 
 echo "Creating SHA256SUMS..."
 cd dist
