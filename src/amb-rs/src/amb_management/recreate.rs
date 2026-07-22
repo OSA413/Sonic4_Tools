@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 use common_binary::error::CommonBinaryError;
 
-use crate::amb_management::{self, common_hander::do_a_thing_over_an_amb_and_save};
+use crate::amb_management::{self, common_handler::do_a_thing_over_an_amb_and_save};
 
 pub fn recreate_amb(file: String, save_as_file_name: Option<String>) -> Result<(), CommonBinaryError> {
     do_a_thing_over_an_amb_and_save(
