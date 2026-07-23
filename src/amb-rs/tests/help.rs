@@ -1,12 +1,16 @@
 #[cfg(test)]
 mod help_tests {
+    use std::time::Duration;
+
     use assert_cmd::Command;
     use predicates::prelude::*;
 
     #[test]
     fn without_arguments() {
         let mut cmd = Command::cargo_bin("amb-rs").unwrap();
-        let assert = cmd.assert();
+        let assert = cmd
+            .timeout(Duration::from_millis(100))
+            .assert();
 
         assert
             .success()
@@ -20,6 +24,7 @@ mod help_tests {
         let mut cmd = Command::cargo_bin("amb-rs").unwrap();
         let assert = cmd
             .arg("-h")
+            .timeout(Duration::from_millis(100))
             .assert();
 
         assert
@@ -34,6 +39,7 @@ mod help_tests {
         let mut cmd = Command::cargo_bin("amb-rs").unwrap();
         let assert = cmd
             .arg("--help")
+            .timeout(Duration::from_millis(100))
             .assert();
 
         assert

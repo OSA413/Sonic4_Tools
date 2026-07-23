@@ -1,5 +1,7 @@
 #[cfg(test)]
 mod version_tests {
+    use std::time::Duration;
+
     use assert_cmd::Command;
 
     #[test]
@@ -7,6 +9,7 @@ mod version_tests {
         let mut cmd = Command::cargo_bin("amb-rs").unwrap();
         let assert = cmd
             .arg("-v")
+            .timeout(Duration::from_millis(100))
             .assert();
 
         assert
@@ -19,6 +22,7 @@ mod version_tests {
         let mut cmd = Command::cargo_bin("amb-rs").unwrap();
         let assert = cmd
             .arg("--version")
+            .timeout(Duration::from_millis(100))
             .assert();
 
         assert
