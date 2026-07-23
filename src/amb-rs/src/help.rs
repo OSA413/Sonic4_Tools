@@ -48,6 +48,10 @@ Usage:
         Needs target AMB file to exist near the directory.
         Via GUI, you can drag&drop AMB file on amb-rs executable to recreate it.
 
+    `amb-rs -v` and
+    `amb-rs --version`
+        Show versions of used tools.
+
     `amb-rs` and
     `amb-rs -h` and
     `amb-rs --help`
