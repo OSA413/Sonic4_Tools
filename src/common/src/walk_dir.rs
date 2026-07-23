@@ -31,6 +31,7 @@ pub fn walk_dir(dir: &Path, extension: Option<&OsStr>) -> Vec<PathBuf> {
         },
         Err(e) => eprintln!("Error: {e}"),
     }
+    files.sort();
     files
 }
 
@@ -53,6 +54,7 @@ pub fn walk_dir_for_dirs(dir: &Path) -> Vec<PathBuf> {
         },
         Err(e) => eprintln!("Error: {e}"),
     }
+    dirs.sort();
     dirs
 }
 
