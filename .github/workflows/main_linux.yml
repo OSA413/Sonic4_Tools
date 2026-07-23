@@ -25,9 +25,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Generate version
-        run: bash src/common/src/generate-version.sh
-
       - uses: actions/cache@v6
         with:
           path: |

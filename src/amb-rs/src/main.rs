@@ -22,7 +22,7 @@ fn main() {
         Some(arg) => {
             match &arg[ops::RangeFull] {
                 "--help" | "-h" => help::print(),
-                "--version" | "-v" => println!("amb-rs version: {}", common::global::VERSION),
+                "--version" | "-v" => println!("amb-rs version: {}",  env!("CARGO_PKG_VERSION")),
                 "add" => {
                     match args.next() {
                         Some(target_file) => {
@@ -98,9 +98,9 @@ Or: add <target_file> <dir_of_files_to_add>".to_string()),
                         true => handle_result(amb_management::recreate::recreate_amb_from_dir(arg)),
                         false => handle_result(amb_management::extract::extract_amb(arg, args.next())),
                     }
-                },
+                }
             }
         },
         None => help::print(),
-    };
+    }
 }
