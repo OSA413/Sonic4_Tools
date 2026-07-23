@@ -2,8 +2,8 @@
 name = "common"
 edition = "2024"
 authors = ["Oleg \"OSA413\" Sokolov"]
-repository = "https://github.com/OSA413/Sonic4_ModLoader"
-homepage = "https://github.com/OSA413/Sonic4_ModLoader"
+repository = "https://github.com/OSA413/Sonic4_Tools"
+homepage = "https://github.com/OSA413/Sonic4_Tools"
 license = "MIT"
 
 [dependencies]

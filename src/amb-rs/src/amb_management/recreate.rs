@@ -11,6 +11,15 @@ pub fn recreate_amb(file: String, save_as_file_name: Option<String>) -> Result<(
     )
 }
 
+pub fn recreate_all_amb(file: String, save_as_file_name: Option<String>) -> Result<(), CommonBinaryError> {
+    do_a_thing_over_an_amb_and_save(
+        &file,
+        &|_| todo!("Imlement"),
+        &save_as_file_name.unwrap_or(file.clone()),
+    )
+}
+
+
 pub fn recreate_amb_from_dir(dir: String) -> Result<(), CommonBinaryError> {
     let dir_path = Path::new(&dir);
     if !dir_path.is_dir() {

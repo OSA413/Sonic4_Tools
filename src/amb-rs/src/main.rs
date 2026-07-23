@@ -92,6 +92,12 @@ Or: add <target_file> <dir_of_files_to_add>".to_string()),
                         None => exit_with_error("Usage: recreate <file> [save_as_file_name]".to_string()),
                     }
                 },
+                "recreate_all" => {
+                    match args.next() {
+                        Some(file) => handle_result(amb_management::recreate::recreate_all_amb(file, args.next())),
+                        None => exit_with_error("Usage: recreate_all <file> [save_as_file_name]".to_string()),
+                    }
+                },
                 _ => {
                     let path = Path::new(&arg);
                     match path.is_dir() {
