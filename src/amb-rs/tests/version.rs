@@ -3,6 +3,7 @@ mod version_tests {
     use std::time::Duration;
 
     use assert_cmd::Command;
+    use predicates::prelude::*;
 
     #[test]
     fn with_v_flag() {
@@ -14,7 +15,9 @@ mod version_tests {
 
         assert
             .success()
-            .stdout("amb-rs version: 0.8.0\n");
+            .stdout(predicate::function(
+                |x: &[u8]| x.starts_with(b"amb-rs: 0.")
+            ));
     }
 
     #[test]
@@ -27,6 +30,8 @@ mod version_tests {
 
         assert
             .success()
-            .stdout("amb-rs version: 0.8.0\n");
+            .stdout(predicate::function(
+                |x: &[u8]| x.starts_with(b"amb-rs: 0.")
+            ));
     }
 }

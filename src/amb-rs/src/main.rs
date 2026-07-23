@@ -2,6 +2,7 @@ use std::{env, ops, path::Path};
 use common_binary::error::CommonBinaryError;
 
 mod help;
+mod version;
 pub mod amb_management;
 
 fn exit_with_error(error: String) {
@@ -22,7 +23,7 @@ fn main() {
         Some(arg) => {
             match &arg[ops::RangeFull] {
                 "--help" | "-h" => help::print(),
-                "--version" | "-v" => println!("amb-rs version: {}",  env!("CARGO_PKG_VERSION")),
+                "--version" | "-v" => version::print(),
                 "add" => {
                     match args.next() {
                         Some(target_file) => {
