@@ -1,24 +1,12 @@
 # Sonic4_Tools
 
-The latest version of the programs can be found on [GitHub Actions][github_actions] (including dependencies).
+The latest version of the programs can be found on [GitHub Actions][github_actions].
 
 More or less suitable for use versions are planned to be published on GitHub's release page.
 
 ------------
 
-## Installation
-
-### Linux
-
-Update dependencies, compile tools, and run installation script.
-
-```
-bash update_dependencies.sh
-bash build_pack.sh
-bash install/linux/install.sh
-```
-
-## Old Mod Conversion Tool
+## Old Mod Conversion Tool (archived)
 
 This program is a tool that converts old mods to make them work properly with the mod loader.
 
@@ -26,13 +14,13 @@ It also can convert **sound and music mods**.
 
 **You need the game to properly convert mods.**
 
-## AMA Editor
+## AMA Editor (archived)
 
 A tool for modifying AMA files. It can change relations, possition, size and UV coordinates of 2D sprites (such as buttons and other HUD).
 
 Currently can properly edit only ~10% of all files in both episodes.
 
-## TXB Editor
+## TXB Editor (archived)
 
 TeXture Bank Editor.
 
