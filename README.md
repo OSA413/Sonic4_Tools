@@ -6,7 +6,7 @@ More or less suitable for use versions are planned to be published on GitHub's r
 
 ------------
 
-## Old Mod Conversion Tool (archived)
+## Old Mod Conversion Tool [(outdated)](https://github.com/OSA413/Sonic4_Tools/releases/tag/v5)
 
 This program is a tool that converts old mods to make them work properly with the mod loader.
 
@@ -14,13 +14,13 @@ It also can convert **sound and music mods**.
 
 **You need the game to properly convert mods.**
 
-## AMA Editor (archived)
+## AMA Editor [(outdated)](https://github.com/OSA413/Sonic4_Tools/releases/tag/v5)
 
 A tool for modifying AMA files. It can change relations, possition, size and UV coordinates of 2D sprites (such as buttons and other HUD).
 
 Currently can properly edit only ~10% of all files in both episodes.
 
-## TXB Editor (archived)
+## TXB Editor [(outdated)](https://github.com/OSA413/Sonic4_Tools/releases/tag/v5)
 
 TeXture Bank Editor.
 
