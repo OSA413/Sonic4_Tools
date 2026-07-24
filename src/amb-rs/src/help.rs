@@ -1,7 +1,7 @@
-pub fn get_text() -> &'static str {
-"        amb-rs by OSA413
+pub fn print() {
+    println!("        amb-rs by OSA413
         Released under the MIT License
-        https://github.com/OSA413/Sonic4_Tools
+        {}
 
 Usage:
     `amb-rs add <target_file> <file_to_add> [internal_file_name]`
@@ -55,9 +55,5 @@ Usage:
     `amb-rs` and
     `amb-rs -h` and
     `amb-rs --help`
-        Show this help message."
-}
-
-pub fn print() {
-    println!("{}", get_text());
+        Show this help message.", env!("CARGO_PKG_REPOSITORY"));
 }
