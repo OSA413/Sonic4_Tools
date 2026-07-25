@@ -16,11 +16,11 @@ struct DecorationPointer {
     DecorationList list @ pointer;
 };
 
-struct DecorationContainer {
+struct DecorationSet {
     u16 x_chunks;
     u16 y_chunks;
     
     DecorationPointer deco[x_chunks * y_chunks];
 };
 
-DecorationContainer dc @ 0x00;
+DecorationSet dc @ 0x00;
