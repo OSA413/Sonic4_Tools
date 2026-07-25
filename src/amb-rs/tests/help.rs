@@ -15,7 +15,7 @@ mod help_tests {
         assert
             .success()
             .stdout(predicate::function(
-                |x: &[u8]| x.starts_with(b"        amb-rs")
+                |x: &[u8]| x.starts_with(b"            amb-rs")
             ));
     }
 
@@ -30,7 +30,7 @@ mod help_tests {
         assert
             .success()
             .stdout(predicate::function(
-                |x: &[u8]| x.starts_with(b"        amb-rs")
+                |x: &[u8]| x.starts_with(b"            amb-rs")
             ));
     }
 
@@ -45,7 +45,7 @@ mod help_tests {
         assert
             .success()
             .stdout(predicate::function(
-                |x: &[u8]| x.starts_with(b"        amb-rs")
+                |x: &[u8]| x.starts_with(b"            amb-rs")
             ));
     }
 }

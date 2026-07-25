@@ -1,11 +1,13 @@
 [package]
-name = "common_binary"
+name = "txb-rs-lib"
 edition = "2024"
+version = "0.1.0"
 authors = ["Oleg \"OSA413\" Sokolov"]
 repository = "https://github.com/OSA413/Sonic4_Tools"
 homepage = "https://github.com/OSA413/Sonic4_Tools"
 license = "MIT"
 
 [dependencies]
-serde = { version = "1.0" }
+common_binary = { path = "../common_binary" }
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

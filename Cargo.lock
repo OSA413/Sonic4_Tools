@@ -101,6 +101,10 @@ dependencies = [
 [[package]]
 name = "common_binary"
 version = "0.0.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "const-random"
@@ -410,6 +414,34 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c9d3793400a45f954c52e73d068316d76b6f4e36977e3fcebb13a2721e80237"
 dependencies = [
  "crunchy",
+]
+
+[[package]]
+name = "txb-rs-lib"
+version = "0.1.0"
+dependencies = [
+ "common_binary",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "txb2json"
+version = "0.9.0"
+dependencies = [
+ "common_binary",
+ "txb-rs-lib",
+ "txb2json-lib",
+]
+
+[[package]]
+name = "txb2json-lib"
+version = "1.0.0"
+dependencies = [
+ "common_binary",
+ "serde",
+ "serde_json",
+ "txb-rs-lib",
 ]
 
 [[package]]

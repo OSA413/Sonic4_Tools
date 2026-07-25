@@ -5,5 +5,8 @@ members = [
     "src/amb-rs",
     "src/amb-rs-lib",
     "src/amb-rs-tests",
+    "src/txb-rs-lib",
+    "src/txb2json-lib",
+    "src/txb2json",
 ]
 resolver = "3"

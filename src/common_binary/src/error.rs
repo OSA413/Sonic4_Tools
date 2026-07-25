@@ -19,8 +19,9 @@ pub struct StringTooLongDetails {
 
 pub enum CommonBinaryError {
     Io(std::io::Error),
+    SerdeJson(serde_json::error::Error),
     PointerOutOfBounds(PointerOutOfBoundsDetails),
-    ProvidedSourceIsNotAnAmb(String),
+    ProvidedSourceIsNotOfExpectedFormat(String),
     StringTooLong(StringTooLongDetails),
     StringBadCharacter(StringBadCharacterDetails),
 }
@@ -31,12 +32,19 @@ impl From<std::io::Error> for CommonBinaryError {
     }
 }
 
+impl From<serde_json::error::Error> for CommonBinaryError {
+    fn from(e: serde_json::error::Error) -> Self {
+        Self::SerdeJson(e)
+    }
+}
+
 impl std::fmt::Debug for CommonBinaryError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             CommonBinaryError::Io(e) => write!(f, "IO error: {e}"),
+            CommonBinaryError::SerdeJson(e) => write!(f, "SerdeJson error: {e}"),
             CommonBinaryError::PointerOutOfBounds(e) => write!(f, "PointerOutOfBounds when {} for {} at {}", e.when, e.source_len, e.pointer),
-            CommonBinaryError::ProvidedSourceIsNotAnAmb(e) => write!(f, "{e}"),
+            CommonBinaryError::ProvidedSourceIsNotOfExpectedFormat(e) => write!(f, "{e}"),
             CommonBinaryError::StringTooLong(e) => write!(f, "StringTooLong when {} at {} with value {}", e.when, e.pointer, e.target_string),
             CommonBinaryError::StringBadCharacter(e) => write!(f, "Detected non-ASCII character {:#04X} when {} at {} with value {}", e.bad_character, e.when, e.pointer, e.target_string),
         }

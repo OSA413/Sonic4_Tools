@@ -1,4 +1,4 @@
-#pragma big endian
+#pragma endian big
 
 struct TXBObject {
     u32 unknown1;
@@ -21,7 +21,7 @@ struct TXB {
     u32 unknown2;
     u32 object_number;
     u32 object_pointer;
-    TXBObject objects[object_number];
+    TXBObject objects[object_number] @ object_pointer;
 };
 
 TXB txb @ 0x0;

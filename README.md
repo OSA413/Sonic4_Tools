@@ -6,6 +6,18 @@ More or less suitable for use versions are planned to be published on GitHub's r
 
 ------------
 
+Please note that most of the CLI tools support the `--help` flag to show help.
+
+------------
+
+## amb-rs
+
+The predecessor of AMBPatcher, the tool to work with the AMB containers.
+
+## txb2json (not tested)
+
+A tool to convert TeXture Bank files to JSON and back.
+
 ## Old Mod Conversion Tool [(outdated)](https://github.com/OSA413/Sonic4_Tools/releases/tag/v5)
 
 This program is a tool that converts old mods to make them work properly with the mod loader.

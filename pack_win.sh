@@ -7,6 +7,7 @@ mkdir -p "./dist/Sonic4Tools"
 echo "Copying new distribution files..."
 
 cp ./target/release/amb-rs.exe ./dist/Sonic4Tools/amb-rs.exe
+cp ./target/release/txb2json.exe ./dist/Sonic4Tools/txb2json.exe
 
 echo "Creating SHA256SUMS..."
 cd dist

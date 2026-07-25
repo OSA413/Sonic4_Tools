@@ -93,7 +93,9 @@ impl Amb {
         name: &String
     ) -> Result<Self, CommonBinaryError> {
         if !Amb::is_source_amb(source, ptr) {
-            return Err(CommonBinaryError::ProvidedSourceIsNotAnAmb(format!("Provided source is not an AMB file, ptr: {ptr:?}, name: {name}")));
+            return Err(CommonBinaryError::ProvidedSourceIsNotOfExpectedFormat(
+                format!("Provided source is not an AMB file, ptr: {ptr:?}, name: {name}")
+            ));
         }
         let (version, endianness) = Amb::get_version(source, ptr);
         let shift: usize = match version {
@@ -162,13 +164,14 @@ impl Amb {
             i += 1;
         }
 
-        "#AMB".as_bytes().read_exact(&mut result[0x0..0x4]).unwrap();
-        binary_writer::u32::write(&mut result, 0x4, match self.version {
+        // TODO: move to the binary_writer
+        "#AMB".as_bytes().read_exact(&mut result[0x00..0x04]).unwrap();
+        binary_writer::u32::write(&mut result, 0x04, match self.version {
             Version::PC => 0x20,
             Version::Mobile => 0x28,
         }, &self.endianness, "version".to_string())?;
-        binary_writer::u32::write(&mut result, 0x8, self.flag1, &self.endianness, "flag1".to_string())?;
-        binary_writer::u32::write(&mut result, 0xC, self.flag2, &self.endianness, "flag2".to_string())?;
+        binary_writer::u32::write(&mut result, 0x08, self.flag1, &self.endianness, "flag1".to_string())?;
+        binary_writer::u32::write(&mut result, 0x0C, self.flag2, &self.endianness, "flag2".to_string())?;
         binary_writer::u32::write(&mut result, 0x10, self.objects.len() as u32, &self.endianness, "object length".to_string())?;
         binary_writer::u32::write(&mut result, 0x14, pointers.list as u32, &self.endianness, "list pointer".to_string())?;
         binary_writer::u32::write(&mut result, 0x18, pointers.data as u32, &self.endianness, "data pointer".to_string())?;
@@ -184,7 +187,8 @@ impl Amb {
 
             let object_data = &o.data;
             result[pointers.data..pointers.data + o.length()].copy_from_slice(object_data);
-            if self.has_names {
+            if self.has_names {            
+                // TODO: move to the binary_writer
                 o.real_name.as_bytes().read_exact(&mut result[pointers.name..pointers.name + o.real_name.len()]).unwrap();
                 pointers.name += 0x20;
             }

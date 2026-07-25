@@ -1,5 +1,5 @@
 pub fn print() {
-    println!("        amb-rs by OSA413
+    println!("            amb-rs by OSA413
         Released under the MIT License
         {}
 
