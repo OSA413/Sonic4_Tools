@@ -8,6 +8,7 @@ echo "Copying new distribution files..."
 
 cp ./target/release/amb-rs ./dist/Sonic4Tools/amb-rs
 cp ./target/release/txb2json ./dist/Sonic4Tools/txb2json
+cp ./target/release/rg2json ./dist/Sonic4Tools/rg2json
 
 echo "Creating SHA256SUMS..."
 cd dist

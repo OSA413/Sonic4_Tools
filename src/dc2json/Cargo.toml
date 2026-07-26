@@ -1,0 +1,13 @@
+[package]
+name = "dc2json"
+description = "Decoration Set to JSON converter (and back)"
+version = "0.1.0"
+edition = "2024"
+authors = ["Oleg \"OSA413\" Sokolov"]
+repository = "https://github.com/OSA413/Sonic4_Tools"
+homepage = "https://github.com/OSA413/Sonic4_Tools"
+license = "MIT"
+
+[dependencies]
+dc-rs-lib = { path = "../dc-rs-lib" }
+common_binary = { path = "../common_binary" }

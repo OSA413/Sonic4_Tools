@@ -16,10 +16,10 @@ struct RingPointer {
 };
 
 struct RingSet {
-    u16 x_chunks;
-    u16 y_chunks;
+    u16 x_tiles;
+    u16 y_tiles;
     
-    RingPointer rings[x_chunks * y_chunks];
+    RingPointer rings[x_tiles * y_tiles];
 };
 
 RingSet rg @ 0x00;

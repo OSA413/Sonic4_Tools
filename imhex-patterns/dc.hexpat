@@ -17,10 +17,10 @@ struct DecorationPointer {
 };
 
 struct DecorationSet {
-    u16 x_chunks;
-    u16 y_chunks;
+    u16 x_tiles;
+    u16 y_tiles;
     
-    DecorationPointer deco[x_chunks * y_chunks];
+    DecorationPointer deco[x_tiles * y_tiles];
 };
 
 DecorationSet dc @ 0x00;

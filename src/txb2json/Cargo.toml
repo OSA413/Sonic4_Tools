@@ -10,5 +10,4 @@ license = "MIT"
 
 [dependencies]
 txb-rs-lib = { path = "../txb-rs-lib" }
-txb2json-lib = { path = "../txb2json-lib" }
 common_binary = { path = "../common_binary" }

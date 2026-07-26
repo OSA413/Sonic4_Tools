@@ -14,9 +14,15 @@ Please note that most of the CLI tools support the `--help` flag to show help.
 
 The predecessor of AMBPatcher, the tool to work with the AMB containers.
 
-## txb2json (not tested)
+## txb2json
 
 A tool to convert TeXture Bank files to JSON and back.
+
+## rg2json
+
+A tool to convert Ring Set to JSON and back.
+
+Basically allows to edit rings layout.
 
 ## Old Mod Conversion Tool [(outdated)](https://github.com/OSA413/Sonic4_Tools/releases/tag/v5)
 

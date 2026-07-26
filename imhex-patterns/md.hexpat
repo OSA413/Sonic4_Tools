@@ -5,10 +5,10 @@ struct Entry {
 };
 
 struct MD {
-    u16 x_chunks;
-    u16 y_chunks;
+    u16 x_tiles;
+    u16 y_tiles;
     
-    Entry entries[x_chunks * y_chunks];
+    Entry entries[x_tiles * y_tiles];
 };
 
 MD md @ 0x00;

@@ -124,9 +124,3 @@ impl Txb {
         Ok(result)
     }
 }
-
-impl std::fmt::Display for Txb {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", serde_json::to_string(&self).unwrap_or("couldn't represent this TXB as JSON".to_string()))
-    }
-}

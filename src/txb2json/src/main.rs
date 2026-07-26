@@ -26,12 +26,12 @@ fn main() {
 fn convert(arg: &String) -> Result<(), CommonBinaryError> {
     if arg.ends_with(".txb") || arg.ends_with(".TXB") {
         let txb = Txb::new_from_file_name(&arg)?;
-        let result = txb2json_lib::to_json::convert(&txb)?;
+        let result = txb_rs_lib::convert::to_json::convert(&txb)?;
         fs::write(format!("{}.json", arg), result)?;
         return Ok(());
     } else if arg.ends_with(".txb.json") || arg.ends_with(".TXB.json") {
         let str = fs::read_to_string(arg)?;
-        let result = txb2json_lib::from_json::convert(&str)?;
+        let result = txb_rs_lib::convert::from_json::convert(&str)?;
         fs::write(arg.chars().take(arg.len() - ".json".len()).collect::<String>(), result.write()?)?;
         return Ok(());
     }

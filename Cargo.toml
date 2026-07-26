@@ -2,11 +2,23 @@
 members = [
     "src/common",
     "src/common_binary",
+
     "src/amb-rs",
     "src/amb-rs-lib",
     "src/amb-rs-tests",
+
     "src/txb-rs-lib",
-    "src/txb2json-lib",
+    "src/dc-rs-lib",
+    "src/ev-rs-lib",
+    "src/md-rs-lib",
+    "src/mp-rs-lib",
+    "src/rg-rs-lib",
+    
     "src/txb2json",
+    "src/dc2json",
+    "src/ev2json",
+    "src/md2json",
+    "src/mp2json",
+    "src/rg2json",
 ]
 resolver = "3"

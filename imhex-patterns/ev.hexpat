@@ -21,10 +21,10 @@ struct EventPointer {
 };
 
 struct EventSet {
-    u16 x_chunks;
-    u16 y_chunks;
+    u16 x_tiles;
+    u16 y_tiles;
     
-    EventPointer events[x_chunks * y_chunks];
+    EventPointer events[x_tiles * y_tiles];
 };
 
 EventSet ev @ 0x00;

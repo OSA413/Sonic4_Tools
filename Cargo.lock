@@ -133,6 +133,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "460fbee9c2c2f33933d720630a6a0bac33ba7053db5344fac858d4b8952d77d5"
 
 [[package]]
+name = "dc-rs-lib"
+version = "0.1.0"
+dependencies = [
+ "common_binary",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "dc2json"
+version = "0.1.0"
+dependencies = [
+ "common_binary",
+ "dc-rs-lib",
+]
+
+[[package]]
 name = "difflib"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -145,6 +162,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "442039f5147480ba31067cb00ada1adae6892028e40e45fc5de7b7df6dcc1b5f"
 dependencies = [
  "const-random",
+]
+
+[[package]]
+name = "ev-rs-lib"
+version = "0.1.0"
+dependencies = [
+ "common_binary",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "ev2json"
+version = "0.1.0"
+dependencies = [
+ "common_binary",
+ "ev-rs-lib",
 ]
 
 [[package]]
@@ -192,10 +226,44 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ceec5bc11778974d1bcb055b18002eba7f4b3518b6a0081b3af5f21666da9ad"
 
 [[package]]
+name = "md-rs-lib"
+version = "0.1.0"
+dependencies = [
+ "common_binary",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "md2json"
+version = "0.1.0"
+dependencies = [
+ "common_binary",
+ "md-rs-lib",
+]
+
+[[package]]
 name = "memchr"
 version = "2.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
+
+[[package]]
+name = "mp-rs-lib"
+version = "0.1.0"
+dependencies = [
+ "common_binary",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "mp2json"
+version = "0.1.0"
+dependencies = [
+ "common_binary",
+ "mp-rs-lib",
+]
 
 [[package]]
 name = "normalize-line-endings"
@@ -304,6 +372,23 @@ name = "regex-syntax"
 version = "0.8.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
+
+[[package]]
+name = "rg-rs-lib"
+version = "1.0.0"
+dependencies = [
+ "common_binary",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "rg2json"
+version = "1.0.0"
+dependencies = [
+ "common_binary",
+ "rg-rs-lib",
+]
 
 [[package]]
 name = "rust-ini"
@@ -430,17 +515,6 @@ name = "txb2json"
 version = "0.9.0"
 dependencies = [
  "common_binary",
- "txb-rs-lib",
- "txb2json-lib",
-]
-
-[[package]]
-name = "txb2json-lib"
-version = "1.0.0"
-dependencies = [
- "common_binary",
- "serde",
- "serde_json",
  "txb-rs-lib",
 ]
 
