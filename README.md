@@ -12,7 +12,7 @@ Please note that most of the CLI tools support the `--help` flag to show help.
 
 ## amb-rs
 
-The predecessor of AMBPatcher, the tool to work with the AMB containers.
+The successor of AMBPatcher, the tool to work with the AMB containers.
 
 ## txb2json
 
