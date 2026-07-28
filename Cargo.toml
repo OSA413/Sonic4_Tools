@@ -1,24 +1,24 @@
 [workspace]
 members = [
-    "src/common",
-    "src/common_binary",
+    "src/common/utils",
+    "src/common/binary",
 
-    "src/amb-rs",
-    "src/amb-rs-lib",
-    "src/amb-rs-tests",
+    "src/amb/amb-rs",
+    "src/amb/amb-rs-lib",
+    "src/amb/amb-rs-tests",
 
-    "src/txb-rs-lib",
-    "src/dc-rs-lib",
-    "src/ev-rs-lib",
-    "src/md-rs-lib",
-    "src/mp-rs-lib",
-    "src/rg-rs-lib",
+    "src/txb/txb-rs-lib",
+    "src/level_layout_tools/dc/dc-rs-lib",
+    "src/level_layout_tools/ev/ev-rs-lib",
+    "src/level_layout_tools/md/md-rs-lib",
+    "src/level_layout_tools/mp/mp-rs-lib",
+    "src/level_layout_tools/rg/rg-rs-lib",
     
-    "src/txb2json",
-    "src/dc2json",
-    "src/ev2json",
-    "src/md2json",
-    "src/mp2json",
-    "src/rg2json",
+    "src/txb/txb2json",
+    "src/level_layout_tools/dc/dc2json",
+    "src/level_layout_tools/ev/ev2json",
+    "src/level_layout_tools/md/md2json",
+    "src/level_layout_tools/mp/mp2json",
+    "src/level_layout_tools/rg/rg2json",
 ]
 resolver = "3"

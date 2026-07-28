@@ -18,8 +18,8 @@ dependencies = [
  "amb-rs-lib",
  "amb-rs-tests",
  "assert_cmd",
- "common",
  "common_binary",
+ "common_utils",
  "predicates",
  "serde",
  "serde_json",
@@ -29,8 +29,8 @@ dependencies = [
 name = "amb-rs-lib"
 version = "1.0.0"
 dependencies = [
- "common",
  "common_binary",
+ "common_utils",
 ]
 
 [[package]]
@@ -38,8 +38,8 @@ name = "amb-rs-tests"
 version = "0.0.0"
 dependencies = [
  "amb-rs-lib",
- "common",
  "common_binary",
+ "common_utils",
  "serde",
  "serde_json",
 ]
@@ -89,20 +89,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 
 [[package]]
-name = "common"
+name = "common_binary"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "common_utils"
 version = "0.0.0"
 dependencies = [
  "rust-ini",
  "serde",
  "serde-xml-rs",
- "serde_json",
-]
-
-[[package]]
-name = "common_binary"
-version = "0.0.0"
-dependencies = [
- "serde",
  "serde_json",
 ]
 
