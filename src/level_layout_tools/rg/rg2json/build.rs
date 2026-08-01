@@ -30,8 +30,6 @@ fn main() {
             &[32, 64, 128, 256]
         ).expect("failed to convert svg to ico");
 
-        fs::remove_file(input_icon).unwrap();
-
         WindowsResource::new()
             .set_icon(&output_icon.to_string_lossy())
             .set_manifest_file("../../../windows.manifest")

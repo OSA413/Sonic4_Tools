@@ -1,4 +1,4 @@
-# Sonic4_Tools
+# Sonic 4 (Episode 1 & 2) Tools
 
 The latest version of the programs can be found on [GitHub Actions][github_actions].
 
@@ -12,15 +12,15 @@ Please note that most of the CLI tools support the `--help` flag to show help.
 
 ------------
 
-## amb-rs
+## <img src="./icons/base/archive.svg" alt="amb-rs-icon" width="24"/> amb-rs
 
 The successor of AMBPatcher, the tool to work with the AMB containers.
 
-## txb2json
+## <img src="./icons/base/json.svg" alt="json-icon" width="24"/> txb2json
 
 A tool to convert TeXture Bank files to JSON and back.
 
-## rg2json
+## <img src="./icons/rg2json.svg" alt="rg2json-icon" width="24"/> rg2json
 
 A tool to convert Ring Set to JSON and back.
 
