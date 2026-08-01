@@ -2,7 +2,7 @@
 set -e
 echo "Removing old distribution package..."
 rm -rf "./dist"
-mkdir -p "./dist/Sonic4Tools"
+mkdir -p "./dist/Sonic4Tools/licenses"
 
 echo "Copying new distribution files..."
 
@@ -13,6 +13,9 @@ cp ./target/release/dc2json.exe ./dist/Sonic4Tools/dc2json.exe
 cp ./target/release/ev2json.exe ./dist/Sonic4Tools/ev2json.exe
 cp ./target/release/md2json.exe ./dist/Sonic4Tools/md2json.exe
 cp ./target/release/mp2json.exe ./dist/Sonic4Tools/mp2json.exe
+
+cargo install -f copydeps cargo-bundle-licenses
+cargo bundle-licenses --format json --output "./dist/Sonic4Tools/licenses/Rust-THIRDPARTY.json"
 
 echo "Creating SHA256SUMS..."
 cd dist
