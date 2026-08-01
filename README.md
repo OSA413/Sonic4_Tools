@@ -56,14 +56,6 @@ A tool for modifying AMA files. It can change relations, possition, size and UV 
 
 Currently can properly edit only ~10% of all files in both episodes.
 
-## TXB Editor [(outdated)](https://github.com/OSA413/Sonic4_Tools/releases/tag/v5)
-
-TeXture Bank Editor.
-
-It can change order of textures, their names and filtering functions (magnification and minifying). It can also add and remove textures in TXB files.
-
-It can properly edit all TXB files.
-
 ------------
 
 [github_actions]: https://github.com/OSA413/Sonic4_Tools/actions
