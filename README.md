@@ -48,6 +48,6 @@ It can properly edit all TXB files.
 
 ------------
 
-See https://github.com/OSA413/Sonic4_Tools/blob/master/docs/File%20description.md for more tools
+See https://github.com/OSA413/Sonic4_Tools/blob/main/docs/File%20description.md for more tools
 
 [github_actions]: https://github.com/OSA413/Sonic4_Tools/actions

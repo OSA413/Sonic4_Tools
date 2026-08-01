@@ -9,7 +9,7 @@
 Templates to quickly view this data in 010 Editor can be found [here](https://github.com/RadiantDerg/DimpsSonicLib/tree/main/Templates "Dimps Templates")
 
 # Header
-The header of an AMB file is unanimous among almost all versions of the file, with the exception of [Windows Phone AMBs.](https://github.com/OSA413/Sonic4_Tools/blob/master/docs/Specifications/AMB_wp.md "Windows Phone AMB File Structure")
+The header of an AMB file is unanimous among almost all versions of the file, with the exception of [Windows Phone AMBs.](https://github.com/OSA413/Sonic4_Tools/blob/main/docs/Specifications/AMB_wp.md "Windows Phone AMB File Structure")
 
     Offset(h)  0  1  2  3  4  5  6  7   8  9  A  B  C  D  E  F  0123456789ABCDEF
     00000000  23 41 4D 42 20 00 00 00  00 00 04 00 00 00 00 00  #AMB ...........
