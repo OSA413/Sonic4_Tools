@@ -19,6 +19,30 @@
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
+    <linearGradient
+       id="linearGradient3"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#ffd500;stop-opacity:1;"
+         offset="0"
+         id="stop3" />
+      <stop
+         style="stop-color:#bd9c00;stop-opacity:1;"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#ffe980;stop-opacity:1;"
+         offset="0"
+         id="stop1" />
+      <stop
+         style="stop-color:#ffd714;stop-opacity:1;"
+         offset="1"
+         id="stop2" />
+    </linearGradient>
     <inkscape:perspective
        id="perspective77"
        inkscape:persp3d-origin="24 : 16 : 1"
@@ -319,6 +343,24 @@
        id="radialGradient2252-9"
        xlink:href="#linearGradient5060"
        inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1"
+       id="linearGradient2"
+       x1="33.866665"
+       y1="-0.00012091624"
+       x2="33.866665"
+       y2="67.733452"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3"
+       id="linearGradient4"
+       x1="33.866665"
+       y1="-0.00012091624"
+       x2="33.866665"
+       y2="67.733452"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -327,9 +369,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.6496933"
-     inkscape:cx="151.24024"
-     inkscape:cy="80.014874"
+     inkscape:zoom="1.6820849"
+     inkscape:cx="161.40684"
+     inkscape:cy="145.65258"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -362,7 +404,7 @@
      inkscape:label="Layer 1">
     <path
        id="path1"
-       style="fill:#ffd712;fill-opacity:1;fill-rule:evenodd;stroke:#e9c300;stroke-width:13.5467;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       style="fill:url(#linearGradient2);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient4);stroke-width:13.5467;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
        d="M 33.866667 6.77323 A 27.093332 27.093332 0 0 0 6.77323 33.866667 A 27.093332 27.093332 0 0 0 33.866667 60.960103 A 27.093332 27.093332 0 0 0 60.960103 33.866667 A 27.093332 27.093332 0 0 0 33.866667 6.77323 z M 33.866667 16.35094 A 17.5158 17.515806 0 0 1 51.382393 33.866667 A 17.5158 17.515806 0 0 1 33.866667 51.382393 A 17.5158 17.515806 0 0 1 16.35094 33.866667 A 17.5158 17.515806 0 0 1 33.866667 16.35094 z " />
   </g>
 </svg>
