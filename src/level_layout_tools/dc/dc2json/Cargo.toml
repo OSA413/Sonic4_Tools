@@ -11,3 +11,7 @@ license = "MIT"
 [dependencies]
 dc-rs-lib = { path = "../dc-rs-lib" }
 common_binary = { path = "../../../common/binary" }
+
+[build-dependencies]
+winresource = "0.1.31"
+svg_to_ico = "1.3.1"

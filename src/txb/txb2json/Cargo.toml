@@ -11,3 +11,7 @@ license = "MIT"
 [dependencies]
 txb-rs-lib = { path = "../txb-rs-lib" }
 common_binary = { path = "../../common/binary" }
+
+[build-dependencies]
+winresource = "0.1.31"
+svg_to_ico = "1.3.1"
