@@ -4,7 +4,7 @@ use winresource::WindowsResource;
 fn main() {
     if env::var_os("CARGO_CFG_WINDOWS").is_some() {
         let icon_name = "json";
-        let icons_dir = Path::new("../../../../icons");
+        let icons_dir = Path::new("../../../icons");
         let input_icon = &icons_dir.join("base").join(format!("{}.svg", icon_name)).into_boxed_path();
         let output_icon = &icons_dir.join(format!("{}.ico", icon_name)).into_boxed_path();
 
@@ -17,7 +17,7 @@ fn main() {
 
         WindowsResource::new()
             .set_icon(&output_icon.to_string_lossy())
-            .set_manifest_file("../../../windows.manifest")
+            .set_manifest_file("../../windows.manifest")
             .compile()
             .unwrap();
     }
