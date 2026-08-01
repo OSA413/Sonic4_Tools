@@ -4,6 +4,8 @@ The latest version of the programs can be found on [GitHub Actions][github_actio
 
 More or less suitable for use versions are planned to be published on GitHub's release page.
 
+See https://github.com/OSA413/Sonic4_Tools/blob/main/docs/File%20description.md for more tools.
+
 ------------
 
 Please note that most of the CLI tools support the `--help` flag to show help.
@@ -23,6 +25,22 @@ A tool to convert TeXture Bank files to JSON and back.
 A tool to convert Ring Set to JSON and back.
 
 Basically allows to edit rings layout.
+
+## dc2json (wip)
+
+A tool to convert Decoration Set files to JSON and back.
+
+## ev2json (wip)
+
+A tool to convert Event Set files to JSON and back.
+
+## md2json (wip)
+
+A tool to convert MD files to JSON and back.
+
+## mp2json (wip)
+
+A tool to convert MP files to JSON and back.
 
 ## Old Mod Conversion Tool [(outdated)](https://github.com/OSA413/Sonic4_Tools/releases/tag/v5)
 
@@ -47,7 +65,5 @@ It can change order of textures, their names and filtering functions (magnificat
 It can properly edit all TXB files.
 
 ------------
-
-See https://github.com/OSA413/Sonic4_Tools/blob/main/docs/File%20description.md for more tools
 
 [github_actions]: https://github.com/OSA413/Sonic4_Tools/actions
