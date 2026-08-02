@@ -16,7 +16,7 @@ Please note that most of the CLI tools support the `--help` flag to show help.
 
 The successor of AMBPatcher, the tool to work with the AMB containers.
 
-## <img src="./icons/base/json.svg" alt="json-icon" width="24"/> txb2json
+## <img src="./icons/txb2json.svg" alt="txb2json-icon" width="24"/> txb2json
 
 A tool to convert TeXture Bank files to JSON and back.
 
