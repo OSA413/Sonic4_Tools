@@ -1,11 +1,11 @@
 use crate::error::{CommonBinaryError, PointerOutOfBoundsDetails};
 
-pub fn write(target: &mut [u8], pointer: usize, data: u8, when: String) -> Result<(), CommonBinaryError> {
+pub fn write(target: &mut [u8], pointer: usize, data: u8, what: String) -> Result<(), CommonBinaryError> {
     if target.len() <= pointer {
         return Err(CommonBinaryError::PointerOutOfBounds(PointerOutOfBoundsDetails { 
             pointer,
             source_len: target.len(),
-            when: format!("Writing {}", when).to_string(),
+            when: format!("Writing {}", what).to_string(),
         }))
     }
 

@@ -56,6 +56,4 @@ A tool for modifying AMA files. It can change relations, possition, size and UV 
 
 Currently can properly edit only ~10% of all files in both episodes.
 
-------------
-
 [github_actions]: https://github.com/OSA413/Sonic4_Tools/actions

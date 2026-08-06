@@ -94,12 +94,11 @@ impl Txb {
         let mut result = Vec::<u8>::with_capacity(txb_length);
         let mut pointers = self.predict_pointers();
 
-        let mut i = 0;
-        while i < txb_length {
+        for _ in 0..txb_length {
             result.push(0);
-            i += 1;
         }
 
+        // TODO: use binary_writer::string32
         "#TXB".as_bytes().read_exact(&mut result[0x0..0x4]).unwrap();
         // Version, suppose it's 0x10 as for now
         binary_writer::u32::write(&mut result, 0x04, 0x10, &Endianness::Big, "version".to_string())?;
@@ -114,7 +113,7 @@ impl Txb {
             binary_writer::u16::write(&mut result, pointers.data + 8, texture.min_filter.into(), &Endianness::Big, "min_filter".to_string())?;
             binary_writer::u16::write(&mut result, pointers.data + 10, texture.mag_filter.into(), &Endianness::Big, "mag_filter".to_string())?;
 
-            // TODO: move to the binary_writer
+            // TODO: use binary_writer
             texture.name.as_bytes().read_exact(&mut result[pointers.name..(pointers.name + texture.name.len())]).unwrap();
 
             pointers.data += 5 * 4;

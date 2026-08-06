@@ -12,11 +12,15 @@ pub enum Version {
 pub struct Amb {
     pub amb_path: String,
     pub endianness: Endianness,
-    pub flag1: u32,
-    pub flag2: u32,
     pub objects: Vec<BinaryObject>,
     pub has_names: bool,
     pub version: Version,
+
+    pub unknown1: u16,
+    pub unknown2: u16,
+    pub unknown3: u8,
+    pub unknown4: u8,
+    pub compression_type: u8,
 }
 
 struct AmbPointersPrediction {
@@ -75,8 +79,11 @@ impl Amb {
         Self {
             amb_path: String::new(),
             endianness: Endianness::Little,
-            flag1: 0,
-            flag2: 0,
+            unknown1: 0,
+            unknown2: 0,
+            unknown3: 0,
+            unknown4: 0,
+            compression_type: 0,
             objects: Vec::new(),
             has_names: true,
             version: Version::PC,
@@ -105,8 +112,12 @@ impl Amb {
 
         let ptr = ptr.unwrap_or(0);
 
-        let flag1 = binary_reader::u32::read(source, ptr + 0x8, &endianness).expect("Another bad thing happened that you didn't account for #9");
-        let flag2 = binary_reader::u32::read(source, ptr + 0xC, &endianness).expect("Another bad thing happened that you didn't account for #9 and a half");
+        let unknown1 = binary_reader::u16::read(source, ptr + 0x08, &endianness).expect("Another bad thing happened that you didn't account for #9");
+        let unknown2 = binary_reader::u16::read(source, ptr + 0x0A, &endianness).expect("Another bad thing happened that you didn't account for #9 and a half");
+        let _endianness = binary_reader::u8::read(source, ptr + 0x0C).expect("error reading endianness");
+        let unknown3 = binary_reader::u8::read(source, ptr + 0x0D).expect("error reading unknown3");
+        let unknown4 = binary_reader::u8::read(source, ptr + 0x0E).expect("error reading unknown3");
+        let compression_type = binary_reader::u8::read(source, ptr + 0x0F).expect("error reading compression type");
         // Btw this also might be incorrect, this actually shows number of entries in the list, but any entry can be empty resulting in "skips" and a bit smaller number of actual objects
         let object_number = binary_reader::u32::read(source, ptr + 0x10, &endianness).expect("Another bad thing happened that you didn't account for #10");
         let list_pointer = binary_reader::u32::read(source, ptr + 0x14, &endianness).expect("Another bad thing happened that you didn't account for #11") + ptr as u32;
@@ -141,8 +152,11 @@ impl Amb {
         Ok(Amb {
             amb_path: name.to_string(),
             endianness,
-            flag1,
-            flag2,
+            unknown1,
+            unknown2,
+            unknown3,
+            unknown4,
+            compression_type,
             objects,
             has_names,
             version,
@@ -158,20 +172,25 @@ impl Amb {
         let mut result = Vec::<u8>::with_capacity(amb_length);
         let mut pointers = self.predict_pointers();
 
-        let mut i = 0;
-        while i < amb_length {
+        for _ in 0..amb_length {
             result.push(0);
-            i += 1;
         }
 
-        // TODO: move to the binary_writer
-        "#AMB".as_bytes().read_exact(&mut result[0x00..0x04]).unwrap();
+        binary_writer::string32::write(&mut result, 0x00, "#AMB", "magic".to_string())?;
         binary_writer::u32::write(&mut result, 0x04, match self.version {
             Version::PC => 0x20,
             Version::Mobile => 0x28,
         }, &self.endianness, "version".to_string())?;
-        binary_writer::u32::write(&mut result, 0x08, self.flag1, &self.endianness, "flag1".to_string())?;
-        binary_writer::u32::write(&mut result, 0x0C, self.flag2, &self.endianness, "flag2".to_string())?;
+        binary_writer::u16::write(&mut result, 0x08, self.unknown1, &self.endianness, "Another bad thing happened that you didn't account for #9".to_string())?;
+        binary_writer::u16::write(&mut result, 0x0A, self.unknown2, &self.endianness, "Another bad thing happened that you didn't account for #9 and a half".to_string())?;
+        binary_writer::u8::write(&mut result,  0x0C, match self.endianness {
+            Endianness::Little => 0,
+            Endianness::Big => 1,
+        }, "error reading endianness".to_string())?;
+        binary_writer::u8::write(&mut result, 0x0D, self.unknown3, "error reading unknown3".to_string())?;
+        binary_writer::u8::write(&mut result, 0x0E, self.unknown4, "error reading unknown3".to_string())?;
+        binary_writer::u8::write(&mut result, 0x0F, self.compression_type, "error reading compression type".to_string())?;
+      
         binary_writer::u32::write(&mut result, 0x10, self.objects.len() as u32, &self.endianness, "object length".to_string())?;
         binary_writer::u32::write(&mut result, 0x14, pointers.list as u32, &self.endianness, "list pointer".to_string())?;
         binary_writer::u32::write(&mut result, 0x18, pointers.data as u32, &self.endianness, "data pointer".to_string())?;
@@ -187,7 +206,7 @@ impl Amb {
 
             let object_data = &o.data;
             result[pointers.data..pointers.data + o.length()].copy_from_slice(object_data);
-            if self.has_names {            
+            if self.has_names {
                 // TODO: move to the binary_writer
                 o.real_name.as_bytes().read_exact(&mut result[pointers.name..pointers.name + o.real_name.len()]).unwrap();
                 pointers.name += 0x20;
@@ -317,6 +336,7 @@ impl Amb {
         }
     }
 
+    // TODO: remove this hack
     // This method is needed to recalculate pointers of newly added objects
     // so that they corespond to the binary form of the AMB (like you just read it and print)
     pub fn prepare_for_print(&mut self) {

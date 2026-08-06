@@ -1,5 +1,6 @@
 pub fn print() {
     println!("            amb-rs by OSA413
+        With the specification by RadiantDerg
         Released under the MIT License
         {}
 
