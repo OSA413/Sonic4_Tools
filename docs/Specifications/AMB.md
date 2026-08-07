@@ -96,8 +96,8 @@ Address | Description
   0x00  | `uint filePointer` - The pointer to the file in the AMB
   0x04  | `uint fileSize` - The total length of the file in bytes
   0x08  | `uint unkEditorData`¹ - Unknown Data (Dimps Internal Tool)
-  0x0C  | `short USR0`¹ - User 1 Data (Dimps Internal Tool)
-  0x0E  | `short USR1`¹ - User 2 Data (Dimps Internal Tool)
+  0x0C  | `short USR0`¹ - User 1 Data (Dimps Internal Tool, used in Episode 2 multiplayer)
+  0x0E  | `short USR1`¹ - User 2 Data (Dimps Internal Tool, used in Episode 2 multiplayer)
 
 **¹** - Changing this value to a random one doesn't crash game.
 

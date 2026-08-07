@@ -39,8 +39,9 @@ mod add_tests {
                     BinaryObjectPrint {
                         name: "1".to_string(),
                         real_name: "1".to_string(),
-                        flag1: 0,
-                        flag2: 0,
+                        unknown: 0,
+                        usr0: 0,
+                        usr1: 0,
                         pointer: 48,
                         length: 73,
                     },

@@ -23,8 +23,9 @@ macro_rules! add_tests {
                 let resulting_binary_objects = test_case.iter().map(|(_, object_name, internal_name, pointer, length)| BinaryObjectPrint {
                     name: make_safe(internal_name.clone().unwrap_or(object_name.to_string()).as_str()),
                     real_name: internal_name.clone().unwrap_or(object_name.to_string()),
-                    flag1: 0,
-                    flag2: 0,
+                    unknown: 0,
+                    usr0: 0,
+                    usr1: 0,
                     pointer: *pointer,
                     length: *length,
                 }).collect();

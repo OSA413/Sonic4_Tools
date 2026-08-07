@@ -9,8 +9,11 @@ use amb_rs_lib::amb::Amb;
 pub struct BinaryObjectPrint {
     pub name: String,
     pub real_name: String,
-    pub flag1: u32,
-    pub flag2: u32,
+    pub unknown: u32,
+    #[serde(rename = "USR0")]
+    pub usr0: u16,
+    #[serde(rename = "USR1")]
+    pub usr1: u16,
     pub pointer: u32,
     pub length: u32,
 }

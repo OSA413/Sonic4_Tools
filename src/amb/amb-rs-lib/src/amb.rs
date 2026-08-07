@@ -141,8 +141,9 @@ impl Amb {
                 false =>  i.to_string(),
             };
             new_object.name = make_safe(&new_object.real_name);
-            new_object.flag1 = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i + 8 + shift, &endianness).expect("Who's bad? (3)");
-            new_object.flag2 = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i + 12 + shift, &endianness).expect("Who's bad? (4)");
+            new_object.unknown = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i + 0x8 + shift, &endianness).expect("Who's bad? (3)");
+            new_object.usr0 = binary_reader::u16::read(source, list_pointer as usize + (0x10 + shift) * i + 0x0C + shift, &endianness).expect("Who's bad? (4)");
+            new_object.usr1 = binary_reader::u16::read(source, list_pointer as usize + (0x10 + shift) * i + 0x0E + shift, &endianness).expect("Tun tun tun tun-tun");
 
             objects.push(new_object);
 
@@ -200,9 +201,10 @@ impl Amb {
 
         for o in self.objects.iter() {
             binary_writer::u32::write(&mut result, pointers.list, pointers.data as u32, &self.endianness, "object data pointer".to_string())?;
-            binary_writer::u32::write(&mut result, pointers.list + 4, o.length() as u32, &self.endianness, "object length".to_string())?;
-            binary_writer::u32::write(&mut result, pointers.list + 8, o.flag1, &self.endianness, "object flag1".to_string())?;
-            binary_writer::u32::write(&mut result, pointers.list + 12, o.flag2, &self.endianness, "object flag2".to_string())?;
+            binary_writer::u32::write(&mut result, pointers.list + 0x04, o.length() as u32, &self.endianness, "object length".to_string())?;
+            binary_writer::u32::write(&mut result, pointers.list + 0x08, o.unknown, &self.endianness, "object unknown".to_string())?;
+            binary_writer::u16::write(&mut result, pointers.list + 0x0C, o.usr0, &self.endianness, "object usr0".to_string())?;
+            binary_writer::u16::write(&mut result, pointers.list + 0x0E, o.usr1, &self.endianness, "object usr1".to_string())?;
 
             let object_data = &o.data;
             result[pointers.data..pointers.data + o.length()].copy_from_slice(object_data);
@@ -274,8 +276,9 @@ impl Amb {
             self.objects[internal_index] = BinaryObject {
                 name: existing_object.name.clone(),
                 real_name: existing_object.real_name.clone(),
-                flag1: existing_object.flag1,
-                flag2: existing_object.flag2,
+                unknown: existing_object.unknown,
+                usr0: existing_object.usr0,
+                usr1: existing_object.usr1,
                 pointer: existing_object.pointer,
                 data: binary_object.data,
             };
@@ -303,8 +306,9 @@ impl Amb {
                 self.objects[parent_index] = BinaryObject {
                     name: parent_object.name.clone(),
                     real_name: parent_object.real_name.clone(),
-                    flag1: parent_object.flag1,
-                    flag2: parent_object.flag2,
+                    unknown: parent_object.unknown,
+                    usr0: parent_object.usr0,
+                    usr1: parent_object.usr1,
                     pointer: 0,
                     data: parent_amb_content,
                 };
@@ -312,8 +316,9 @@ impl Amb {
             None => self.objects.push(BinaryObject {
                 name: internal_name.clone(),
                 real_name: internal_name.clone(),
-                flag1: 0,
-                flag2: 0,
+                unknown: 0,
+                usr0: 0,
+                usr1: 0,
                 pointer: 0,
                 data: binary_object.data,
             }),

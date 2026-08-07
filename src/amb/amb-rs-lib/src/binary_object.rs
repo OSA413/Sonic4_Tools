@@ -6,8 +6,9 @@ pub struct BinaryObject {
     pub name: String,
     pub real_name: String,
 
-    pub flag1: u32,
-    pub flag2: u32,
+    pub unknown: u32,
+    pub usr0: u16,
+    pub usr1: u16,
 
     pub pointer: usize, //This is used just for the json print and debugging
     pub data: Vec<u8>,
@@ -29,8 +30,9 @@ impl BinaryObject {
     ) -> Self {
         BinaryObject {
             data: source.iter().skip(pointer).take(length).map(|x| x.to_owned()).collect(),
-            flag1: 0,
-            flag2: 0,
+            unknown: 0,
+            usr0: 0,
+            usr1: 0,
             pointer,
             name: String::new(),
             real_name: String::new(),
@@ -43,8 +45,9 @@ impl BinaryObject {
         let file_content = std::fs::read(file_path)?;
         Ok(BinaryObject {
             data: file_content,
-            flag1: 0,
-            flag2: 0,
+            unknown: 0,
+            usr0: 0,
+            usr1: 0,
             pointer: 0,
             name: String::new(),
             real_name: String::new(),
@@ -57,8 +60,9 @@ impl std::fmt::Display for BinaryObject {
         write!(f, "{{{}}}", [
             json_formatter::add_str("name", &self.name.replace("\\", "\\\\")),
             json_formatter::add_str("real_name", &self.real_name.replace("\\", "\\\\")),
-            json_formatter::add_value("flag1", &self.flag1.to_string()),
-            json_formatter::add_value("flag2", &self.flag2.to_string()),
+            json_formatter::add_value("unknown", &self.unknown.to_string()),
+            json_formatter::add_value("USR0", &self.usr0.to_string()),
+            json_formatter::add_value("USR1", &self.usr1.to_string()),
             json_formatter::add_value("pointer", &self.pointer.to_string()),
             json_formatter::add_value("length", &self.length().to_string()),
         ].join(","))
