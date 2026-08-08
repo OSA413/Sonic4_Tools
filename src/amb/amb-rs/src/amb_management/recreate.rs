@@ -1,4 +1,5 @@
 use std::path::{Path, PathBuf};
+use amb_rs_lib::{amb::Amb, binary_object::BinaryObject};
 use common_binary::error::CommonBinaryError;
 
 use crate::amb_management::{self, common_handler::do_a_thing_over_an_amb_and_save};
@@ -11,14 +12,36 @@ pub fn recreate_amb(file: String, save_as_file_name: Option<String>) -> Result<(
     )
 }
 
-pub fn recreate_all_amb(file: String, save_as_file_name: Option<String>) -> Result<(), CommonBinaryError> {
+fn _recreate_amb_recursively(amb: &mut Amb) -> &mut Amb {
+    let mut new_binary_objects = Vec::new();
+    for object in &amb.objects {
+        let probably_amb = Amb::new_from_binary_object(&object);
+        let binary_object = match probably_amb {
+            Ok(mut amb) => {
+                let amb = _recreate_amb_recursively(&mut amb);
+                let buffer = amb.write().unwrap();
+                BinaryObject::new_from_src_ptr_len(buffer.as_slice(), 0, buffer.len())
+            },
+            Err(_error) => {
+                BinaryObject::new_from_src_ptr_len(object.data.as_slice(), object.pointer, object.length())
+            }
+        };
+
+        new_binary_objects.push(binary_object);
+    }
+
+    amb.objects = new_binary_objects;
+
+    amb
+}
+
+pub fn recreate_amb_recursively(file: String, save_as_file_name: Option<String>) -> Result<(), CommonBinaryError> {
     do_a_thing_over_an_amb_and_save(
         &file,
-        &|_| todo!("Imlement"),
+        &|amb| {_recreate_amb_recursively(amb);},
         &save_as_file_name.unwrap_or(file.clone()),
     )
 }
-
 
 pub fn recreate_amb_from_dir(dir: String) -> Result<(), CommonBinaryError> {
     let dir_path = Path::new(&dir);
