@@ -22,7 +22,7 @@ mod create_tests {
                 name: reference_file.to_string(),
                 endianness: "little".to_string(),
                 objects: Vec::new(),
-                version: "PC".to_string(),
+                version: "v1".to_string(),
             }).unwrap()));
     }
 }

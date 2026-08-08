@@ -26,7 +26,7 @@ fn main() {
 
 fn convert(arg: &String) -> Result<(), CommonBinaryError> {
     if arg.ends_with(".txb") || arg.ends_with(".TXB") {
-        let txb = Txb::new_from_file_name(&arg)?;
+        let txb = Txb::new_from_file_name(arg)?;
         let result = txb_rs_lib::convert::to_json::convert(&txb)?;
         fs::write(format!("{}.json", arg), result)?;
         return Ok(());

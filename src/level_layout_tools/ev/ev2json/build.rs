@@ -1,4 +1,3 @@
-#![deny(clippy::unwrap_used)]
 use std::{env, path::Path};
 use winresource::WindowsResource;
 

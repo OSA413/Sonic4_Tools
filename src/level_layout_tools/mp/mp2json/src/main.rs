@@ -26,7 +26,7 @@ fn main() {
 
 fn convert(arg: &String) -> Result<(), CommonBinaryError> {
     if arg.ends_with(".mp") || arg.ends_with(".MP") {
-        let mp = MpSet::new_from_file_name(&arg)?;
+        let mp = MpSet::new_from_file_name(arg)?;
         let result = mp_rs_lib::convert::to_json::convert(&mp)?;
         fs::write(format!("{}.json", arg), result)?;
         return Ok(());

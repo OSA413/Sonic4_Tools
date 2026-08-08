@@ -20,7 +20,7 @@ pub fn copy_dir(from: &PathBuf, to: &PathBuf) -> Result<(), Vec<IoError>> {
                                                 Err(e) => errors.extend(e),
                                             }
                                         } else {
-                                            match fs::copy(&entry.path(), &Path::new(to).join(entry.file_name())) {
+                                            match fs::copy(entry.path(), Path::new(to).join(entry.file_name())) {
                                                 Ok(_) => {},
                                                 Err(e) => errors.push(IoError{cause: e, description: "Couldn't copy file"})
                                             }
@@ -37,15 +37,13 @@ pub fn copy_dir(from: &PathBuf, to: &PathBuf) -> Result<(), Vec<IoError>> {
             }
 
             if errors.is_empty() {
-                return Ok(());
+                Ok(())
             } else {
-                return Err(errors);
+                Err(errors)
             }
         }
         Err(e) => {
-            let mut errors = Vec::new();
-            errors.push(IoError{cause: e, description: "Error creating all directories"});
-            Err(errors)
+            Err(vec![IoError{cause: e, description: "Error creating all directories"}])
         }
     }
 }

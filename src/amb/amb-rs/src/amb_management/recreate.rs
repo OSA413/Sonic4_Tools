@@ -15,7 +15,7 @@ pub fn recreate_amb(file: String, save_as_file_name: Option<String>) -> Result<(
 fn _recreate_amb_recursively(amb: &mut Amb) -> &mut Amb {
     let mut new_binary_objects = Vec::new();
     for object in &amb.objects {
-        let probably_amb = Amb::new_from_binary_object(&object);
+        let probably_amb = Amb::new_from_binary_object(object);
         let binary_object = match probably_amb {
             Ok(mut amb) => {
                 let amb = _recreate_amb_recursively(&mut amb);
@@ -54,8 +54,7 @@ pub fn recreate_amb_from_dir(dir: String) -> Result<(), CommonBinaryError> {
     let amb_file_path = if dir.ends_with(extracted_prefix) {
         let possible_file = &dir;
         let possible_file = possible_file.chars().take(possible_file.len() - extracted_prefix.len()).collect::<String>();
-        let path = Path::new(&possible_file).to_path_buf();
-        path
+        Path::new(&possible_file).to_path_buf()
     } else {
         let mut result = PathBuf::new();
         let possible_file = dir_path.join(".amb");

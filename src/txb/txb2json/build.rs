@@ -12,7 +12,7 @@ fn main() {
         let base = fs::read_to_string(icons_dir.join("base\\txb.svg")).unwrap();
         let container = container.replace(
             "<content />",
-            &&base.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>", "")
+            &base.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>", "")
                 .replacen("svg", "svg width=\"256\" height=\"256\"", 1)
                 .replacen("width=\"32\"", "", 1)
                 .replacen("height=\"32\"", "", 1)

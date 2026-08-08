@@ -4,8 +4,8 @@ pub fn make_safe(raw_name: &str) -> String {
     //Turns out there's a double dot directory in file names
     //And double backslash in file names
     let mut safe_index = 0;
-    let mut chars = raw_name.chars();
-    while let Some(ch) = chars.nth(0) {
+    let chars = raw_name.chars();
+    for ch in chars {
         if ch == '.' || ch == '\\' || ch == '/' {
             safe_index += 1;
         } else {

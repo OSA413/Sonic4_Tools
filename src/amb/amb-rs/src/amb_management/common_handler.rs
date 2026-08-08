@@ -9,17 +9,17 @@ pub fn do_a_thing_over_an_amb_and_save_result(
 ) -> Result<(), CommonBinaryError> {
     let mut amb = Amb::new_from_file_name(source_file_name)?;
     action(&mut amb)?;
-    fs::write(&destination_file, amb.write()?)?;
+    fs::write(destination_file, amb.write()?)?;
     Ok(())
 }
 
 pub fn do_a_thing_over_an_amb_and_save(
     source_file_name: &String,
-    action: &dyn Fn(&mut Amb) -> (),
+    action: &dyn Fn(&mut Amb),
     destination_file: &String,
 ) -> Result<(), CommonBinaryError> {
     let mut amb = Amb::new_from_file_name(source_file_name)?;
     action(&mut amb);
-    fs::write(&destination_file, amb.write()?)?;
+    fs::write(destination_file, amb.write()?)?;
     Ok(())
 }

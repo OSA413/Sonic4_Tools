@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 use std::{env, fs};
 use common_binary::{cli, error::CommonBinaryError};
 use ev_rs_lib::event_set::EventSet;
@@ -25,7 +26,7 @@ fn main() {
 
 fn convert(arg: &String) -> Result<(), CommonBinaryError> {
     if arg.ends_with(".ev") || arg.ends_with(".EV") {
-        let ev = EventSet::new_from_file_name(&arg)?;
+        let ev = EventSet::new_from_file_name(arg)?;
         let result = ev_rs_lib::convert::to_json::convert(&ev)?;
         fs::write(format!("{}.json", arg), result)?;
         return Ok(());

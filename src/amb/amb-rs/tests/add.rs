@@ -46,7 +46,7 @@ mod add_tests {
                         length: 73,
                     },
                 ],
-                version: "PC".to_string(),
+                version: "v1".to_string(),
             }
         );
     }

@@ -1,12 +1,13 @@
-use std::{io::Read, path::Path};
+use std::path::Path;
 use crate::binary_object::BinaryObject;
 use common_binary::{
     binary_reader, binary_writer, endianness::Endianness, error::CommonBinaryError, json_formatter, path::make_safe
 };
 
 pub enum Version {
-    PC = 0x20,
-    Mobile = 0x28,
+    V1 = 0x20,
+    V2 = 0x28,
+    V3 = 0x30,
 }
 
 pub struct Amb {
@@ -59,20 +60,26 @@ impl Amb {
 
     pub fn get_version(source: &[u8], ptr: Option<usize>) -> (Version, Endianness) {
         let ptr = ptr.unwrap_or(0);
-        match binary_reader::u32::read(source, ptr + 0x4, &Endianness::Little).unwrap() {
-            0x20 => (Version::PC, Endianness::Little),
-            0x28 => (Version::Mobile, Endianness::Little),
-            value => {
-                match value.swap_bytes() {
-                    0x20 => (Version::PC, Endianness::Big),
-                    0x28 => (Version::Mobile, Endianness::Big),
-                    _ => {
-                        eprintln!("Could not detect version of AMB file, assuming it's little endian");
-                        (Version::PC, Endianness::Little)
-                    },
-                }
-            }
-        }
+        let endianness = binary_reader::u8::read(source, ptr + 0x0C).unwrap_or(0xFF);
+        let endianness = match endianness {
+            0 => Endianness::Little,
+            1 => Endianness::Big,
+            _ => {
+                eprintln!("Could not detect endianness of AMB file, assuming it's little endian");
+                Endianness::Little
+            },
+        };
+        let version = match binary_reader::u32::read(source, ptr + 0x4, &Endianness::Little).unwrap_or(0xFFFFFFFF) {
+            0x20 => Version::V1,
+            0x28 => Version::V2,
+            0x30 => Version::V3,
+            _ => {
+                eprintln!("Could not detect version of AMB file, assuming it's AMBv1");
+                Version::V1
+            },
+        };
+
+        (version, endianness)
     }
 
     pub fn new_empty() -> Self {
@@ -86,7 +93,7 @@ impl Amb {
             compression_type: 0,
             objects: Vec::new(),
             has_names: true,
-            version: Version::PC,
+            version: Version::V1,
         }
     }
 
@@ -106,7 +113,7 @@ impl Amb {
         }
         let (version, endianness) = Amb::get_version(source, ptr);
         let shift: usize = match version {
-            Version::Mobile => 0x4,
+            Version::V2 => 0x4,
             _ => 0,
         };
 
@@ -170,17 +177,14 @@ impl Amb {
 
     pub fn write(&self) -> Result<Vec<u8>, CommonBinaryError> {
         let amb_length = self.length();
-        let mut result = Vec::<u8>::with_capacity(amb_length);
+        let mut result = vec![0; amb_length];
         let mut pointers = self.predict_pointers();
-
-        for _ in 0..amb_length {
-            result.push(0);
-        }
 
         binary_writer::string32::write(&mut result, 0x00, "#AMB", "magic".to_string())?;
         binary_writer::u32::write(&mut result, 0x04, match self.version {
-            Version::PC => 0x20,
-            Version::Mobile => 0x28,
+            Version::V1 => 0x20,
+            Version::V2 => 0x28,
+            Version::V3 => 0x30,
         }, &self.endianness, "version".to_string())?;
         binary_writer::u16::write(&mut result, 0x08, self.unknown1, &self.endianness, "Another bad thing happened that you didn't account for #9".to_string())?;
         binary_writer::u16::write(&mut result, 0x0A, self.unknown2, &self.endianness, "Another bad thing happened that you didn't account for #9 and a half".to_string())?;
@@ -210,7 +214,7 @@ impl Amb {
             result[pointers.data..pointers.data + o.length()].copy_from_slice(object_data);
             if self.has_names {
                 // TODO: move to the binary_writer
-                o.real_name.as_bytes().read_exact(&mut result[pointers.name..pointers.name + o.real_name.len()]).unwrap();
+                binary_writer::string32::write(&mut result, pointers.name, &o.real_name, "real name of object".to_string())?;
                 pointers.name += 0x20;
             }
 
@@ -360,8 +364,9 @@ impl std::fmt::Display for Amb {
         write!(f, "{{{}}}", [
             json_formatter::add_str("name", &self.amb_path.replace("\\", "\\\\")),
             json_formatter::add_str("version", match &self.version {
-                Version::PC => "PC",
-                Version::Mobile => "Mobile"
+                Version::V1 => "v1",
+                Version::V2 => "v2",
+                Version::V3 => "v3",
             }),
             json_formatter::add_str("endianness", match self.endianness {
                 Endianness::Little => "little",

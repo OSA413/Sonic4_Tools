@@ -26,7 +26,7 @@ fn main() {
 
 fn convert(arg: &String) -> Result<(), CommonBinaryError> {
     if arg.ends_with(".rg") || arg.ends_with(".RG") {
-        let rg = RingSet::new_from_file_name(&arg)?;
+        let rg = RingSet::new_from_file_name(arg)?;
         let result = rg_rs_lib::convert::to_json::convert(&rg)?;
         fs::write(format!("{}.json", arg), result)?;
         return Ok(());

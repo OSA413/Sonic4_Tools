@@ -94,11 +94,7 @@ impl EventSet {
     pub fn write(&self) -> Result<Vec<u8>, CommonBinaryError> {
         let mut pointers = self.predict_pointers();
         let length = pointers.length;
-        let mut result = Vec::<u8>::with_capacity(length);
-
-        for _ in 0..length {
-            result.push(0);
-        }
+        let mut result = vec![0; length];
 
         binary_writer::u16::write(&mut result, 0x00, self.x_tiles, &Endianness::Little, "x_tiles".to_string())?;
         binary_writer::u16::write(&mut result, 0x02, self.y_tiles, &Endianness::Little, "y_tiles".to_string())?;

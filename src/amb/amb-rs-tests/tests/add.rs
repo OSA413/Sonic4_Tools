@@ -37,7 +37,7 @@ macro_rules! add_tests {
                         name: amb_path.to_string(),
                         endianness: "little".to_string(),
                         objects: resulting_binary_objects,
-                        version: "PC".to_string(),
+                        version: "v1".to_string(),
                     }).unwrap()
                 );
 

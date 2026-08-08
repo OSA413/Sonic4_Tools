@@ -29,7 +29,7 @@ mod create_tests {
                 name: temp_dir.join("test.amb").display().to_string(),
                 endianness: "little".to_string(),
                 objects: Vec::new(),
-                version: "PC".to_string(),
+                version: "v1".to_string(),
             }
         );
     }

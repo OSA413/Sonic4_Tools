@@ -49,7 +49,7 @@ impl Serialize for GlTextureMinFilter {
     where
         S: serde::Serializer,
     {
-        serializer.serialize_u16(u16::from(self.clone()))
+        serializer.serialize_u16(u16::from(*self))
     }
 }
 

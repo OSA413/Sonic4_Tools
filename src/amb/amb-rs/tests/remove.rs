@@ -34,7 +34,7 @@ mod add_tests {
                 name: result_path.display().to_string(),
                 endianness: "little".to_string(),
                 objects: vec![],
-                version: "PC".to_string(),
+                version: "v1".to_string(),
             }
         );
     }

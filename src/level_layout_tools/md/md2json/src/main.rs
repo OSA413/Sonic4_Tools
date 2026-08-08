@@ -26,7 +26,7 @@ fn main() {
 
 fn convert(arg: &String) -> Result<(), CommonBinaryError> {
     if arg.ends_with(".md") || arg.ends_with(".MD") {
-        let md = MdSet::new_from_file_name(&arg)?;
+        let md = MdSet::new_from_file_name(arg)?;
         let result = md_rs_lib::convert::to_json::convert(&md)?;
         fs::write(format!("{}.json", arg), result)?;
         return Ok(());

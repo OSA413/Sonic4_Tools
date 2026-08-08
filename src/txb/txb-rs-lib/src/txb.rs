@@ -1,4 +1,3 @@
-use std::io::Read;
 use common_binary::{
     binary_reader, binary_writer, endianness::Endianness, error::CommonBinaryError
 };
@@ -91,15 +90,11 @@ impl Txb {
 
     pub fn write(&self) -> Result<Vec<u8>, CommonBinaryError> {
         let txb_length = self.length();
-        let mut result = Vec::<u8>::with_capacity(txb_length);
+        let mut result = vec![0; txb_length];
         let mut pointers = self.predict_pointers();
 
-        for _ in 0..txb_length {
-            result.push(0);
-        }
-
         // TODO: use binary_writer::string32
-        "#TXB".as_bytes().read_exact(&mut result[0x0..0x4]).unwrap();
+        binary_writer::string32::write(&mut result, 0x00, "#TXB", "TXB header".to_string())?;
         // Version, suppose it's 0x10 as for now
         binary_writer::u32::write(&mut result, 0x04, 0x10, &Endianness::Big, "version".to_string())?;
         // unknown1, TODO: add
@@ -112,9 +107,7 @@ impl Txb {
             binary_writer::u32::write(&mut result, pointers.data + 4, pointers.name as u32, &Endianness::Big, "name pointer".to_string())?;
             binary_writer::u16::write(&mut result, pointers.data + 8, texture.min_filter.into(), &Endianness::Big, "min_filter".to_string())?;
             binary_writer::u16::write(&mut result, pointers.data + 10, texture.mag_filter.into(), &Endianness::Big, "mag_filter".to_string())?;
-
-            // TODO: use binary_writer
-            texture.name.as_bytes().read_exact(&mut result[pointers.name..(pointers.name + texture.name.len())]).unwrap();
+            binary_writer::string32::write(&mut result, pointers.name, &texture.name, "name".to_string())?;
 
             pointers.data += 5 * 4;
             pointers.name += texture.name.len() + 1;
