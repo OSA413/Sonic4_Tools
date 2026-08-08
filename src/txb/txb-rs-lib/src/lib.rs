@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 pub mod txb;
 pub mod txb_object;
 pub mod gl_texture_mag_filter;

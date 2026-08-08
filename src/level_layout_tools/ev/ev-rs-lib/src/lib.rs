@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 pub mod event_set;
 pub mod event_tile;
 pub mod event;

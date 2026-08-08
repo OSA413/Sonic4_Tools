@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 use std::{env, fs};
 use common_binary::{cli, error::CommonBinaryError};
 use rg_rs_lib::ring_set::RingSet;

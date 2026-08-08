@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 use std::{env, ops, path::Path};
 use common_binary::cli;
 

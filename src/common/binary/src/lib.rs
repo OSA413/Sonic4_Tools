@@ -1,3 +1,5 @@
+#![deny(clippy::unwrap_used)]
+
 pub mod binary_reader {
     pub mod string32;
     pub mod u8;

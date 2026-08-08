@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 pub mod decoration_set;
 pub mod decoration_tile;
 pub mod decoration;

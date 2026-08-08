@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 pub mod md_set;
 pub mod md_entry;
 pub mod convert {
