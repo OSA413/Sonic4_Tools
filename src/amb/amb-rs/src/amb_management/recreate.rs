@@ -12,15 +12,22 @@ pub fn recreate_amb(file: String, save_as_file_name: Option<String>) -> Result<(
     )
 }
 
-fn _recreate_amb_recursively(amb: &mut Amb) -> &mut Amb {
+fn _recreate_amb_recursively(amb: &mut Amb) -> (&mut Amb, Vec<CommonBinaryError>) {
+    let mut errors = Vec::new();
     let mut new_binary_objects = Vec::new();
     for object in &amb.objects {
         let probably_amb = Amb::new_from_binary_object(object);
         let binary_object = match probably_amb {
             Ok(mut amb) => {
-                let amb = _recreate_amb_recursively(&mut amb);
-                let buffer = amb.write().unwrap();
-                BinaryObject::new_from_src_ptr_len(buffer.as_slice(), 0, buffer.len())
+                let (amb, inner_errors) = _recreate_amb_recursively(&mut amb);
+                errors.extend(inner_errors);
+                match amb.write() {
+                    Ok(buffer) => BinaryObject::new_from_src_ptr_len(buffer.as_slice(), 0, buffer.len()),
+                    Err(error) => {
+                        errors.push(error);
+                        BinaryObject::new_from_src_ptr_len(object.data.as_slice(), object.pointer, object.length())
+                    }
+                }
             },
             Err(_error) => {
                 BinaryObject::new_from_src_ptr_len(object.data.as_slice(), object.pointer, object.length())
@@ -32,13 +39,18 @@ fn _recreate_amb_recursively(amb: &mut Amb) -> &mut Amb {
 
     amb.objects = new_binary_objects;
 
-    amb
+    (amb, errors)
 }
 
 pub fn recreate_amb_recursively(file: String, save_as_file_name: Option<String>) -> Result<(), CommonBinaryError> {
     do_a_thing_over_an_amb_and_save(
         &file,
-        &|amb| {_recreate_amb_recursively(amb);},
+        &|amb| {
+            let (_, errors) = _recreate_amb_recursively(amb);
+            if !errors.is_empty() {
+                eprintln!("There were errors while recreating the AMB: {:?}", errors);
+            }
+        },
         &save_as_file_name.unwrap_or(file.clone()),
     )
 }

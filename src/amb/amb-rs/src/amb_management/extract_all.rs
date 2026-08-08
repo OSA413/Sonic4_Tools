@@ -1,26 +1,46 @@
 use std::{ffi::OsStr, fs, path::Path};
 use amb_rs_lib::amb::Amb;
 use common_utils::walk_dir;
-use common_binary::error::CommonBinaryError;
+use common_binary::error::{CommonBinaryError, IoDetails};
 
-fn continue_extraction(amb: Amb, base_dir: &Path) {
+fn continue_extraction(amb: Amb, base_dir: &Path) -> Result<(), Vec<CommonBinaryError>> {
+    let mut errors = Vec::new();
+    
     for binary_object in amb.objects {
         // We do this because some of the files inside Episode 1 have no names and are AMB
         let probably_amb = Amb::new_from_binary_object(&binary_object);
         match probably_amb {
             Ok(inner_amb) => {
                 println!("Extracting {base_dir:?}");
-                continue_extraction(inner_amb, &base_dir.join(&binary_object.name));
+                match continue_extraction(inner_amb, &base_dir.join(&binary_object.name)) {
+                    Ok(_) => (),
+                    Err(e) => errors.extend(e)
+                }
             }
             Err(_) => {
                 let file_path = base_dir.join(&binary_object.name);
-                fs::create_dir_all(file_path.parent().unwrap()).unwrap();
-                match fs::write(file_path, &binary_object.data) {
-                    Ok(_) => println!("Extracted {}", &binary_object.name),
-                    Err(e) => eprintln!("Error: {e}"),
+                let created_dirs = match file_path.parent() {
+                    Some(parent) => fs::create_dir_all(parent),
+                    // Here we are at the root of the drive/fs
+                    None => Ok(()),
+                };
+
+                // This probably can be minimized using unwrap_or or something
+                match created_dirs {
+                    Ok(_) => match fs::write(file_path, &binary_object.data) {
+                        Ok(_) => (),
+                        Err(e) => errors.push(CommonBinaryError::IoDetracked(IoDetails { cause: e, description: "Failed to write file" })),
+                    },
+                    Err(e) => errors.push(CommonBinaryError::IoDetracked(IoDetails { cause: e, description: "Failed to create directory" })),
                 }
             },
         }
+    }
+
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        Err(errors)
     }
 }
 
@@ -32,18 +52,28 @@ pub fn extract_amb(file_or_dir: String, destination: Option<String>) -> Result<(
         walk_dir::walk_dir(path, Some(OsStr::new("amb")))
     };
 
+    let mut errors = Vec::new();
     for entry in probably_amb_files {
-        let path = entry.to_str().unwrap().to_string();
+        let path = entry.as_path().to_string_lossy().to_string();
         println!("Extracting {path}");
         let amb = Amb::new_from_file_name(&path)?;
         let base_dir = match destination {
-            Some(ref destination) => Path::new(destination).join(Path::new(&path).file_name().unwrap()),
-            None => Path::new(&format!("{path}_extracted")).to_path_buf(),
+            Some(ref destination) => destination.clone(),
+            None => format!("{path}_extracted")
         };
-        continue_extraction(amb, &base_dir);
+        match continue_extraction(amb, Path::new(&base_dir)) {
+            Ok(()) => {},
+            Err(e) => errors.extend(e),
+        }
     }
+    
     println!("Done!");
-    Ok(())
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        eprintln!("Errors: {:?}", errors);
+        Err(CommonBinaryError::SeeConsole())
+    }
 }
 
 #[cfg(test)]
@@ -99,62 +129,62 @@ mod tests {
         ),
         extract_from_1: (
             "add_1.amb",
-            vec![("add_1.amb/1", "test_files/files/1")],
-            1
+            vec![("1", "test_files/files/1")],
+            0
         ),
         extract_from_2: (
             "add_2.amb",
-            vec![("add_2.amb/2", "test_files/files/2")],
-            1
+            vec![("2", "test_files/files/2")],
+            0
         ),
         extract_from_3: (
             "add_3.amb",
-            vec![("add_3.amb/3", "test_files/files/3")],
-            1
+            vec![("3", "test_files/files/3")],
+            0
         ),
         extract_from_1_2: (
             "add_1_2.amb",
             vec![
-                ("add_1_2.amb/1", "test_files/files/1"),
-                ("add_1_2.amb/2", "test_files/files/2"),
+                ("1", "test_files/files/1"),
+                ("2", "test_files/files/2"),
             ],
-            1
+            0
         ),
         extract_from_1_3: (
             "add_1_3.amb",
             vec![
-                ("add_1_3.amb/1", "test_files/files/1"),
-                ("add_1_3.amb/3", "test_files/files/3"),
+                ("1", "test_files/files/1"),
+                ("3", "test_files/files/3"),
             ],
-            1
+            0
         ),
         extract_from_2_3: (
             "add_2_3.amb",
             vec![
-                ("add_2_3.amb/2", "test_files/files/2"),
-                ("add_2_3.amb/3", "test_files/files/3"),
+                ("2", "test_files/files/2"),
+                ("3", "test_files/files/3"),
             ],
-            1
+            0
         ),
         extract_from_1_2_3: (
             "add_1_2_3.amb",
             vec![
-                ("add_1_2_3.amb/1", "test_files/files/1"),
-                ("add_1_2_3.amb/2", "test_files/files/2"),
-                ("add_1_2_3.amb/3", "test_files/files/3"),
+                ("1", "test_files/files/1"),
+                ("2", "test_files/files/2"),
+                ("3", "test_files/files/3"),
             ],
-            1
+            0
         ),
 
         // Shuffled content doesn't affect the extraction result
         extract_from_3_2_1: (
             "add_3_2_1.amb",
             vec![
-                ("add_3_2_1.amb/1", "test_files/files/1"),
-                ("add_3_2_1.amb/2", "test_files/files/2"),
-                ("add_3_2_1.amb/3", "test_files/files/3"),
+                ("1", "test_files/files/1"),
+                ("2", "test_files/files/2"),
+                ("3", "test_files/files/3"),
             ],
-            1
+            0
         ),
     }
 }

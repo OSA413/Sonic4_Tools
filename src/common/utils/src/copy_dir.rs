@@ -1,8 +1,8 @@
 use std::{fs, path::{Path, PathBuf}};
 
-use crate::error::IoError;
+use common_binary::error::{CommonBinaryError, IoDetails};
 
-pub fn copy_dir(from: &PathBuf, to: &PathBuf) -> Result<(), Vec<IoError>> {
+pub fn copy_dir(from: &PathBuf, to: &PathBuf) -> Result<(), Vec<CommonBinaryError>> {
     match fs::create_dir_all(to) {
         Ok(()) => {
             let mut errors = Vec::new();
@@ -22,18 +22,18 @@ pub fn copy_dir(from: &PathBuf, to: &PathBuf) -> Result<(), Vec<IoError>> {
                                         } else {
                                             match fs::copy(entry.path(), Path::new(to).join(entry.file_name())) {
                                                 Ok(_) => {},
-                                                Err(e) => errors.push(IoError{cause: e, description: "Couldn't copy file"})
+                                                Err(e) => errors.push(CommonBinaryError::IoDetracked(IoDetails {cause: e, description: "Couldn't copy file"}))
                                             }
                                         }
                                     }
-                                    Err(e) => errors.push(IoError{cause: e, description: "Couldn't retrieve file type"})
+                                    Err(e) => errors.push(CommonBinaryError::IoDetracked(IoDetails {cause: e, description: "Couldn't retrieve file type"}))
                                 }
                             },
-                            Err(e) => errors.push(IoError{cause: e, description: "Couldn't get directory entry"}),
+                            Err(e) => errors.push(CommonBinaryError::IoDetracked(IoDetails {cause: e, description: "Couldn't get directory entry"})),
                         }
                     }
                 }
-                Err(e) => errors.push(IoError{cause: e, description: "Error reading directory"}),
+                Err(e) => errors.push(CommonBinaryError::IoDetracked(IoDetails {cause: e, description: "Error reading directory"})),
             }
 
             if errors.is_empty() {
@@ -43,7 +43,7 @@ pub fn copy_dir(from: &PathBuf, to: &PathBuf) -> Result<(), Vec<IoError>> {
             }
         }
         Err(e) => {
-            Err(vec![IoError{cause: e, description: "Error creating all directories"}])
+            Err(vec![CommonBinaryError::IoDetracked(IoDetails {cause: e, description: "Error creating all directories"})])
         }
     }
 }
