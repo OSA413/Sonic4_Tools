@@ -28,39 +28,28 @@ impl EventSet {
     ) -> Result<Self, CommonBinaryError> {
         let ptr = ptr.unwrap_or(0);
 
-        let x_tiles = binary_reader::u16::read(source, ptr, &Endianness::Little)
-        // TODO: move exceptions to Result Err() with Option<When>
-            .expect("Error reading x_tiles from EventSet header");
-        let y_tiles = binary_reader::u16::read(source, ptr + 2, &Endianness::Little)
-            .expect("Error reading y_tiles from EventSet header");
+        let x_tiles = binary_reader::u16::read(source, ptr, &Endianness::Little, "x_tiles from EventSet header")?;
+        let y_tiles = binary_reader::u16::read(source, ptr + 2, &Endianness::Little, "y_tiles from EventSet header")?;
 
-        let total_tiles = x_tiles as usize * y_tiles as usize;
-        let mut tiles = Vec::with_capacity(total_tiles);
+        let total_tiles = x_tiles * y_tiles;
+        let mut tiles = Vec::with_capacity(total_tiles as usize);
 
         let mut pointers_pointer = ptr + 0x04;
         for i in 0..total_tiles {
-            let number_pointer = binary_reader::u32::read(source, pointers_pointer, &Endianness::Little)
-                .unwrap_or_else(|_| panic!("{}", format!("Error reading {}th event pointer", i).into_boxed_str())) as usize;
+            let number_pointer = binary_reader::u32::read(source, pointers_pointer, &Endianness::Little, format!("Error reading {}th event pointer", i).as_str())? as usize;
 
-            let number = binary_reader::u16::read(source, number_pointer, &Endianness::Little)
-                .expect("Error reading events number") as usize;
+            let number = binary_reader::u16::read(source, number_pointer, &Endianness::Little, "events number")? as usize;
 
             let mut events = Vec::with_capacity(number);
             let mut event_pointer = number_pointer + 0x02;
 
             for _ in 0..number {
-                let unknown1 = binary_reader::u16::read(source, event_pointer, &Endianness::Little)
-                    .expect("Error reading event unknown1");
-                let unknown2 = binary_reader::u16::read(source, event_pointer + 0x02, &Endianness::Little)
-                    .expect("Error reading event unknown2");
-                let unknown3 = binary_reader::u16::read(source, event_pointer + 0x04, &Endianness::Little)
-                    .expect("Error reading event unknown3");
-                let unknown4 = binary_reader::u16::read(source, event_pointer + 0x06, &Endianness::Little)
-                    .expect("Error reading event unknown4");
-                let unknown5 = binary_reader::u16::read(source, event_pointer + 0x08, &Endianness::Little)
-                    .expect("Error reading event unknown5");
-                let unknown6 = binary_reader::u16::read(source, event_pointer + 0x0A, &Endianness::Little)
-                    .expect("Error reading event unknown6");
+                let unknown1 = binary_reader::u16::read(source, event_pointer, &Endianness::Little, "event unknown1")?;
+                let unknown2 = binary_reader::u16::read(source, event_pointer + 0x02, &Endianness::Little, "event unknown2")?;
+                let unknown3 = binary_reader::u16::read(source, event_pointer + 0x04, &Endianness::Little, "event unknown3")?;
+                let unknown4 = binary_reader::u16::read(source, event_pointer + 0x06, &Endianness::Little, "event unknown4")?;
+                let unknown5 = binary_reader::u16::read(source, event_pointer + 0x08, &Endianness::Little, "event unknown5")?;
+                let unknown6 = binary_reader::u16::read(source, event_pointer + 0x0A, &Endianness::Little, "event unknown6")?;
 
                 events.push(Event { unknown1, unknown2, unknown3, unknown4, unknown5, unknown6 });
                 event_pointer += 0x0C;
@@ -96,22 +85,22 @@ impl EventSet {
         let length = pointers.length;
         let mut result = vec![0; length];
 
-        binary_writer::u16::write(&mut result, 0x00, self.x_tiles, &Endianness::Little, "x_tiles".to_string())?;
-        binary_writer::u16::write(&mut result, 0x02, self.y_tiles, &Endianness::Little, "y_tiles".to_string())?;
+        binary_writer::u16::write(&mut result, 0x00, self.x_tiles, &Endianness::Little, "x_tiles")?;
+        binary_writer::u16::write(&mut result, 0x02, self.y_tiles, &Endianness::Little, "y_tiles")?;
 
         for tile in &self.tiles {
-            binary_writer::u32::write(&mut result, pointers.pointers, pointers.tiles as u32, &Endianness::Little, "tile pointer".to_string())?;
+            binary_writer::u32::write(&mut result, pointers.pointers, pointers.tiles as u32, &Endianness::Little, "tile pointer")?;
             pointers.pointers += 0x04;
 
-            binary_writer::u16::write(&mut result, pointers.tiles, tile.events.len() as u16, &Endianness::Little, "number of events".to_string())?;
+            binary_writer::u16::write(&mut result, pointers.tiles, tile.events.len() as u16, &Endianness::Little, "number of events")?;
             pointers.tiles += 0x02;
             for event in &tile.events {
-                binary_writer::u16::write(&mut result, pointers.tiles, event.unknown1, &Endianness::Little, "unknown1".to_string())?;
-                binary_writer::u16::write(&mut result, pointers.tiles + 0x02, event.unknown2, &Endianness::Little, "unknown2".to_string())?;
-                binary_writer::u16::write(&mut result, pointers.tiles + 0x04, event.unknown3, &Endianness::Little, "unknown3".to_string())?;
-                binary_writer::u16::write(&mut result, pointers.tiles + 0x06, event.unknown4, &Endianness::Little, "unknown4".to_string())?;
-                binary_writer::u16::write(&mut result, pointers.tiles + 0x08, event.unknown5, &Endianness::Little, "unknown5".to_string())?;
-                binary_writer::u16::write(&mut result, pointers.tiles + 0x0A, event.unknown6, &Endianness::Little, "unknown6".to_string())?;
+                binary_writer::u16::write(&mut result, pointers.tiles, event.unknown1, &Endianness::Little, "unknown1")?;
+                binary_writer::u16::write(&mut result, pointers.tiles + 0x02, event.unknown2, &Endianness::Little, "unknown2")?;
+                binary_writer::u16::write(&mut result, pointers.tiles + 0x04, event.unknown3, &Endianness::Little, "unknown3")?;
+                binary_writer::u16::write(&mut result, pointers.tiles + 0x06, event.unknown4, &Endianness::Little, "unknown4")?;
+                binary_writer::u16::write(&mut result, pointers.tiles + 0x08, event.unknown5, &Endianness::Little, "unknown5")?;
+                binary_writer::u16::write(&mut result, pointers.tiles + 0x0A, event.unknown6, &Endianness::Little, "unknown6")?;
                 pointers.tiles += 0x0C;
             }
         }

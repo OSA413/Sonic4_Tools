@@ -28,31 +28,23 @@ impl RingSet {
     ) -> Result<Self, CommonBinaryError> {
         let ptr = ptr.unwrap_or(0);
 
-        let x_tiles = binary_reader::u16::read(source, ptr, &Endianness::Little)
-        // TODO: move exceptions to Result Err() with Option<When>
-            .expect("Error reading x_tiles from RingSet header");
-        let y_tiles = binary_reader::u16::read(source, ptr + 2, &Endianness::Little)
-            .expect("Error reading y_tiles from RingSet header");
+        let x_tiles = binary_reader::u16::read(source, ptr, &Endianness::Little, "x_tiles from RingSet header")?;
+        let y_tiles = binary_reader::u16::read(source, ptr + 2, &Endianness::Little, "y_tiles from RingSet header")?;
 
-        let total_tiles = x_tiles as usize * y_tiles as usize;
-        let mut tiles = Vec::with_capacity(total_tiles);
+        let total_tiles = x_tiles * y_tiles;
+        let mut tiles = Vec::with_capacity(total_tiles as usize);
 
         let mut pointers_pointer = ptr + 0x04;
         for i in 0..total_tiles {
-            let number_pointer = binary_reader::u32::read(source, pointers_pointer, &Endianness::Little)
-                .unwrap_or_else(|_| panic!("{}", format!("Error reading {}th ring pointer", i).into_boxed_str())) as usize;
+            let number_pointer = binary_reader::u32::read(source, pointers_pointer, &Endianness::Little, &format!("Error reading {}th ring pointer", i + 1).into_boxed_str())? as usize;
+            let number = binary_reader::u16::read(source, number_pointer, &Endianness::Little, "rings number")?;
 
-            let number = binary_reader::u16::read(source, number_pointer, &Endianness::Little)
-                .expect("Error reading rings number") as usize;
-
-            let mut rings = Vec::with_capacity(number);
+            let mut rings = Vec::with_capacity(number as usize);
             let mut ring_pointer = number_pointer + 0x02;
 
             for _ in 0..number {
-                let x = binary_reader::u8::read(source, ring_pointer)
-                    .expect("Error reading ring x coordinate");
-                let y = binary_reader::u8::read(source, ring_pointer + 1)
-                    .expect("Error reading ring y coordinate");
+                let x = binary_reader::u8::read(source, ring_pointer, "ring x coordinate")?;
+                let y = binary_reader::u8::read(source, ring_pointer + 1, "ring y coordinate")?;
 
                 rings.push(RingCoordinates { x, y });
                 ring_pointer += 0x02;
@@ -88,18 +80,18 @@ impl RingSet {
         let length = pointers.length;
         let mut result = vec![0; length];
 
-        binary_writer::u16::write(&mut result, 0x00, self.x_tiles, &Endianness::Little, "x_tiles".to_string())?;
-        binary_writer::u16::write(&mut result, 0x02, self.y_tiles, &Endianness::Little, "y_tiles".to_string())?;
+        binary_writer::u16::write(&mut result, 0x00, self.x_tiles, &Endianness::Little, "x_tiles")?;
+        binary_writer::u16::write(&mut result, 0x02, self.y_tiles, &Endianness::Little, "y_tiles")?;
 
         for tile in &self.tiles {
-            binary_writer::u32::write(&mut result, pointers.pointers, pointers.tiles as u32, &Endianness::Little, "tile pointer".to_string())?;
+            binary_writer::u32::write(&mut result, pointers.pointers, pointers.tiles as u32, &Endianness::Little, "tile pointer")?;
             pointers.pointers += 0x04;
 
-            binary_writer::u16::write(&mut result, pointers.tiles, tile.rings.len() as u16, &Endianness::Little, "number of rings".to_string())?;
+            binary_writer::u16::write(&mut result, pointers.tiles, tile.rings.len() as u16, &Endianness::Little, "number of rings")?;
             pointers.tiles += 0x02;
             for ring in &tile.rings {
-                binary_writer::u8::write(&mut result, pointers.tiles, ring.x, "x".to_string())?;
-                binary_writer::u8::write(&mut result, pointers.tiles + 1, ring.y, "y".to_string())?;
+                binary_writer::u8::write(&mut result, pointers.tiles, ring.x, "x")?;
+                binary_writer::u8::write(&mut result, pointers.tiles + 1, ring.y, "y")?;
                 pointers.tiles += 0x02;
             }
         }

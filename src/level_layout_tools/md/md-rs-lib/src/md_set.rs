@@ -23,18 +23,15 @@ impl MdSet {
     ) -> Result<Self, CommonBinaryError> {
         let ptr = ptr.unwrap_or(0);
 
-        let x_tiles = binary_reader::u16::read(source, ptr, &Endianness::Little)
-        // TODO: move exceptions to Result Err() with Option<When>
-            .expect("Error reading x_tiles from MdSet header");
-        let y_tiles = binary_reader::u16::read(source, ptr + 2, &Endianness::Little)
-            .expect("Error reading y_tiles from MdSet header");
+        let x_tiles = binary_reader::u16::read(source, ptr, &Endianness::Little, "x_tiles from MdSet header")?;
+        let y_tiles = binary_reader::u16::read(source, ptr + 2, &Endianness::Little, "y_tiles from MdSet header")?;
 
-        let entries_number = x_tiles as usize * y_tiles as usize;
-        let mut entries = Vec::with_capacity(entries_number);
+        let entries_number = x_tiles * y_tiles;
+        let mut entries = Vec::with_capacity(entries_number as usize);
 
         let mut entry_pointer = ptr + 0x04;
         for _ in 0..entries_number {
-            let unknown1 = binary_reader::u8::read(source, entry_pointer)?;
+            let unknown1 = binary_reader::u8::read(source, entry_pointer, "unknown1")?;
             entry_pointer += 0x01;
             entries.push(MdEntry { unknown1 });
         }
@@ -54,12 +51,12 @@ impl MdSet {
         let length = self.length();
         let mut result = vec![0; length];
 
-        binary_writer::u16::write(&mut result, 0x00, self.x_tiles, &Endianness::Little, "x_tiles".to_string())?;
-        binary_writer::u16::write(&mut result, 0x02, self.y_tiles, &Endianness::Little, "y_tiles".to_string())?;
+        binary_writer::u16::write(&mut result, 0x00, self.x_tiles, &Endianness::Little, "x_tiles")?;
+        binary_writer::u16::write(&mut result, 0x02, self.y_tiles, &Endianness::Little, "y_tiles")?;
 
         let mut entry_pointer = 0x04;
         for entry in &self.entries {
-            binary_writer::u8::write(&mut result, entry_pointer, entry.unknown1, "unknown1".to_string())?;
+            binary_writer::u8::write(&mut result, entry_pointer, entry.unknown1, "unknown1")?;
             entry_pointer += 0x01;
         }
 

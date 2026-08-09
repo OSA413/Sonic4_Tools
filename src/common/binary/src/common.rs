@@ -1,0 +1,12 @@
+use std::ops::RangeInclusive;
+
+pub static ALLOWED_CHARACTER_RANGES: [RangeInclusive<u8>; 8] = [
+    0x20..=0x20, // Space
+    0x23..=0x23, // #
+    0x28..=0x29, // ()
+    0x2C..=0x39, // ,-./0123456789
+    0x41..=0x5A, // A-Z
+    0x5C..=0x5C, // \
+    0x5F..=0x5F, // _
+    0x61..=0x7A, // a-z
+];

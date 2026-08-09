@@ -58,25 +58,18 @@ impl Txb {
 
         let ptr = ptr.unwrap_or(0);
 
-        let file_number = binary_reader::u32::read(source, ptr + 0x10, &Endianness::Big)
-            .expect("Error reading file number from TXB header");
-        let object_pointer = binary_reader::u32::read(source, ptr + 0x14, &Endianness::Big)
-            .expect("Error reading object pointer from TXB header") as usize;
+        let object_number = binary_reader::u32::read(source, ptr + 0x10, &Endianness::Big, "number from TXB header")? as usize;
+        let object_pointer = binary_reader::u32::read(source, ptr + 0x14, &Endianness::Big, "object pointer from TXB header")? as usize;
 
-        let mut objects = Vec::<TxbObject>::new();
+        let mut objects = Vec::<TxbObject>::with_capacity(object_number);
 
-        for i in 0..file_number as usize {
+        for i in 0..object_number {
             let ptr = object_pointer + i * 5 * 4;
 
-            // Maybe convert .expect to a Result Err()?
-            let name_pointer = binary_reader::u32::read(source, ptr + 0x04, &Endianness::Big)
-                .unwrap_or_else(|_| panic!("{}", format!("Error reading name pointer of {}th object", i + 1).into_boxed_str())) as usize;
-            let (name, _) = binary_reader::string32::read(source, name_pointer)
-                .unwrap_or_else(|_| panic!("{}", format!("Error reading the name of {}th object", i + 1).into_boxed_str()));
-            let min_filter = binary_reader::u16::read(source, ptr + 0x08, &Endianness::Big)
-                .unwrap_or_else(|_| panic!("{}", format!("Error reading min_filter of {name}").into_boxed_str()));
-            let mag_filter = binary_reader::u16::read(source, ptr + 0x0A, &Endianness::Big)
-                .unwrap_or_else(|_| panic!("{}", format!("Error reading mag_filter of {name}").into_boxed_str()));
+            let name_pointer = binary_reader::u32::read(source, ptr + 0x04, &Endianness::Big, &format!("Error reading name pointer of {}th object", i + 1).into_boxed_str())? as usize;
+            let (name, _) = binary_reader::string32::read(source, name_pointer, &format!("Error reading the name of {}th object", i + 1).into_boxed_str())?;
+            let min_filter = binary_reader::u16::read(source, ptr + 0x08, &Endianness::Big, &format!("Error reading min_filter of {name}").into_boxed_str())?;
+            let mag_filter = binary_reader::u16::read(source, ptr + 0x0A, &Endianness::Big, &format!("Error reading mag_filter of {name}").into_boxed_str())?;
 
             objects.push(TxbObject {
                 name,
@@ -93,21 +86,20 @@ impl Txb {
         let mut result = vec![0; txb_length];
         let mut pointers = self.predict_pointers();
 
-        // TODO: use binary_writer::string32
-        binary_writer::string32::write(&mut result, 0x00, "#TXB", "TXB header".to_string())?;
+        binary_writer::string32::write(&mut result, 0x00, "#TXB", "TXB header")?;
         // Version, suppose it's 0x10 as for now
-        binary_writer::u32::write(&mut result, 0x04, 0x10, &Endianness::Big, "version".to_string())?;
+        binary_writer::u32::write(&mut result, 0x04, 0x10, &Endianness::Big, "version")?;
         // unknown1, TODO: add
         // unknown2, TODO: add
-        binary_writer::u32::write(&mut result, 0x10, self.textures.len() as u32, &Endianness::Big, "object length".to_string())?;
-        binary_writer::u32::write(&mut result, 0x14, pointers.data as u32, &Endianness::Big, "list pointer".to_string())?;
+        binary_writer::u32::write(&mut result, 0x10, self.textures.len() as u32, &Endianness::Big, "object length")?;
+        binary_writer::u32::write(&mut result, 0x14, pointers.data as u32, &Endianness::Big, "list pointer")?;
 
         for texture in self.textures.iter() {
             // unknown1
-            binary_writer::u32::write(&mut result, pointers.data + 4, pointers.name as u32, &Endianness::Big, "name pointer".to_string())?;
-            binary_writer::u16::write(&mut result, pointers.data + 8, texture.min_filter.into(), &Endianness::Big, "min_filter".to_string())?;
-            binary_writer::u16::write(&mut result, pointers.data + 10, texture.mag_filter.into(), &Endianness::Big, "mag_filter".to_string())?;
-            binary_writer::string32::write(&mut result, pointers.name, &texture.name, "name".to_string())?;
+            binary_writer::u32::write(&mut result, pointers.data + 4, pointers.name as u32, &Endianness::Big, "name pointer")?;
+            binary_writer::u16::write(&mut result, pointers.data + 8, texture.min_filter.into(), &Endianness::Big, "min_filter")?;
+            binary_writer::u16::write(&mut result, pointers.data + 10, texture.mag_filter.into(), &Endianness::Big, "mag_filter")?;
+            binary_writer::string32::write(&mut result, pointers.name, &texture.name, "name")?;
 
             pointers.data += 5 * 4;
             pointers.name += texture.name.len() + 1;

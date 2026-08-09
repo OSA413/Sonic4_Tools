@@ -60,7 +60,7 @@ impl Amb {
 
     pub fn get_version(source: &[u8], ptr: Option<usize>) -> (Version, Endianness) {
         let ptr = ptr.unwrap_or(0);
-        let endianness = binary_reader::u8::read(source, ptr + 0x0C).unwrap_or(0xFF);
+        let endianness = binary_reader::u8::read(source, ptr + 0x0C, "endianness").unwrap_or(0xFF);
         let endianness = match endianness {
             0 => Endianness::Little,
             1 => Endianness::Big,
@@ -69,7 +69,7 @@ impl Amb {
                 Endianness::Little
             },
         };
-        let version = match binary_reader::u32::read(source, ptr + 0x4, &Endianness::Little).unwrap_or(0xFFFFFFFF) {
+        let version = match binary_reader::u32::read(source, ptr + 0x4, &Endianness::Little, "version").unwrap_or(0xFFFFFFFF) {
             0x20 => Version::V1,
             0x28 => Version::V2,
             0x30 => Version::V3,
@@ -119,38 +119,37 @@ impl Amb {
 
         let ptr = ptr.unwrap_or(0);
 
-        let unknown1 = binary_reader::u16::read(source, ptr + 0x08, &endianness).expect("Another bad thing happened that you didn't account for #9");
-        let unknown2 = binary_reader::u16::read(source, ptr + 0x0A, &endianness).expect("Another bad thing happened that you didn't account for #9 and a half");
-        let _endianness = binary_reader::u8::read(source, ptr + 0x0C).expect("error reading endianness");
-        let unknown3 = binary_reader::u8::read(source, ptr + 0x0D).expect("error reading unknown3");
-        let unknown4 = binary_reader::u8::read(source, ptr + 0x0E).expect("error reading unknown3");
-        let compression_type = binary_reader::u8::read(source, ptr + 0x0F).expect("error reading compression type");
+        let unknown1 = binary_reader::u16::read(source, ptr + 0x08, &endianness, "unknown1")?;
+        let unknown2 = binary_reader::u16::read(source, ptr + 0x0A, &endianness, "unknown2")?;
+        let unknown3 = binary_reader::u8::read(source, ptr + 0x0D, "unknown3")?;
+        let unknown4 = binary_reader::u8::read(source, ptr + 0x0E, "unknown4")?;
+        let compression_type = binary_reader::u8::read(source, ptr + 0x0F, "compression type")?;
         // Btw this also might be incorrect, this actually shows number of entries in the list, but any entry can be empty resulting in "skips" and a bit smaller number of actual objects
-        let object_number = binary_reader::u32::read(source, ptr + 0x10, &endianness).expect("Another bad thing happened that you didn't account for #10");
-        let list_pointer = binary_reader::u32::read(source, ptr + 0x14, &endianness).expect("Another bad thing happened that you didn't account for #11") + ptr as u32;
+        let object_number = binary_reader::u32::read(source, ptr + 0x10, &endianness, "object_number")?;
+        let list_pointer = binary_reader::u32::read(source, ptr + 0x14, &endianness, "list_pointer")? + ptr as u32;
         //var dataPtr = binary_reader::u32::read(source, sourcePtr + 0x18 + shift) + sourcePtr; //this may be not dataPtr for mobile
-        let names_pointer = binary_reader::u32::read(source, ptr + 0x1C + shift, &endianness).expect("Another bad thing happened that you didn't account for #12") + ptr as u32;
+        let names_pointer = binary_reader::u32::read(source, ptr + 0x1C + shift, &endianness, "name_pointer")? + ptr as u32;
         let has_names = names_pointer != 0;
 
-        let mut objects = Vec::<BinaryObject>::new();
+        let mut objects = Vec::<BinaryObject>::with_capacity(object_number as usize);
         let mut i: usize = 0;
         while i < object_number as usize {
-            let object_pointer = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i, &endianness).expect("Who's bad?") + ptr as u32;
+            let object_pointer = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i, &endianness, "object_pointer")? + ptr as u32;
             if object_pointer == 0 {
                 i += 1;
                 continue;
             }
 
-            let object_length = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i + 4 + shift, &endianness).expect("Who's bad? (2)");
+            let object_length = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i + 4 + shift, &endianness, "object length")?;
             let mut new_object = BinaryObject::new_from_src_ptr_len(source, object_pointer as usize, object_length as usize);
             new_object.real_name = match has_names {
-                true => binary_reader::string32::read(source, names_pointer as usize + 0x20 * i)?.0,
+                true => binary_reader::string32::read(source, names_pointer as usize + 0x20 * i, "real object name")?.0,
                 false =>  i.to_string(),
             };
             new_object.name = make_safe(&new_object.real_name);
-            new_object.unknown = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i + 0x8 + shift, &endianness).expect("Who's bad? (3)");
-            new_object.usr0 = binary_reader::u16::read(source, list_pointer as usize + (0x10 + shift) * i + 0x0C + shift, &endianness).expect("Who's bad? (4)");
-            new_object.usr1 = binary_reader::u16::read(source, list_pointer as usize + (0x10 + shift) * i + 0x0E + shift, &endianness).expect("Tun tun tun tun-tun");
+            new_object.unknown = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i + 0x8 + shift, &endianness, "unknown")?;
+            new_object.usr0 = binary_reader::u16::read(source, list_pointer as usize + (0x10 + shift) * i + 0x0C + shift, &endianness, "usr0")?;
+            new_object.usr1 = binary_reader::u16::read(source, list_pointer as usize + (0x10 + shift) * i + 0x0E + shift, &endianness, "usr1")?;
 
             objects.push(new_object);
 
@@ -180,41 +179,41 @@ impl Amb {
         let mut result = vec![0; amb_length];
         let mut pointers = self.predict_pointers();
 
-        binary_writer::string32::write(&mut result, 0x00, "#AMB", "magic".to_string())?;
+        binary_writer::string32::write(&mut result, 0x00, "#AMB", "magic")?;
         binary_writer::u32::write(&mut result, 0x04, match self.version {
             Version::V1 => 0x20,
             Version::V2 => 0x28,
             Version::V3 => 0x30,
-        }, &self.endianness, "version".to_string())?;
-        binary_writer::u16::write(&mut result, 0x08, self.unknown1, &self.endianness, "Another bad thing happened that you didn't account for #9".to_string())?;
-        binary_writer::u16::write(&mut result, 0x0A, self.unknown2, &self.endianness, "Another bad thing happened that you didn't account for #9 and a half".to_string())?;
+        }, &self.endianness, "version")?;
+        binary_writer::u16::write(&mut result, 0x08, self.unknown1, &self.endianness, "Another bad thing happened that you didn't account for #9")?;
+        binary_writer::u16::write(&mut result, 0x0A, self.unknown2, &self.endianness, "Another bad thing happened that you didn't account for #9 and a half")?;
         binary_writer::u8::write(&mut result,  0x0C, match self.endianness {
             Endianness::Little => 0,
             Endianness::Big => 1,
-        }, "error reading endianness".to_string())?;
-        binary_writer::u8::write(&mut result, 0x0D, self.unknown3, "error reading unknown3".to_string())?;
-        binary_writer::u8::write(&mut result, 0x0E, self.unknown4, "error reading unknown3".to_string())?;
-        binary_writer::u8::write(&mut result, 0x0F, self.compression_type, "error reading compression type".to_string())?;
+        }, "error reading endianness")?;
+        binary_writer::u8::write(&mut result, 0x0D, self.unknown3, "error reading unknown3")?;
+        binary_writer::u8::write(&mut result, 0x0E, self.unknown4, "error reading unknown3")?;
+        binary_writer::u8::write(&mut result, 0x0F, self.compression_type, "error reading compression type")?;
       
-        binary_writer::u32::write(&mut result, 0x10, self.objects.len() as u32, &self.endianness, "object length".to_string())?;
-        binary_writer::u32::write(&mut result, 0x14, pointers.list as u32, &self.endianness, "list pointer".to_string())?;
-        binary_writer::u32::write(&mut result, 0x18, pointers.data as u32, &self.endianness, "data pointer".to_string())?;
+        binary_writer::u32::write(&mut result, 0x10, self.objects.len() as u32, &self.endianness, "object length")?;
+        binary_writer::u32::write(&mut result, 0x14, pointers.list as u32, &self.endianness, "list pointer")?;
+        binary_writer::u32::write(&mut result, 0x18, pointers.data as u32, &self.endianness, "data pointer")?;
         if self.has_names {
-            binary_writer::u32::write(&mut result, 0x1C, pointers.name as u32, &self.endianness, "name pointer".to_string())?;
+            binary_writer::u32::write(&mut result, 0x1C, pointers.name as u32, &self.endianness, "name pointer")?;
         }
 
         for o in self.objects.iter() {
-            binary_writer::u32::write(&mut result, pointers.list, pointers.data as u32, &self.endianness, "object data pointer".to_string())?;
-            binary_writer::u32::write(&mut result, pointers.list + 0x04, o.length() as u32, &self.endianness, "object length".to_string())?;
-            binary_writer::u32::write(&mut result, pointers.list + 0x08, o.unknown, &self.endianness, "object unknown".to_string())?;
-            binary_writer::u16::write(&mut result, pointers.list + 0x0C, o.usr0, &self.endianness, "object usr0".to_string())?;
-            binary_writer::u16::write(&mut result, pointers.list + 0x0E, o.usr1, &self.endianness, "object usr1".to_string())?;
+            binary_writer::u32::write(&mut result, pointers.list, pointers.data as u32, &self.endianness, "object data pointer")?;
+            binary_writer::u32::write(&mut result, pointers.list + 0x04, o.length() as u32, &self.endianness, "object length")?;
+            binary_writer::u32::write(&mut result, pointers.list + 0x08, o.unknown, &self.endianness, "object unknown")?;
+            binary_writer::u16::write(&mut result, pointers.list + 0x0C, o.usr0, &self.endianness, "object usr0")?;
+            binary_writer::u16::write(&mut result, pointers.list + 0x0E, o.usr1, &self.endianness, "object usr1")?;
 
             let object_data = &o.data;
             result[pointers.data..pointers.data + o.length()].copy_from_slice(object_data);
             if self.has_names {
                 // TODO: move to the binary_writer
-                binary_writer::string32::write(&mut result, pointers.name, &o.real_name, "real name of object".to_string())?;
+                binary_writer::string32::write(&mut result, pointers.name, &o.real_name, "real name of object")?;
                 pointers.name += 0x20;
             }
 
