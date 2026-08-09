@@ -40,7 +40,7 @@ impl EventSet {
         let mut pointers_pointer = ptr + 0x04;
         for i in 0..total_tiles {
             let number_pointer = binary_reader::u32::read(source, pointers_pointer, &Endianness::Little)
-                .expect(&format!("Error reading {}th event pointer", i).into_boxed_str()) as usize;
+                .unwrap_or_else(|_| panic!("{}", format!("Error reading {}th event pointer", i).into_boxed_str())) as usize;
 
             let number = binary_reader::u16::read(source, number_pointer, &Endianness::Little)
                 .expect("Error reading events number") as usize;

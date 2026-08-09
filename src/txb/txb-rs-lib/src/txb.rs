@@ -70,13 +70,13 @@ impl Txb {
 
             // Maybe convert .expect to a Result Err()?
             let name_pointer = binary_reader::u32::read(source, ptr + 0x04, &Endianness::Big)
-                .expect(&format!("Error reading name pointer of {}th object", i + 1).into_boxed_str()) as usize;
+                .unwrap_or_else(|_| panic!("{}", format!("Error reading name pointer of {}th object", i + 1).into_boxed_str())) as usize;
             let (name, _) = binary_reader::string32::read(source, name_pointer)
-                .expect(&format!("Error reading the name of {}th object", i + 1).into_boxed_str());
+                .unwrap_or_else(|_| panic!("{}", format!("Error reading the name of {}th object", i + 1).into_boxed_str()));
             let min_filter = binary_reader::u16::read(source, ptr + 0x08, &Endianness::Big)
-                .expect(&format!("Error reading min_filter of {name}").into_boxed_str());
+                .unwrap_or_else(|_| panic!("{}", format!("Error reading min_filter of {name}").into_boxed_str()));
             let mag_filter = binary_reader::u16::read(source, ptr + 0x0A, &Endianness::Big)
-                .expect(&format!("Error reading mag_filter of {name}").into_boxed_str());
+                .unwrap_or_else(|_| panic!("{}", format!("Error reading mag_filter of {name}").into_boxed_str()));
 
             objects.push(TxbObject {
                 name,

@@ -1,3 +1,4 @@
+#![allow(clippy::explicit_counter_loop)]
 use common_binary::{
     binary_reader, binary_writer, endianness::Endianness, error::CommonBinaryError
 };
