@@ -30,7 +30,7 @@ macro_rules! add_tests {
                     length: *length,
                 }).collect();
 
-                amb.prepare_for_print();
+                let amb = Amb::new_from_src_ptr_name(&amb.write().unwrap(), Some(0), &amb.amb_path).unwrap();
                 assert_eq!(
                     format!("{amb}"),
                     serde_json::to_string(&AmbPrint {

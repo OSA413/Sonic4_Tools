@@ -212,7 +212,6 @@ impl Amb {
             let object_data = &o.data;
             result[pointers.data..pointers.data + o.length()].copy_from_slice(object_data);
             if self.has_names {
-                // TODO: move to the binary_writer
                 binary_writer::string32::write(&mut result, pointers.name, &o.real_name, "real name of object")?;
                 pointers.name += 0x20;
             }
@@ -341,19 +340,6 @@ impl Amb {
         let target = self.objects.iter().position(|x| x.name == object_name);
         if let Some(target) = target {
             self.objects.remove(target);
-        }
-    }
-
-    // TODO: remove this hack
-    // This method is needed to recalculate pointers of newly added objects
-    // so that they corespond to the binary form of the AMB (like you just read it and print)
-    pub fn prepare_for_print(&mut self) {
-        let pointer_predition = self.predict_pointers();
-        let mut pointer = pointer_predition.data;
-        for object in &mut self.objects {
-            object.pointer = pointer;
-            object.name = make_safe(&object.name);
-            pointer += object.length_nice();
         }
     }
 }
