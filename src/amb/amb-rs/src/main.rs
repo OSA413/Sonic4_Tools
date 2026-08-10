@@ -82,10 +82,10 @@ Or: add <target_file> <dir_of_files_to_add>".to_string()),
                         None => cli::exit_with_error("Usage: recreate <file> [save_as_file_name]".to_string()),
                     }
                 },
-                "recreate_recursive" => {
+                "recreate_recursively" => {
                     match args.next() {
                         Some(file) => cli::handle_result(amb_management::recreate::recreate_amb_recursively(file, args.next())),
-                        None => cli::exit_with_error("Usage: recreate_recursive <file> [save_as_file_name]".to_string()),
+                        None => cli::exit_with_error("Usage: recreate_recursively <file> [save_as_file_name]".to_string()),
                     }
                 },
                 _ => {

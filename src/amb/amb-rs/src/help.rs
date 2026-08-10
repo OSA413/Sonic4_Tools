@@ -39,6 +39,10 @@ Usage:
         Recreate (read and save) the input AMB file.
         If [save_as_file_name] is not specified, overwrites input file.
 
+    `amb-rs recreate_recursively <file> [save_as_file_name]`
+        Recreate (read and save) the input AMB file and all inner AMB files.
+        If [save_as_file_name] is not specified, overwrites input file.
+
     `amb-rs <file> [dir_to_extract]`
         Extract <file> (AMB file) to [dir_to_extract] directory.
         If [dir_to_extract] is not specified, extracts to \"<file>_extracted\" directory.
