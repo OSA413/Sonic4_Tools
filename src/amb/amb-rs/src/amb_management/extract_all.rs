@@ -90,8 +90,8 @@ mod tests {
                     let (source_ref, expected_objects, expected_directories): (&str, Vec<(&str, &str)>, usize) = $value;
 
                     let file_path = format!("../amb-rs-tests/tests/reference_files/le/{source_ref}");
-                    let temp_dir = std::env::temp_dir().join("amb-rs-tests").join(format!("extract_test_{source_ref}"));
-                    let temp_dir_str = temp_dir.display().to_string();
+                    let temp_dir = std::env::temp_dir().join("amb-rs-tests").join(format!("extract_test_all_{source_ref}"));
+                    let temp_dir_str = temp_dir.join("extraction_result").display().to_string();
 
                     // BEFORE, it may fail because the dir may not exist
                     let _ = fs::remove_dir_all(&temp_dir);
@@ -130,17 +130,17 @@ mod tests {
         extract_from_1: (
             "add_1.amb",
             vec![("1", "test_files/files/1")],
-            0
+            1
         ),
         extract_from_2: (
             "add_2.amb",
             vec![("2", "test_files/files/2")],
-            0
+            1
         ),
         extract_from_3: (
             "add_3.amb",
             vec![("3", "test_files/files/3")],
-            0
+            1
         ),
         extract_from_1_2: (
             "add_1_2.amb",
@@ -148,7 +148,7 @@ mod tests {
                 ("1", "test_files/files/1"),
                 ("2", "test_files/files/2"),
             ],
-            0
+            1
         ),
         extract_from_1_3: (
             "add_1_3.amb",
@@ -156,7 +156,7 @@ mod tests {
                 ("1", "test_files/files/1"),
                 ("3", "test_files/files/3"),
             ],
-            0
+            1
         ),
         extract_from_2_3: (
             "add_2_3.amb",
@@ -164,7 +164,7 @@ mod tests {
                 ("2", "test_files/files/2"),
                 ("3", "test_files/files/3"),
             ],
-            0
+            1
         ),
         extract_from_1_2_3: (
             "add_1_2_3.amb",
@@ -173,7 +173,7 @@ mod tests {
                 ("2", "test_files/files/2"),
                 ("3", "test_files/files/3"),
             ],
-            0
+            1
         ),
 
         // Shuffled content doesn't affect the extraction result
@@ -184,7 +184,7 @@ mod tests {
                 ("2", "test_files/files/2"),
                 ("3", "test_files/files/3"),
             ],
-            0
+            1
         ),
     }
 }
