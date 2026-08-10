@@ -5,7 +5,7 @@ pub fn write(target: &mut [u8], pointer: usize, data: u16, endianness: &Endianne
         return Err(CommonBinaryError::PointerOutOfBounds(PointerOutOfBoundsDetails { 
             pointer,
             source_len: target.len(),
-            when: format!("Writing {} (u16)", what),
+            when: format!("writing {} (u16)", what),
         }))
     }
 
@@ -49,7 +49,7 @@ mod tests {
         let result = write(&mut target, 3, 0x1234, &Endianness::Little, "test_write_le_3").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Writing test_write_le_3 for 4 at 3"
+            "PointerOutOfBounds when writing test_write_le_3 (u16) for 4 at 3"
         );
     }
 
@@ -59,7 +59,7 @@ mod tests {
         let result = write(&mut target, 99, 0x1234, &Endianness::Little, "test_write_le_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Writing test_write_le_4 for 4 at 99"
+            "PointerOutOfBounds when writing test_write_le_4 (u16) for 4 at 99"
         );
     }
 
@@ -90,7 +90,7 @@ mod tests {
         let result = write(&mut target, 3, 0x1234, &Endianness::Big, "test_write_be_3").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Writing test_write_be_3 for 4 at 3"
+            "PointerOutOfBounds when writing test_write_be_3 (u16) for 4 at 3"
         );
     }
 
@@ -100,7 +100,7 @@ mod tests {
         let result = write(&mut target, 99, 0x1234, &Endianness::Big, "test_write_be_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Writing test_write_be_4 for 4 at 99"
+            "PointerOutOfBounds when writing test_write_be_4 (u16) for 4 at 99"
         );
     }
 }

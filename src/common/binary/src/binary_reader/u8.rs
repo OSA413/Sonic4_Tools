@@ -3,7 +3,7 @@ use crate::error::{CommonBinaryError, PointerOutOfBoundsDetails};
 pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<u8, CommonBinaryError> {
     if source.len() <= pointer {
         return Err(CommonBinaryError::PointerOutOfBounds(PointerOutOfBoundsDetails {
-            when: format!("Reading {what} (u8)"),
+            when: format!("reading {what} (u8)"),
             pointer,
             source_len: source.len(),
         }));
@@ -38,7 +38,7 @@ mod tests {
         let result = read(&SIMPLE_SOURCE, 3, "test_read_le_3").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Reading an u8 for 3 at 3"
+            "PointerOutOfBounds when reading test_read_le_3 (u8) for 3 at 3"
         );
     }
 
@@ -47,7 +47,7 @@ mod tests {
         let result = read(&SIMPLE_SOURCE, 99, "test_read_le_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Reading an u8 for 3 at 99"
+            "PointerOutOfBounds when reading test_read_le_4 (u8) for 3 at 99"
         );
     }
 
@@ -71,7 +71,7 @@ mod tests {
         let result = read(&SIMPLE_SOURCE, 3, "test_read_be_3").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Reading an u8 for 3 at 3"
+            "PointerOutOfBounds when reading test_read_be_3 (u8) for 3 at 3"
         );
     }
     
@@ -80,7 +80,7 @@ mod tests {
         let result = read(&SIMPLE_SOURCE, 99, "test_read_be_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Reading an u8 for 3 at 99"
+            "PointerOutOfBounds when reading test_read_be_4 (u8) for 3 at 99"
         );
     }
 }

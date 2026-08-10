@@ -6,7 +6,7 @@ pub fn read(source: &[u8], pointer: usize, endianness: &Endianness, what: &str) 
     // And is using Rust's built in conversion to type from binary
     if source.len() < pointer + size_of::<u16>() {
         return Err(CommonBinaryError::PointerOutOfBounds(PointerOutOfBoundsDetails {
-            when: format!("Reading {what} (u16)"),
+            when: format!("reading {what} (u16)"),
             pointer,
             source_len: source.len(),
         }));
@@ -49,7 +49,7 @@ mod tests {
         let result = read(&SIMPLE_SOURCE, 3, &Endianness::Little, "test_read_le_3").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Reading an u16 for 4 at 3"
+            "PointerOutOfBounds when reading test_read_le_3 (u16) for 4 at 3"
         );
     }
 
@@ -58,7 +58,7 @@ mod tests {
         let result = read(&SIMPLE_SOURCE, 99, &Endianness::Little, "test_read_le_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Reading an u16 for 4 at 99"
+            "PointerOutOfBounds when reading test_read_le_4 (u16) for 4 at 99"
         );
     }
 
@@ -82,7 +82,7 @@ mod tests {
         let result = read(&SIMPLE_SOURCE, 3, &Endianness::Big, "test_read_be_3").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Reading an u16 for 4 at 3"
+            "PointerOutOfBounds when reading test_read_be_3 (u16) for 4 at 3"
         );
     }
     
@@ -91,7 +91,7 @@ mod tests {
         let result = read(&SIMPLE_SOURCE, 99, &Endianness::Big, "test_read_be_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when Reading an u16 for 4 at 99"
+            "PointerOutOfBounds when reading test_read_be_4 (u16) for 4 at 99"
         );
     }
 }
