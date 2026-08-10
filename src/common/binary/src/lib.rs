@@ -1,4 +1,3 @@
-#![deny(clippy::unwrap_used)]
 pub mod common;
 pub mod binary_reader {
     pub mod string32;

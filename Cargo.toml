@@ -22,3 +22,6 @@ members = [
     "src/level_layout_tools/rg/rg2json",
 ]
 resolver = "3"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"

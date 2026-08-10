@@ -1,4 +1,4 @@
-
+#![allow(clippy::unwrap_used)]
 use std::{fs, path::Path};
 use serde::{Deserialize, Serialize};
 

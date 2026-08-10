@@ -14,3 +14,5 @@ license = "MIT"
 common_utils = { path = "../../common/utils" }
 common_binary = { path = "../../common/binary" }
 
+[lints]
+workspace = true

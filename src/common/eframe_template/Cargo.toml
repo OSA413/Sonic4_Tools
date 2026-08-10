@@ -8,3 +8,6 @@ rust-version = "1.85"
 [dependencies]
 egui = "0.32"
 eframe = { version = "0.32" }
+
+[lints]
+workspace = true

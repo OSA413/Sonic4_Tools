@@ -1,4 +1,3 @@
-#![deny(clippy::unwrap_used)]
 pub mod mp_set;
 pub mod mp_entry;
 pub mod convert {

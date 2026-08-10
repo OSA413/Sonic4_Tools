@@ -1,4 +1,3 @@
-#![deny(clippy::unwrap_used)]
 use std::{env, fs};
 use common_binary::{cli, error::CommonBinaryError};
 use dc_rs_lib::decoration_set::DecorationSet;

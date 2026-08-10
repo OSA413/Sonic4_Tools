@@ -1,4 +1,3 @@
-#![deny(clippy::unwrap_used)]
 pub mod ring_set;
 pub mod ring_tile;
 pub mod ring;

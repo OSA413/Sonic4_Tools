@@ -1,4 +1,3 @@
-#![deny(clippy::unwrap_used)]
 use std::{env, fs};
 use common_binary::{cli, error::CommonBinaryError};
 use mp_rs_lib::mp_set::MpSet;
