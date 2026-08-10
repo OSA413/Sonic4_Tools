@@ -16,11 +16,11 @@ pub fn write(target: &mut [u8], pointer: usize, data: &str, what: &str) -> Resul
     }
 
     for character in data.as_bytes() {
-        if !(ALLOWED_CHARACTER_RANGES).iter().any(|range| range.contains(&character)) {
+        if !(ALLOWED_CHARACTER_RANGES).iter().any(|range| range.contains(character)) {
             return Err(CommonBinaryError::StringBadCharacter(StringBadCharacterDetails {
                 pointer,
                 target_string: data.to_string(),
-                bad_character: character.clone(),
+                bad_character: *character,
                 when,
             }));
         }
