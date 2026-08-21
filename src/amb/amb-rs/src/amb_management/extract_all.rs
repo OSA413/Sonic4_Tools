@@ -29,9 +29,9 @@ fn continue_extraction(amb: Amb, base_dir: &Path) -> Result<(), Vec<CommonBinary
                 match created_dirs {
                     Ok(_) => match fs::write(file_path, &binary_object.data) {
                         Ok(_) => (),
-                        Err(e) => errors.push(CommonBinaryError::IoDetracked(IoDetails { cause: e, description: "Failed to write file" })),
+                        Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to write file" })),
                     },
-                    Err(e) => errors.push(CommonBinaryError::IoDetracked(IoDetails { cause: e, description: "Failed to create directory" })),
+                    Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to create directory" })),
                 }
             },
         }
