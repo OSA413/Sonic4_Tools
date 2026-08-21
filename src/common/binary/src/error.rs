@@ -30,8 +30,9 @@ impl std::fmt::Debug for IoDetails {
 
 pub enum CommonBinaryError {
     SeeConsole(),
+    Description(String),
     Io(std::io::Error),
-    IoDetracked(IoDetails),
+    IoDetails(IoDetails),
     SerdeJson(serde_json::error::Error),
     PointerOutOfBounds(PointerOutOfBoundsDetails),
     ProvidedSourceIsNotOfExpectedFormat(String),
@@ -41,7 +42,7 @@ pub enum CommonBinaryError {
 
 impl From<IoDetails> for CommonBinaryError {
     fn from(e: IoDetails) -> Self {
-        Self::IoDetracked(e)
+        Self::IoDetails(e)
     }
 }
 
@@ -60,9 +61,10 @@ impl From<serde_json::error::Error> for CommonBinaryError {
 impl std::fmt::Debug for CommonBinaryError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            CommonBinaryError::Description(e) => write!(f, "{e}"),
             CommonBinaryError::SeeConsole() => write!(f, "There were some errors, please see console to check what's wrong."),
             CommonBinaryError::Io(e) => write!(f, "IO error: {e}"),
-            CommonBinaryError::IoDetracked(e) => write!(f, "{}: {}", e.description, e.cause),
+            CommonBinaryError::IoDetails(e) => write!(f, "{}: {}", e.description, e.cause),
             CommonBinaryError::SerdeJson(e) => write!(f, "SerdeJson error: {e}"),
             CommonBinaryError::PointerOutOfBounds(e) => write!(f, "PointerOutOfBounds when {} for {} at {}", e.when, e.source_len, e.pointer),
             CommonBinaryError::ProvidedSourceIsNotOfExpectedFormat(e) => write!(f, "{e}"),
