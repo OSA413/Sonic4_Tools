@@ -25,11 +25,11 @@ pub fn walk_dir(dir: &Path, extension: Option<&OsStr>) -> Vec<PathBuf> {
                             }
                         }
                     },
-                    Err(e) => eprintln!("Error: {e}"),
+                    Err(e) => eprintln!("Error #41305: {e}"),
                 }
             }
         },
-        Err(e) => eprintln!("Error: {e}"),
+        Err(e) => eprintln!("Error #41306: {dir:?}; {e}"),
     }
     files.sort();
     files
@@ -48,11 +48,11 @@ pub fn walk_dir_for_dirs(dir: &Path) -> Vec<PathBuf> {
                             dirs.push(path);
                         }
                     },
-                    Err(e) => eprintln!("Error: {e}"),
+                    Err(e) => eprintln!("Error #41307: {e}"),
                 }
             }
         },
-        Err(e) => eprintln!("Error: {e}"),
+        Err(e) => eprintln!("Error #41308: {e}"),
     }
     dirs.sort();
     dirs

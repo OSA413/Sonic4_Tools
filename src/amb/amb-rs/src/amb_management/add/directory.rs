@@ -10,7 +10,7 @@ fn add_dir_of_files_to_amb(amb: &mut Amb, dir_to_add: &Path) -> usize {
     for file_path in &files_chain {
         match amb.add_file(file_path, None) {
             Ok(_) => (),
-            Err(e) => eprintln!("Error: {e:?}"),
+            Err(e) => eprintln!("Error #41304: {e:?}"),
         };
     }
 
