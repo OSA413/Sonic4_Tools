@@ -1,5 +1,6 @@
 pub mod common;
 pub mod binary_reader {
+    pub mod safe_string32;
     pub mod string32;
     pub mod u8;
     pub mod u16;

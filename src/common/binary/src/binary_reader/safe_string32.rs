@@ -1,4 +1,4 @@
-use crate::error::{CommonBinaryError, PointerOutOfBoundsDetails, StringTooLongDetails};
+use crate::{common::ALLOWED_CHARACTER_RANGES, error::{CommonBinaryError, PointerOutOfBoundsDetails, StringBadCharacterDetails, StringTooLongDetails}};
 
 pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<(String, usize), CommonBinaryError> {
     let mut result = String::with_capacity(31);
@@ -27,6 +27,15 @@ pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<(String, usize)
 
         if character == 0x00 {
             break;
+        }
+
+        if !(ALLOWED_CHARACTER_RANGES).iter().any(|range| range.contains(&character)) {
+            return Err(CommonBinaryError::StringBadCharacter(StringBadCharacterDetails {
+                pointer,
+                target_string: result,
+                bad_character: character,
+                when,
+            }));
         }
 
         result.push(character as char);
