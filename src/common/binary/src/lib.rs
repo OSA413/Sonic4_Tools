@@ -1,5 +1,7 @@
 pub mod common;
 pub mod binary_reader {
+    pub mod f32;
+    pub mod f64;
     pub mod safe_string32;
     pub mod string;
     pub mod string32;
