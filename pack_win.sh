@@ -14,6 +14,7 @@ cp ./target/release/ev2json.exe ./dist/Sonic4Tools/ev2json.exe
 cp ./target/release/md2json.exe ./dist/Sonic4Tools/md2json.exe
 cp ./target/release/mp2json.exe ./dist/Sonic4Tools/mp2json.exe
 
+cp ./LICENSE ./dist/Sonic4Tools/licenses/LICENSE
 cargo install -f copydeps cargo-bundle-licenses
 cargo bundle-licenses --format json --output "./dist/Sonic4Tools/licenses/Rust-THIRDPARTY.json"
 
