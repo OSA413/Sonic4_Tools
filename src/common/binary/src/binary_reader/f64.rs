@@ -33,24 +33,21 @@ pub fn read(source: &[u8], pointer: usize, endianness: &Endianness, what: &str) 
 mod tests {
     use super::*;
 
-    static SIMPLE_SOURCE: [u8; 10] = [0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0, 0x11, 0x22];
+    static SIMPLE_SOURCE: [u8; 10] = [0x00, 0x43, 0xE5, 0x6A, 0x95, 0x31, 0x9D, 0x63, 0xE1, 0x00];
 
     #[test]
     fn test_read_le_0() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 0, &Endianness::Little, "test_read_le_0").unwrap(), 0xF0DEBC9A78563412);
+        assert_eq!(read(&SIMPLE_SOURCE, 0, &Endianness::Little, "test_read_le_0").unwrap(), 7.051255980114156e171);
     }
 
     #[test]
     fn test_read_le_1() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 1, &Endianness::Little, "test_read_le_1").unwrap(), 0x11F0DEBC9A785634);
+        assert_eq!(read(&SIMPLE_SOURCE, 1, &Endianness::Little, "test_read_le_1").unwrap(), -1.3787791467183283e161);
     }
 
     #[test]
     fn test_read_le_2() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 2, &Endianness::Little, "test_read_le_2").unwrap(), 0x2211F0DEBC9A7856);
+        assert_eq!(read(&SIMPLE_SOURCE, 2, &Endianness::Little, "test_read_le_2").unwrap(), 1.981034004750801e-304);
     }
 
     #[test]
@@ -73,20 +70,17 @@ mod tests {
 
     #[test]
     fn test_read_be_0() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 0, &Endianness::Big, "test_read_be_0").unwrap(), 0x123456789ABCDEF0);
+        assert_eq!(read(&SIMPLE_SOURCE, 0, &Endianness::Big, "test_read_be_0").unwrap(), 2.213521005164029e-307);
     }
 
     #[test]
     fn test_read_be_1() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 1, &Endianness::Big, "test_read_be_1").unwrap(), 0x3456789ABCDEF011);
+        assert_eq!(read(&SIMPLE_SOURCE, 1, &Endianness::Big, "test_read_be_1").unwrap(), 12345678901234567890_f64);
     }
 
     #[test]
     fn test_read_be_2() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 2, &Endianness::Big, "test_read_be_2").unwrap(), 0x56789ABCDEF01122);
+        assert_eq!(read(&SIMPLE_SOURCE, 2, &Endianness::Big, "test_read_be_2").unwrap(), -3.447052936383801e180);
     }
 
     #[test]

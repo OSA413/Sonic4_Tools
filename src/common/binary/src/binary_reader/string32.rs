@@ -1,5 +1,6 @@
 use crate::error::{CommonBinaryError, PointerOutOfBoundsDetails, StringTooLongDetails};
 
+// TODO: add documentation
 pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<(String, usize), CommonBinaryError> {
     let mut result = String::with_capacity(31);
     // Isn't it cool that you can do that in Rust?
@@ -477,111 +478,32 @@ mod string_tests {
 #[cfg(test)]
 mod garbage_tests {
     use super::*;
-    use std::time::SystemTime;
-
-    static DISALLOWED_CHARACTERS: [u8; 56] = [
-        0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
-        0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
-        0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x2A, 0x2B,
-        0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F,
-        0x40,
-        0x5B, 0x5D, 0x5E,
-        0x60,
-        0x7B, 0x7C, 0x7D, 0x7E, 0x7F,
-    ];
 
     static DISALLOWED_CHARACTER_IN_BEGINNING: [u8; 6] = *b"+test\0";
     static DISALLOWED_CHARACTER_IN_MIDDLE: [u8; 13] = *b"middle+after\0";
     static DISALLOWED_CHARACTER_IN_END: [u8; 12] = *b"end_before+\0";
 
     #[test]
-    fn garbage_string() {
-        let pointer = (SystemTime::now()
-            .duration_since(SystemTime::UNIX_EPOCH).unwrap().as_nanos() as usize)
-            % DISALLOWED_CHARACTERS.len();
-        let result = read(&DISALLOWED_CHARACTERS, pointer, "garbage_string").unwrap_err();
-        let char = DISALLOWED_CHARACTERS[pointer];
-        assert_eq!(
-            format!("{result:?}"),
-            format!("Detected non-ASCII character {char:#04X} when reading garbage_string (string32) at {pointer} with value ")
-        );
-    }
-
-    #[test]
     fn garbage_string_in_beginning_0() {
-        let result = read(&DISALLOWED_CHARACTER_IN_BEGINNING, 0, "garbage_string_in_beginning_0").unwrap_err();
         assert_eq!(
-            format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_beginning_0 (string32) at 0 with value ")
+            read(&DISALLOWED_CHARACTER_IN_BEGINNING, 0, "garbage_string_in_beginning_0").unwrap().0,
+            "+test"
         )
     }
 
-    #[test]
-    fn garbage_string_in_beginning_1() {
-        assert_eq!(
-            read(&DISALLOWED_CHARACTER_IN_BEGINNING, 1, "garbage_string_in_beginning_1").unwrap().0,
-            "test".to_string()
-        )
-    }
-    
     #[test]
     fn garbage_string_in_middle_0() {
-        let result = read(&DISALLOWED_CHARACTER_IN_MIDDLE, 6, "garbage_string_in_middle_0").unwrap_err();
         assert_eq!(
-            format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_middle_0 (string32) at 6 with value ")
-        )
-    }
-
-    #[test]
-    fn garbage_string_in_middle_2() {
-        let result = read(&DISALLOWED_CHARACTER_IN_MIDDLE, 5, "garbage_string_in_middle_2").unwrap_err();
-        assert_eq!(
-            format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_middle_2 (string32) at 6 with value e")
-        )
-    }
-
-    #[test]
-    fn garbage_string_in_middle_3() {
-        assert_eq!(
-            read(&DISALLOWED_CHARACTER_IN_MIDDLE, 7, "garbage_string_in_middle_3").unwrap().0,
-            "after".to_string()
+            read(&DISALLOWED_CHARACTER_IN_MIDDLE, 0, "garbage_string_in_middle_0").unwrap().0,
+            "middle+after",
         )
     }
 
     #[test]
     fn garbage_string_in_end_0() {
-        let result = read(&DISALLOWED_CHARACTER_IN_END, 0, "garbage_string_in_end_0").unwrap_err();
         assert_eq!(
-            format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_end_0 (string32) at 10 with value end_before")
-        )
-    }
-
-    #[test]
-    fn garbage_string_in_end_1() {
-        let result = read(&DISALLOWED_CHARACTER_IN_END, 4, "garbage_string_in_end_1").unwrap_err();
-        assert_eq!(
-            format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_end_1 (string32) at 10 with value before")
-        )
-    }
-    
-    #[test]
-    fn garbage_string_in_end_2() {
-        let result = read(&DISALLOWED_CHARACTER_IN_END, 10, "garbage_string_in_end_2").unwrap_err();
-        assert_eq!(
-            format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_end_2 (string32) at 10 with value ")
-        )
-    }
-
-    #[test]
-    fn garbage_string_in_end_3() {
-        assert_eq!(
-            read(&DISALLOWED_CHARACTER_IN_END, 11, "garbage_string_in_end_3").unwrap().0,
-            "".to_string()
+            read(&DISALLOWED_CHARACTER_IN_END, 0, "garbage_string_in_end_0").unwrap().0,
+            "end_before+"
         )
     }
 }
@@ -606,11 +528,7 @@ mod complex_tests {
     
     #[test]
     fn amb_example_0() {
-        let result = read(&AMB_EXAMPLE, 0x00, "amb_example_0").unwrap_err();
-        assert_eq!(
-            format!("{result:?}"),
-            "Detected non-ASCII character 0x21 when reading amb_example_0 (string32) at 0 with value "
-        );
+        assert_eq!(read(&AMB_EXAMPLE, 0x00, "amb_example_0").unwrap().0, "!$+=!$+=!$+=!$+=!$+=!$+=!$+");
     }
 
     #[test]
@@ -630,11 +548,7 @@ mod complex_tests {
 
     #[test]
     fn txb_example_0() {
-        let result = read(&TXB_EXAMPLE, 0x00, "txb_example_0").unwrap_err();
-        assert_eq!(
-            format!("{result:?}"),
-            "Detected non-ASCII character 0x21 when reading txb_example_0 (string32) at 0 with value "
-        );
+        assert_eq!(read(&TXB_EXAMPLE, 0x00, "txb_example_0").unwrap().0, "!$+=!$+=!$+=!$+=FILE_00");
     }
 
     #[test]

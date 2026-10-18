@@ -29,24 +29,21 @@ pub fn read(source: &[u8], pointer: usize, endianness: &Endianness, what: &str) 
 mod tests {
     use super::*;
 
-    static SIMPLE_SOURCE: [u8; 6] = [0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC];
+    static SIMPLE_SOURCE: [u8; 6] = [0x0, 0x4B, 0x3C, 0x61, 0x4E, 0x00];
 
     #[test]
     fn test_read_le_0() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 0, &Endianness::Little, "test_read_le_0").unwrap(), 0x78563412);
+        assert_eq!(read(&SIMPLE_SOURCE, 0, &Endianness::Little, "test_read_le_0").unwrap(), 2.1708701e+20);
     }
 
     #[test]
     fn test_read_le_1() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 1, &Endianness::Little, "test_read_le_1").unwrap(), 0x9A785634);
+        assert_eq!(read(&SIMPLE_SOURCE, 1, &Endianness::Little, "test_read_le_1").unwrap(), 944706240_f32);
     }
 
     #[test]
     fn test_read_le_2() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 2, &Endianness::Little, "test_read_le_2").unwrap(), 0xBC9A7856);
+        assert_eq!(read(&SIMPLE_SOURCE, 2, &Endianness::Little, "test_read_le_2").unwrap(), 7.19805e-39);
     }
 
     #[test]
@@ -69,20 +66,17 @@ mod tests {
 
     #[test]
     fn test_read_be_0() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 0, &Endianness::Big, "test_read_be_0").unwrap(), 0x12345678);
+        assert_eq!(read(&SIMPLE_SOURCE, 0, &Endianness::Big, "test_read_be_0").unwrap(), 6.909322e-39);
     }
 
     #[test]
     fn test_read_be_1() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 1, &Endianness::Big, "test_read_be_1").unwrap(), 0x3456789A);
+        assert_eq!(read(&SIMPLE_SOURCE, 1, &Endianness::Big, "test_read_be_1").unwrap(), 12345678_f32);
     }
 
     #[test]
     fn test_read_be_2() {
-        todo!();
-        // assert_eq!(read(&SIMPLE_SOURCE, 2, &Endianness::Big, "test_read_be_2").unwrap(), 0x56789ABC);
+        assert_eq!(read(&SIMPLE_SOURCE, 2, &Endianness::Big, "test_read_be_2").unwrap(), 0.013751507);
     }
 
     #[test]
