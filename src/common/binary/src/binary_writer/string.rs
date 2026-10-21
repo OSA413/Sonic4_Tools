@@ -1,6 +1,6 @@
 use std::io::Read;
 
-use crate::{common::ALLOWED_CHARACTER_RANGES, error::{CommonBinaryError, PointerOutOfBoundsDetails, StringBadCharacterDetails}};
+use crate::{error::{CommonBinaryError, PointerOutOfBoundsDetails}};
 
 pub fn write(target: &mut [u8], pointer: usize, data: &str, what: &str) -> Result<(), CommonBinaryError> {
     let data_len = data.len();
@@ -13,17 +13,6 @@ pub fn write(target: &mut [u8], pointer: usize, data: &str, what: &str) -> Resul
             source_len: target.len(),
             when,
         }));
-    }
-
-    for character in data.as_bytes() {
-        if !(ALLOWED_CHARACTER_RANGES).iter().any(|range| range.contains(character)) {
-            return Err(CommonBinaryError::StringBadCharacter(StringBadCharacterDetails {
-                pointer,
-                target_string: data.to_string(),
-                bad_character: *character,
-                when,
-            }));
-        }
     }
 
     data.as_bytes().read_exact(&mut target[pointer..end])?;

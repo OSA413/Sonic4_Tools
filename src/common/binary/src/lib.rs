@@ -11,7 +11,8 @@ pub mod binary_reader {
     pub mod u64;
 }
 pub mod binary_writer {
-    pub mod string32;
+    pub mod safe_string;
+    pub mod string;
     pub mod u8;
     pub mod u16;
     pub mod u32;
