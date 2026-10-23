@@ -13,11 +13,7 @@ pub fn walk_dir(dir: &Path, extension: Option<&OsStr>) -> Vec<PathBuf> {
                         } else {
                             match extension {
                                 Some(desired_extension) => {
-                                    if let Some(file_extension) = path.extension() {
-                                        if file_extension.to_ascii_lowercase() == desired_extension {
-                                            files.push(path);
-                                        }
-                                    } else if desired_extension.is_empty() {
+                                    if path.to_string_lossy().to_lowercase().ends_with(&desired_extension.to_string_lossy().into_owned()) {
                                         files.push(path);
                                     }
                                 },
