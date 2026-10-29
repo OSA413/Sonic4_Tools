@@ -17,13 +17,13 @@ pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<(String, usize)
         }
 
         let character = source[pointer];
+        pointer += 1;
 
         if character == 0x00 {
             break;
         }
 
         result.push(character as char);
-        pointer += 1;
     }
 
     Ok((result, pointer))
