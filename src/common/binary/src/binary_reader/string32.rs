@@ -25,13 +25,13 @@ pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<(String, usize)
         }
 
         let character = source[pointer];
+        pointer += 1;
 
         if character == 0x00 {
             break;
         }
 
         result.push(character as char);
-        pointer += 1;
     }
 
     Ok((result, pointer))
@@ -556,10 +556,10 @@ mod complex_tests {
         let result = read(&TXB_EXAMPLE, 0x10, "txb_example_1_0").unwrap();
         assert_eq!(result.0, "FILE_00".to_string());
         
-        let result = read(&TXB_EXAMPLE, result.1 + 1, "txb_example_1_1").unwrap();
+        let result = read(&TXB_EXAMPLE, result.1, "txb_example_1_1").unwrap();
         assert_eq!(result.0, "FILE_01".to_string());
 
-        let result = read(&TXB_EXAMPLE, result.1 + 1, "txb_example_1_2").unwrap();
+        let result = read(&TXB_EXAMPLE, result.1, "txb_example_1_2").unwrap();
         assert_eq!(result.0, "FILE_01234567890123456789ABCDEF".to_string());
     }
 }

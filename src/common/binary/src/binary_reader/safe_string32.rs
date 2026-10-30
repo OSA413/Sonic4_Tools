@@ -5,7 +5,7 @@ pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<(String, usize)
     let mut result = String::with_capacity(31);
     // Isn't it cool that you can do that in Rust?
     let mut pointer = pointer;
-    let when = format!("reading {what} (safe_string32)");
+    let when = format!("reading {what} (safe_string)");
 
     loop {
         if result.len() > 31 {
@@ -25,6 +25,7 @@ pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<(String, usize)
         }
 
         let character = source[pointer];
+        pointer += 1;
 
         if character == 0x00 {
             break;
@@ -32,7 +33,7 @@ pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<(String, usize)
 
         if !(ALLOWED_CHARACTER_RANGES).iter().any(|range| range.contains(&character)) {
             return Err(CommonBinaryError::StringBadCharacter(StringBadCharacterDetails {
-                pointer,
+                pointer: pointer - 1,
                 target_string: result,
                 bad_character: character,
                 when,
@@ -40,7 +41,6 @@ pub fn read(source: &[u8], pointer: usize, what: &str) -> Result<(String, usize)
         }
 
         result.push(character as char);
-        pointer += 1;
     }
 
     Ok((result, pointer))
@@ -141,7 +141,7 @@ mod binary_tests {
         let result = read(&HELLO_WORLD, 12, "read_string32_out_of_bounds_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_out_of_bounds_0 (safe_string32) for 12 at 12"
+            "PointerOutOfBounds when reading read_string32_out_of_bounds_0 (safe_string) for 12 at 12"
         );
     }
 
@@ -150,7 +150,7 @@ mod binary_tests {
         let result = read(&HELLO_WORLD, 13, "read_string32_out_of_bounds_1").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_out_of_bounds_1 (safe_string32) for 12 at 13"
+            "PointerOutOfBounds when reading read_string32_out_of_bounds_1 (safe_string) for 12 at 13"
         );
     }
 
@@ -159,7 +159,7 @@ mod binary_tests {
         let result = read(&HELLO_WORLD, 99, "read_string32_out_of_bounds_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_out_of_bounds_2 (safe_string32) for 12 at 99"
+            "PointerOutOfBounds when reading read_string32_out_of_bounds_2 (safe_string) for 12 at 99"
         );
     }
 
@@ -178,7 +178,7 @@ mod binary_tests {
         let result = read(&EXACTLY_33_BYTE_LONG_STRING, 0, "read_exactly_33_string_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "StringTooLong when reading read_exactly_33_string_0 (safe_string32) at 32 with value abcdefghijklmnopqrstuvwxyzABCDEF"
+            "StringTooLong when reading read_exactly_33_string_0 (safe_string) at 32 with value abcdefghijklmnopqrstuvwxyzABCDEF"
         );
     }
 
@@ -197,7 +197,7 @@ mod binary_tests {
         let result = read(&VERY_LONG_STRING, 0, "read_very_long_string_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "StringTooLong when reading read_very_long_string_0 (safe_string32) at 32 with value abcdefghijklmnopqrstuvwxyzABCDEF"
+            "StringTooLong when reading read_very_long_string_0 (safe_string) at 32 with value abcdefghijklmnopqrstuvwxyzABCDEF"
         );
     }
 
@@ -206,7 +206,7 @@ mod binary_tests {
         let result = read(&VERY_LONG_STRING, 8, "read_very_long_string_1").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "StringTooLong when reading read_very_long_string_1 (safe_string32) at 40 with value ijklmnopqrstuvwxyzABCDEFGHIJKLMN"
+            "StringTooLong when reading read_very_long_string_1 (safe_string) at 40 with value ijklmnopqrstuvwxyzABCDEFGHIJKLMN"
         );
     }
 
@@ -215,7 +215,7 @@ mod binary_tests {
         let result = read(&VERY_LONG_STRING, 20, "read_very_long_string_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "StringTooLong when reading read_very_long_string_2 (safe_string32) at 52 with value uvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "StringTooLong when reading read_very_long_string_2 (safe_string) at 52 with value uvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         );
     }
 
@@ -241,7 +241,7 @@ mod binary_tests {
         let result = read(&HELLO_WORLD_WO_NULL, 0, "read_string32_wo_null_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_wo_null_0 (safe_string32) for 11 at 11"
+            "PointerOutOfBounds when reading read_string32_wo_null_0 (safe_string) for 11 at 11"
         );
     }
 
@@ -250,7 +250,7 @@ mod binary_tests {
         let result = read(&HELLO_WORLD_WO_NULL, 6, "read_string32_wo_null_1").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_wo_null_1 (safe_string32) for 11 at 11"
+            "PointerOutOfBounds when reading read_string32_wo_null_1 (safe_string) for 11 at 11"
         );
     }
     
@@ -259,7 +259,7 @@ mod binary_tests {
         let result = read(&HELLO_WORLD_WO_NULL, 11, "read_string32_wo_null_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_wo_null_2 (safe_string32) for 11 at 11"
+            "PointerOutOfBounds when reading read_string32_wo_null_2 (safe_string) for 11 at 11"
         );
     }
 
@@ -268,7 +268,7 @@ mod binary_tests {
         let result = read(&HELLO_WORLD_WO_NULL, 12, "read_string32_wo_null_out_of_bounds").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_wo_null_out_of_bounds (safe_string32) for 11 at 12"
+            "PointerOutOfBounds when reading read_string32_wo_null_out_of_bounds (safe_string) for 11 at 12"
         );
     }
 }
@@ -352,7 +352,7 @@ mod string_tests {
         let result = read(&HELLO_WORLD, 12, "read_string32_out_of_bounds_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_out_of_bounds_0 (safe_string32) for 12 at 12"
+            "PointerOutOfBounds when reading read_string32_out_of_bounds_0 (safe_string) for 12 at 12"
         );
     }
 
@@ -361,7 +361,7 @@ mod string_tests {
         let result = read(&HELLO_WORLD, 13, "read_string32_out_of_bounds_1").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_out_of_bounds_1 (safe_string32) for 12 at 13"
+            "PointerOutOfBounds when reading read_string32_out_of_bounds_1 (safe_string) for 12 at 13"
         );
     }
 
@@ -370,7 +370,7 @@ mod string_tests {
         let result = read(&HELLO_WORLD, 99, "read_string32_out_of_bounds_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_out_of_bounds_2 (safe_string32) for 12 at 99"
+            "PointerOutOfBounds when reading read_string32_out_of_bounds_2 (safe_string) for 12 at 99"
         );
     }
 
@@ -389,7 +389,7 @@ mod string_tests {
         let result = read(&EXACTLY_33_BYTE_LONG_STRING, 0, "read_exactly_33_string_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "StringTooLong when reading read_exactly_33_string_0 (safe_string32) at 32 with value abcdefghijklmnopqrstuvwxyzABCDEF"
+            "StringTooLong when reading read_exactly_33_string_0 (safe_string) at 32 with value abcdefghijklmnopqrstuvwxyzABCDEF"
         );
     }
 
@@ -408,7 +408,7 @@ mod string_tests {
         let result = read(&VERY_LONG_STRING, 0, "read_very_long_string_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "StringTooLong when reading read_very_long_string_0 (safe_string32) at 32 with value abcdefghijklmnopqrstuvwxyzABCDEF"
+            "StringTooLong when reading read_very_long_string_0 (safe_string) at 32 with value abcdefghijklmnopqrstuvwxyzABCDEF"
         );
     }
 
@@ -417,7 +417,7 @@ mod string_tests {
         let result = read(&VERY_LONG_STRING, 8, "read_very_long_string_1").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "StringTooLong when reading read_very_long_string_1 (safe_string32) at 40 with value ijklmnopqrstuvwxyzABCDEFGHIJKLMN"
+            "StringTooLong when reading read_very_long_string_1 (safe_string) at 40 with value ijklmnopqrstuvwxyzABCDEFGHIJKLMN"
         );
     }
 
@@ -426,7 +426,7 @@ mod string_tests {
         let result = read(&VERY_LONG_STRING, 20, "read_very_long_string_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "StringTooLong when reading read_very_long_string_2 (safe_string32) at 52 with value uvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "StringTooLong when reading read_very_long_string_2 (safe_string) at 52 with value uvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         );
     }
 
@@ -452,7 +452,7 @@ mod string_tests {
         let result = read(&HELLO_WORLD_WO_NULL, 0, "read_string32_wo_null_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_wo_null_0 (safe_string32) for 11 at 11"
+            "PointerOutOfBounds when reading read_string32_wo_null_0 (safe_string) for 11 at 11"
         );
     }
 
@@ -461,7 +461,7 @@ mod string_tests {
         let result = read(&HELLO_WORLD_WO_NULL, 6, "read_string32_wo_null_1").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_wo_null_1 (safe_string32) for 11 at 11"
+            "PointerOutOfBounds when reading read_string32_wo_null_1 (safe_string) for 11 at 11"
         );
     }
     
@@ -470,7 +470,7 @@ mod string_tests {
         let result = read(&HELLO_WORLD_WO_NULL, 11, "read_string32_wo_null_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_wo_null_2 (safe_string32) for 11 at 11"
+            "PointerOutOfBounds when reading read_string32_wo_null_2 (safe_string) for 11 at 11"
         );
     }
 
@@ -479,7 +479,7 @@ mod string_tests {
         let result = read(&HELLO_WORLD_WO_NULL, 12, "read_string32_wo_null_out_of_bounds").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading read_string32_wo_null_out_of_bounds (safe_string32) for 11 at 12"
+            "PointerOutOfBounds when reading read_string32_wo_null_out_of_bounds (safe_string) for 11 at 12"
         );
     }
 }
@@ -513,7 +513,7 @@ mod garbage_tests {
         let char = DISALLOWED_CHARACTERS[pointer];
         assert_eq!(
             format!("{result:?}"),
-            format!("Detected non-ASCII character {char:#04X} when reading garbage_string (safe_string32) at {pointer} with value ")
+            format!("Detected non-ASCII character {char:#04X} when reading garbage_string (safe_string) at {pointer} with value ")
         );
     }
 
@@ -522,7 +522,7 @@ mod garbage_tests {
         let result = read(&DISALLOWED_CHARACTER_IN_BEGINNING, 0, "garbage_string_in_beginning_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_beginning_0 (safe_string32) at 0 with value ")
+            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_beginning_0 (safe_string) at 0 with value ")
         )
     }
 
@@ -539,7 +539,7 @@ mod garbage_tests {
         let result = read(&DISALLOWED_CHARACTER_IN_MIDDLE, 6, "garbage_string_in_middle_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_middle_0 (safe_string32) at 6 with value ")
+            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_middle_0 (safe_string) at 6 with value ")
         )
     }
 
@@ -548,7 +548,7 @@ mod garbage_tests {
         let result = read(&DISALLOWED_CHARACTER_IN_MIDDLE, 5, "garbage_string_in_middle_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_middle_2 (safe_string32) at 6 with value e")
+            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_middle_2 (safe_string) at 6 with value e")
         )
     }
 
@@ -565,7 +565,7 @@ mod garbage_tests {
         let result = read(&DISALLOWED_CHARACTER_IN_END, 0, "garbage_string_in_end_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_end_0 (safe_string32) at 10 with value end_before")
+            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_end_0 (safe_string) at 10 with value end_before")
         )
     }
 
@@ -574,7 +574,7 @@ mod garbage_tests {
         let result = read(&DISALLOWED_CHARACTER_IN_END, 4, "garbage_string_in_end_1").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_end_1 (safe_string32) at 10 with value before")
+            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_end_1 (safe_string) at 10 with value before")
         )
     }
     
@@ -583,7 +583,7 @@ mod garbage_tests {
         let result = read(&DISALLOWED_CHARACTER_IN_END, 10, "garbage_string_in_end_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_end_2 (safe_string32) at 10 with value ")
+            format!("Detected non-ASCII character 0x2B when reading garbage_string_in_end_2 (safe_string) at 10 with value ")
         )
     }
 
@@ -619,7 +619,7 @@ mod complex_tests {
         let result = read(&AMB_EXAMPLE, 0x00, "amb_example_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "Detected non-ASCII character 0x21 when reading amb_example_0 (safe_string32) at 0 with value "
+            "Detected non-ASCII character 0x21 when reading amb_example_0 (safe_string) at 0 with value "
         );
     }
 
@@ -643,7 +643,7 @@ mod complex_tests {
         let result = read(&TXB_EXAMPLE, 0x00, "txb_example_0").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "Detected non-ASCII character 0x21 when reading txb_example_0 (safe_string32) at 0 with value "
+            "Detected non-ASCII character 0x21 when reading txb_example_0 (safe_string) at 0 with value "
         );
     }
 
@@ -652,10 +652,10 @@ mod complex_tests {
         let result = read(&TXB_EXAMPLE, 0x10, "txb_example_1_0").unwrap();
         assert_eq!(result.0, "FILE_00".to_string());
         
-        let result = read(&TXB_EXAMPLE, result.1 + 1, "txb_example_1_1").unwrap();
+        let result = read(&TXB_EXAMPLE, result.1, "txb_example_1_1").unwrap();
         assert_eq!(result.0, "FILE_01".to_string());
 
-        let result = read(&TXB_EXAMPLE, result.1 + 1, "txb_example_1_2").unwrap();
+        let result = read(&TXB_EXAMPLE, result.1, "txb_example_1_2").unwrap();
         assert_eq!(result.0, "FILE_01234567890123456789ABCDEF".to_string());
     }
 }

@@ -5,7 +5,7 @@ use crate::{error::{CommonBinaryError, PointerOutOfBoundsDetails}};
 pub fn write(target: &mut [u8], pointer: usize, data: &str, what: &str) -> Result<(), CommonBinaryError> {
     let data_len = data.len();
     let end = pointer + data_len;
-    let when = format!("writing {} (string32)", what);
+    let when = format!("writing {} (string)", what);
 
     if end > target.len() {
         return Err(CommonBinaryError::PointerOutOfBounds(PointerOutOfBoundsDetails {
@@ -46,7 +46,7 @@ mod tests {
         let result = write(&mut target, 2, MAGIC, "test_write_magic_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when writing test_write_magic_2 (string32) for 6 at 2"
+            "PointerOutOfBounds when writing test_write_magic_2 (string) for 6 at 2"
         );
     }
 
@@ -56,7 +56,7 @@ mod tests {
         let result = write(&mut target, 99, MAGIC, "test_write_magic_3").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when writing test_write_magic_3 (string32) for 6 at 99"
+            "PointerOutOfBounds when writing test_write_magic_3 (string) for 6 at 99"
         );
     }
 }

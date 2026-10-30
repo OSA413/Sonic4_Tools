@@ -86,7 +86,7 @@ impl Txb {
         let mut result = vec![0; txb_length];
         let mut pointers = self.predict_pointers();
 
-        binary_writer::string32::write(&mut result, 0x00, "#TXB", "TXB header")?;
+        binary_writer::safe_string::write(&mut result, 0x00, "#TXB", "TXB header")?;
         // Version, suppose it's 0x10 as for now
         binary_writer::u32::write(&mut result, 0x04, 0x10, &Endianness::Big, "version")?;
         // unknown1, TODO: add
@@ -99,7 +99,7 @@ impl Txb {
             binary_writer::u32::write(&mut result, pointers.data + 4, pointers.name as u32, &Endianness::Big, "name pointer")?;
             binary_writer::u16::write(&mut result, pointers.data + 8, texture.min_filter.into(), &Endianness::Big, "min_filter")?;
             binary_writer::u16::write(&mut result, pointers.data + 10, texture.mag_filter.into(), &Endianness::Big, "mag_filter")?;
-            binary_writer::string32::write(&mut result, pointers.name, &texture.name, "name")?;
+            binary_writer::safe_string::write(&mut result, pointers.name, &texture.name, "name")?;
 
             pointers.data += 5 * 4;
             pointers.name += texture.name.len() + 1;

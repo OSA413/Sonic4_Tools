@@ -179,7 +179,7 @@ impl Amb {
         let mut result = vec![0; amb_length];
         let mut pointers = self.predict_pointers();
 
-        binary_writer::string32::write(&mut result, 0x00, "#AMB", "magic")?;
+        binary_writer::safe_string::write(&mut result, 0x00, "#AMB", "magic")?;
         binary_writer::u32::write(&mut result, 0x04, match self.version {
             Version::V1 => 0x20,
             Version::V2 => 0x28,
@@ -212,7 +212,7 @@ impl Amb {
             let object_data = &o.data;
             result[pointers.data..pointers.data + o.length()].copy_from_slice(object_data);
             if self.has_names {
-                binary_writer::string32::write(&mut result, pointers.name, &o.real_name, "real name of object")?;
+                binary_writer::safe_string::write(&mut result, pointers.name, &o.real_name, "real name of object")?;
                 pointers.name += 0x20;
             }
 

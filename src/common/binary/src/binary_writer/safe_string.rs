@@ -57,7 +57,7 @@ mod tests {
         let result = write(&mut target, 2, MAGIC, "test_write_magic_2").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when writing test_write_magic_2 (string32) for 6 at 2"
+            "PointerOutOfBounds when writing test_write_magic_2 (safe_string) for 6 at 2"
         );
     }
 
@@ -67,7 +67,7 @@ mod tests {
         let result = write(&mut target, 99, MAGIC, "test_write_magic_3").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when writing test_write_magic_3 (string32) for 6 at 99"
+            "PointerOutOfBounds when writing test_write_magic_3 (safe_string) for 6 at 99"
         );
     }
 }

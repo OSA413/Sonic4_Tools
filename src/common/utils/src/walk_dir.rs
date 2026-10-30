@@ -88,6 +88,8 @@ mod tests {
             dir.join("test.amb_extracted/1.txt"),
         ]);
         assert_eq!(walk_dir(&dir, Some(OsStr::new(""))), [
+            dir.join("test.amb"),
+            dir.join("test.amb_extracted/1.txt"),
             dir.join("test.amb_extracted/2"),
         ]);
         assert_eq!(walk_dir_for_dirs(&dir), [
