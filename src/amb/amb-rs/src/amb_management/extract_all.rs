@@ -7,33 +7,35 @@ fn continue_extraction(amb: Amb, base_dir: &Path) -> Result<(), Vec<CommonBinary
     let mut errors = Vec::new();
     
     for binary_object in amb.objects {
-        // We do this because some of the files inside Episode 1 have no names and are AMB
-        let probably_amb = Amb::new_from_binary_object(&binary_object);
-        match probably_amb {
-            Ok(inner_amb) => {
-                println!("Extracting {base_dir:?}");
-                match continue_extraction(inner_amb, &base_dir.join(&binary_object.name)) {
-                    Ok(_) => (),
-                    Err(e) => errors.extend(e)
-                }
-            }
-            Err(_) => {
-                let file_path = base_dir.join(&binary_object.name);
-                let created_dirs = match file_path.parent() {
-                    Some(parent) => fs::create_dir_all(parent),
-                    // Here we are at the root of the drive/fs
-                    None => Ok(()),
-                };
-
-                // This probably can be minimized using unwrap_or or something
-                match created_dirs {
-                    Ok(_) => match fs::write(file_path, &binary_object.data) {
+        if let Some(binary_object) = binary_object {
+            // We do this because some of the files inside Episode 1 have no names and are AMB
+            let probably_amb = Amb::new_from_binary_object(&binary_object);
+            match probably_amb {
+                Ok(inner_amb) => {
+                    println!("Extracting {base_dir:?}");
+                    match continue_extraction(inner_amb, &base_dir.join(&binary_object.name)) {
                         Ok(_) => (),
-                        Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to write file" })),
-                    },
-                    Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to create directory" })),
+                        Err(e) => errors.extend(e)
+                    }
                 }
-            },
+                Err(_) => {
+                    let file_path = base_dir.join(&binary_object.name);
+                    let created_dirs = match file_path.parent() {
+                        Some(parent) => fs::create_dir_all(parent),
+                        // Here we are at the root of the drive/fs
+                        None => Ok(()),
+                    };
+
+                    // This probably can be minimized using unwrap_or or something
+                    match created_dirs {
+                        Ok(_) => match fs::write(file_path, &binary_object.data) {
+                            Ok(_) => (),
+                            Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to write file" })),
+                        },
+                        Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to create directory" })),
+                    }
+                },
+            }
         }
     }
 

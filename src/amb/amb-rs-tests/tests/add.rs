@@ -3,6 +3,9 @@ use amb_rs_lib::amb::Amb;
 use amb_rs_tests::{AmbPrint, BinaryObjectPrint};
 use common_binary::path::make_safe;
 
+// Maybe making this a macro was a mistake.
+// But how else it would be possible to make it a higher-level abstraction?
+// The only problem is with IDE suggestions that don't work properly inside of macros
 macro_rules! add_tests {
     ($($name:ident: $value:expr,)*) => {
         $(
@@ -42,7 +45,7 @@ macro_rules! add_tests {
                 );
 
                 for (object, (file_name, _, _, _, _)) in amb.objects.iter().zip(&test_case) {
-                    assert_eq!(object.data, fs::read(file_name).unwrap());
+                    assert_eq!(object.as_ref().unwrap().data, fs::read(file_name).unwrap());
                 }
 
                 assert_eq!(amb.objects.len(), test_case.len());

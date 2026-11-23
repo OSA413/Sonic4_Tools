@@ -16,25 +16,31 @@ fn _recreate_amb_recursively(amb: &mut Amb) -> (&mut Amb, Vec<CommonBinaryError>
     let mut errors = Vec::new();
     let mut new_binary_objects = Vec::new();
     for object in &amb.objects {
-        let probably_amb = Amb::new_from_binary_object(object);
-        let binary_object = match probably_amb {
-            Ok(mut amb) => {
-                let (amb, inner_errors) = _recreate_amb_recursively(&mut amb);
-                errors.extend(inner_errors);
-                match amb.write() {
-                    Ok(buffer) => BinaryObject::new_from_src_ptr_len(buffer.as_slice(), 0, buffer.len()),
-                    Err(error) => {
-                        errors.push(error);
-                        BinaryObject::new_from_src_ptr_len(object.data.as_slice(), object.pointer, object.length())
+        let object = if let Some(object) = object {
+            let probably_amb = Amb::new_from_binary_object(object);
+            let binary_object = match probably_amb {
+                Ok(mut amb) => {
+                    let (amb, inner_errors) = _recreate_amb_recursively(&mut amb);
+                    errors.extend(inner_errors);
+                    match amb.write() {
+                        Ok(buffer) => BinaryObject::new_from_src_ptr_len(buffer.as_slice(), 0, buffer.len()),
+                        Err(error) => {
+                            errors.push(error);
+                            BinaryObject::new_from_src_ptr_len(object.data.as_slice(), object.pointer, object.length())
+                        }
                     }
+                },
+                Err(_error) => {
+                    BinaryObject::new_from_src_ptr_len(object.data.as_slice(), object.pointer, object.length())
                 }
-            },
-            Err(_error) => {
-                BinaryObject::new_from_src_ptr_len(object.data.as_slice(), object.pointer, object.length())
-            }
+            };
+
+            Some(binary_object)
+        } else {
+            None
         };
 
-        new_binary_objects.push(binary_object);
+        new_binary_objects.push(object);
     }
 
     amb.objects = new_binary_objects;

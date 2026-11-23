@@ -13,7 +13,8 @@ pub enum Version {
 pub struct Amb {
     pub amb_path: String,
     pub endianness: Endianness,
-    pub objects: Vec<BinaryObject>,
+    // Option because those blank entries are actually used in some circumstances
+    pub objects: Vec<Option<BinaryObject>>,
     pub has_names: bool,
     pub version: Version,
 
@@ -41,7 +42,7 @@ impl Amb {
 
     fn predict_pointers(&self) -> AmbPointersPrediction {
         let data = 0x20 + 0x10 * self.objects.len();
-        let name = data + self.objects.iter().map(|object| object.length_nice()).sum::<usize>();
+        let name = data + self.objects.iter().map(|object| object.as_ref().map_or(0, |o| o.length_nice())).sum::<usize>();
         AmbPointersPrediction {
             list: 0x20,
             data,
@@ -131,11 +132,14 @@ impl Amb {
         let names_pointer = binary_reader::u32::read(source, ptr + 0x1C + shift, &endianness, "name_pointer")? + ptr as u32;
         let has_names = names_pointer != 0;
 
-        let mut objects = Vec::<BinaryObject>::with_capacity(object_number as usize);
+        let mut objects = Vec::<Option<BinaryObject>>::with_capacity(object_number as usize);
         let mut i: usize = 0;
         while i < object_number as usize {
             let object_pointer = binary_reader::u32::read(source, list_pointer as usize + (0x10 + shift) * i, &endianness, "object_pointer")? + ptr as u32;
+            // Turns out those "NULL" entries in the list are actually used in Metal Episode
+            // Othervise the game crashes if those null entries are not kept
             if object_pointer == 0 {
+                objects.push(None);
                 i += 1;
                 continue;
             }
@@ -151,7 +155,7 @@ impl Amb {
             new_object.usr0 = binary_reader::u16::read(source, list_pointer as usize + (0x10 + shift) * i + 0x0C + shift, &endianness, "usr0")?;
             new_object.usr1 = binary_reader::u16::read(source, list_pointer as usize + (0x10 + shift) * i + 0x0E + shift, &endianness, "usr1")?;
 
-            objects.push(new_object);
+            objects.push(Some(new_object));
 
             i += 1;
         }
@@ -203,21 +207,23 @@ impl Amb {
         }
 
         for o in self.objects.iter() {
-            binary_writer::u32::write(&mut result, pointers.list, pointers.data as u32, &self.endianness, "object data pointer")?;
-            binary_writer::u32::write(&mut result, pointers.list + 0x04, o.length() as u32, &self.endianness, "object length")?;
-            binary_writer::u32::write(&mut result, pointers.list + 0x08, o.unknown, &self.endianness, "object unknown")?;
-            binary_writer::u16::write(&mut result, pointers.list + 0x0C, o.usr0, &self.endianness, "object usr0")?;
-            binary_writer::u16::write(&mut result, pointers.list + 0x0E, o.usr1, &self.endianness, "object usr1")?;
+            if let Some(o) = o {
+                binary_writer::u32::write(&mut result, pointers.list, pointers.data as u32, &self.endianness, "object data pointer")?;
+                binary_writer::u32::write(&mut result, pointers.list + 0x04, o.length() as u32, &self.endianness, "object length")?;
+                binary_writer::u32::write(&mut result, pointers.list + 0x08, o.unknown, &self.endianness, "object unknown")?;
+                binary_writer::u16::write(&mut result, pointers.list + 0x0C, o.usr0, &self.endianness, "object usr0")?;
+                binary_writer::u16::write(&mut result, pointers.list + 0x0E, o.usr1, &self.endianness, "object usr1")?;
 
-            let object_data = &o.data;
-            result[pointers.data..pointers.data + o.length()].copy_from_slice(object_data);
-            if self.has_names {
-                binary_writer::safe_string::write(&mut result, pointers.name, &o.real_name, "real name of object")?;
-                pointers.name += 0x20;
+                let object_data = &o.data;
+                result[pointers.data..pointers.data + o.length()].copy_from_slice(object_data);
+                if self.has_names {
+                    binary_writer::safe_string::write(&mut result, pointers.name, &o.real_name, "real name of object")?;
+                    pointers.name += 0x20;
+                }
+                
+                pointers.data += o.length_nice();
             }
-
             pointers.list += 0x10;
-            pointers.data += o.length_nice();
         }
 
         Ok(result)
@@ -273,9 +279,9 @@ impl Amb {
     }
 
     pub fn add_binary_object(&mut self, binary_object: BinaryObject, internal_name: &String) -> Result<(), CommonBinaryError> {
-        if let Some(internal_index) = self.objects.iter().position(|x| &x.name == internal_name) {
-            let existing_object = &self.objects[internal_index];                
-            self.objects[internal_index] = BinaryObject {
+        if let Some(internal_index) = self.objects.iter().position(|x| x.as_ref().is_some_and(|x| &x.name == internal_name))
+        && let Some(existing_object) = &self.objects[internal_index] {
+            self.objects[internal_index] = Some(BinaryObject {
                 name: existing_object.name.clone(),
                 real_name: existing_object.real_name.clone(),
                 unknown: existing_object.unknown,
@@ -283,39 +289,37 @@ impl Amb {
                 usr1: existing_object.usr1,
                 pointer: existing_object.pointer,
                 data: binary_object.data,
-            };
+            });
             return Ok(());
         }
 
-        match self.objects.iter().position(|x|
-            x.name == internal_name
+        if let Some(parent_index) = self.objects.iter().position(|x|
+            x.as_ref().is_some_and(|x| x.name == internal_name
                 .split('\\')
                 .take(x.name.chars().filter(|&c| c == '\\').count() + 1)
                 .collect::<Vec<_>>()
-                .join("\\")
-        ) {
-            Some(parent_index) => {
-                let parent_object = &self.objects[parent_index];
-                let mut parent_amb = Amb::new_from_binary_object(parent_object)?;
-                parent_amb.add_binary_object(
-                    binary_object,
-                    &internal_name
-                        .chars()
-                        .skip(parent_object.name.chars().count() + 1)
-                        .collect::<String>()
-                )?;
-                let parent_amb_content = parent_amb.write()?;
-                self.objects[parent_index] = BinaryObject {
-                    name: parent_object.name.clone(),
-                    real_name: parent_object.real_name.clone(),
-                    unknown: parent_object.unknown,
-                    usr0: parent_object.usr0,
-                    usr1: parent_object.usr1,
-                    pointer: 0,
-                    data: parent_amb_content,
-                };
-            }
-            None => self.objects.push(BinaryObject {
+                .join("\\"))
+        ) && let Some(parent_object) = &self.objects[parent_index] {
+            let mut parent_amb = Amb::new_from_binary_object(parent_object)?;
+            parent_amb.add_binary_object(
+                binary_object,
+                &internal_name
+                    .chars()
+                    .skip(parent_object.name.chars().count() + 1)
+                    .collect::<String>()
+            )?;
+            let parent_amb_content = parent_amb.write()?;
+            self.objects[parent_index] = Some(BinaryObject {
+                name: parent_object.name.clone(),
+                real_name: parent_object.real_name.clone(),
+                unknown: parent_object.unknown,
+                usr0: parent_object.usr0,
+                usr1: parent_object.usr1,
+                pointer: 0,
+                data: parent_amb_content,
+            });
+        } else {
+            self.objects.push(Some(BinaryObject {
                 name: internal_name.clone(),
                 real_name: internal_name.clone(),
                 unknown: 0,
@@ -323,7 +327,7 @@ impl Amb {
                 usr1: 0,
                 pointer: 0,
                 data: binary_object.data,
-            }),
+            }));
         }
         Ok(())
     }
@@ -337,7 +341,7 @@ impl Amb {
 
     // Make recursive as `add`?
     pub fn remove(&mut self, object_name: String) {
-        let target = self.objects.iter().position(|x| x.name == object_name);
+        let target = self.objects.iter().position(|x| x.as_ref().is_some_and(|x| x.name == object_name));
         if let Some(target) = target {
             self.objects.remove(target);
         }
@@ -359,7 +363,10 @@ impl std::fmt::Display for Amb {
             }),
             json_formatter::add_value(
                 "objects",
-                &format!("[{}]", &self.objects.iter().map(|x| format!("{x}")).collect::<Vec<_>>().join(","))
+                &format!("[{}]", &self.objects.iter().map(|x| match x {
+                    Some(x) =>  format!("{x}"),
+                    None => "null".to_string(),
+                }).collect::<Vec<_>>().join(","))
             ),
         ].join(","))
     }

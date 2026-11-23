@@ -9,20 +9,22 @@ pub fn extract_amb(target_file: String, dir_to_extract: Option<String>) -> Resul
     let base_dir = dir_to_extract.unwrap_or(format!("{target_file}_extracted"));
     let base_dir = Path::new(&base_dir);
     for binary_object in amb.objects {
-        let file_path = base_dir.join(&binary_object.name);
-        let created_dirs = match file_path.parent() {
-            Some(parent) => fs::create_dir_all(parent),
-            // Here we are at the root of the drive/fs
-            None => Ok(()),
-        };
+        if let Some(binary_object) = binary_object {
+            let file_path = base_dir.join(&binary_object.name);
+            let created_dirs = match file_path.parent() {
+                Some(parent) => fs::create_dir_all(parent),
+                // Here we are at the root of the drive/fs
+                None => Ok(()),
+            };
 
-        // This probably can be minimized using unwrap_or or something
-        match created_dirs {
-            Ok(_) => match fs::write(file_path, &binary_object.data) {
-                Ok(_) => (),
-                Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to write file" })),
-            },
-            Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to create directory" })),
+            // This probably can be minimized using unwrap_or or something
+            match created_dirs {
+                Ok(_) => match fs::write(file_path, &binary_object.data) {
+                    Ok(_) => (),
+                    Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to write file" })),
+                },
+                Err(e) => errors.push(CommonBinaryError::IoDetails(IoDetails { cause: e, description: "Failed to create directory" })),
+            }
         }
     };
 

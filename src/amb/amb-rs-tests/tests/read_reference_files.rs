@@ -15,9 +15,9 @@ macro_rules! read_reference_tests {
                 assert_eq!(amb.objects.len(), expected_objects.len());
 
                 for (object, (expected_name, expected_data_path)) in amb.objects.iter().zip(&expected_objects) {
-                    assert_eq!(object.name, *expected_name);
+                    assert_eq!(object.as_ref().unwrap().name, *expected_name);
                     let expected_data = fs::read(format!("../amb-rs-tests/{expected_data_path}")).unwrap();
-                    assert_eq!(object.data, expected_data);
+                    assert_eq!(object.as_ref().unwrap().data, expected_data);
                 }
             }
         )*
