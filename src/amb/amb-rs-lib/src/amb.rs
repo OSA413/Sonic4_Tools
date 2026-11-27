@@ -178,6 +178,14 @@ impl Amb {
         Amb::new_from_src_ptr_name(&bo.data, None, &bo.name)
     }
 
+    pub fn clear_object_list(&mut self) {
+        self.objects.clear();
+    }
+
+    pub fn clear_null_entries(&mut self) {
+        self.objects.retain(|x| x.is_some());
+    }
+
     pub fn write(&self) -> Result<Vec<u8>, CommonBinaryError> {
         let amb_length = self.length();
         let mut result = vec![0; amb_length];
@@ -260,7 +268,7 @@ impl Amb {
             self.amb_path.clone(),
             file_name.replace("_extracted", ""),
         )).replace('/', "\\");
-        self.add_binary_object(new_object, &internal_name)
+        self.add_binary_object(Some(new_object), &internal_name)
     }
 
     pub fn add_u8_vec(
@@ -275,59 +283,64 @@ impl Amb {
             pointer.unwrap_or(0),
             length.unwrap_or(source.len()),
         );
-        self.add_binary_object(new_object, internal_name)
+        self.add_binary_object(Some(new_object), internal_name)
     }
 
-    pub fn add_binary_object(&mut self, binary_object: BinaryObject, internal_name: &String) -> Result<(), CommonBinaryError> {
-        if let Some(internal_index) = self.objects.iter().position(|x| x.as_ref().is_some_and(|x| &x.name == internal_name))
-        && let Some(existing_object) = &self.objects[internal_index] {
-            self.objects[internal_index] = Some(BinaryObject {
-                name: existing_object.name.clone(),
-                real_name: existing_object.real_name.clone(),
-                unknown: existing_object.unknown,
-                usr0: existing_object.usr0,
-                usr1: existing_object.usr1,
-                pointer: existing_object.pointer,
-                data: binary_object.data,
-            });
-            return Ok(());
-        }
+    pub fn add_binary_object(&mut self, binary_object: Option<BinaryObject>, internal_name: &String) -> Result<(), CommonBinaryError> {
+        match binary_object {
+            None => self.objects.push(None),
+            Some(binary_object) => {  
+                if let Some(internal_index) = self.objects.iter().position(|x| x.as_ref().is_some_and(|x| &x.name == internal_name))
+                && let Some(existing_object) = &self.objects[internal_index] {
+                    self.objects[internal_index] = Some(BinaryObject {
+                        name: existing_object.name.clone(),
+                        real_name: existing_object.real_name.clone(),
+                        unknown: existing_object.unknown,
+                        usr0: existing_object.usr0,
+                        usr1: existing_object.usr1,
+                        pointer: existing_object.pointer,
+                        data: binary_object.data,
+                    });
+                    return Ok(());
+                }
 
-        if let Some(parent_index) = self.objects.iter().position(|x|
-            x.as_ref().is_some_and(|x| x.name == internal_name
-                .split('\\')
-                .take(x.name.chars().filter(|&c| c == '\\').count() + 1)
-                .collect::<Vec<_>>()
-                .join("\\"))
-        ) && let Some(parent_object) = &self.objects[parent_index] {
-            let mut parent_amb = Amb::new_from_binary_object(parent_object)?;
-            parent_amb.add_binary_object(
-                binary_object,
-                &internal_name
-                    .chars()
-                    .skip(parent_object.name.chars().count() + 1)
-                    .collect::<String>()
-            )?;
-            let parent_amb_content = parent_amb.write()?;
-            self.objects[parent_index] = Some(BinaryObject {
-                name: parent_object.name.clone(),
-                real_name: parent_object.real_name.clone(),
-                unknown: parent_object.unknown,
-                usr0: parent_object.usr0,
-                usr1: parent_object.usr1,
-                pointer: 0,
-                data: parent_amb_content,
-            });
-        } else {
-            self.objects.push(Some(BinaryObject {
-                name: internal_name.clone(),
-                real_name: internal_name.clone(),
-                unknown: 0,
-                usr0: 0,
-                usr1: 0,
-                pointer: 0,
-                data: binary_object.data,
-            }));
+                if let Some(parent_index) = self.objects.iter().position(|x|
+                    x.as_ref().is_some_and(|x| x.name == internal_name
+                        .split('\\')
+                        .take(x.name.chars().filter(|&c| c == '\\').count() + 1)
+                        .collect::<Vec<_>>()
+                        .join("\\"))
+                ) && let Some(parent_object) = &self.objects[parent_index] {
+                    let mut parent_amb = Amb::new_from_binary_object(parent_object)?;
+                    parent_amb.add_binary_object(
+                        Some(binary_object),
+                        &internal_name
+                            .chars()
+                            .skip(parent_object.name.chars().count() + 1)
+                            .collect::<String>()
+                    )?;
+                    let parent_amb_content = parent_amb.write()?;
+                    self.objects[parent_index] = Some(BinaryObject {
+                        name: parent_object.name.clone(),
+                        real_name: parent_object.real_name.clone(),
+                        unknown: parent_object.unknown,
+                        usr0: parent_object.usr0,
+                        usr1: parent_object.usr1,
+                        pointer: 0,
+                        data: parent_amb_content,
+                    });
+                } else {
+                    self.objects.push(Some(BinaryObject {
+                        name: internal_name.clone(),
+                        real_name: internal_name.clone(),
+                        unknown: 0,
+                        usr0: 0,
+                        usr1: 0,
+                        pointer: 0,
+                        data: binary_object.data,
+                    }));
+                }
+            }
         }
         Ok(())
     }
@@ -337,6 +350,10 @@ impl Amb {
             Endianness::Little => Endianness::Big,
             Endianness::Big => Endianness::Little,
         };
+    }
+
+    pub fn set_endianness(&mut self, endianness: Endianness) {
+        self.endianness = endianness
     }
 
     // Make recursive as `add`?

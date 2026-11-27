@@ -5,13 +5,11 @@ version = "1.1.0"
 edition = "2024"
 authors = ["Oleg \"OSA413\" Sokolov"]
 repository = "https://github.com/OSA413/Sonic4_Tools"
-homepage = "https://github.com/OSA413/Sonic4_Tools"
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-common_utils = { path = "../../common/utils" }
 common_binary = { path = "../../common/binary" }
 
 [lints]
