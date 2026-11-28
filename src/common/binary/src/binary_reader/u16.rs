@@ -27,7 +27,7 @@ pub fn read(source: &[u8], pointer: usize, endianness: &Endianness, what: &str) 
 mod tests {
     use super::*;
 
-    static SIMPLE_SOURCE: [u8; 4] = [0x12, 0x34, 0x56, 0x78];
+    static SIMPLE_SOURCE: [u8; 5] = [0x12, 0x34, 0x56, 0x78, 0x9A];
 
     #[test]
     fn test_read_le_0() {
@@ -44,21 +44,27 @@ mod tests {
         assert_eq!(read(&SIMPLE_SOURCE, 2, &Endianness::Little, "test_read_le_2").unwrap(), 0x7856);
     }
 
+    
     #[test]
     fn test_read_le_3() {
-        let result = read(&SIMPLE_SOURCE, 3, &Endianness::Little, "test_read_le_3").unwrap_err();
-        assert_eq!(
-            format!("{result:?}"),
-            "PointerOutOfBounds when reading test_read_le_3 (u16) for 4 at 3"
-        );
+        assert_eq!(read(&SIMPLE_SOURCE, 3, &Endianness::Little, "test_read_le_3").unwrap(), 0x9A78);
     }
 
     #[test]
     fn test_read_le_4() {
-        let result = read(&SIMPLE_SOURCE, 99, &Endianness::Little, "test_read_le_4").unwrap_err();
+        let result = read(&SIMPLE_SOURCE, 4, &Endianness::Little, "test_read_le_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading test_read_le_4 (u16) for 4 at 99"
+            "PointerOutOfBounds when reading test_read_le_4 (u16) for 5 at 4"
+        );
+    }
+
+    #[test]
+    fn test_read_le_5() {
+        let result = read(&SIMPLE_SOURCE, 99, &Endianness::Little, "test_read_le_5").unwrap_err();
+        assert_eq!(
+            format!("{result:?}"),
+            "PointerOutOfBounds when reading test_read_le_5 (u16) for 5 at 99"
         );
     }
 
@@ -79,19 +85,24 @@ mod tests {
 
     #[test]
     fn test_read_be_3() {
-        let result = read(&SIMPLE_SOURCE, 3, &Endianness::Big, "test_read_be_3").unwrap_err();
+        assert_eq!(read(&SIMPLE_SOURCE, 3, &Endianness::Big, "test_read_be_3").unwrap(), 0x789A);
+    }
+
+    #[test]
+    fn test_read_be_4() {
+        let result = read(&SIMPLE_SOURCE, 4, &Endianness::Big, "test_read_be_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading test_read_be_3 (u16) for 4 at 3"
+            "PointerOutOfBounds when reading test_read_be_4 (u16) for 5 at 4"
         );
     }
     
     #[test]
-    fn test_read_be_4() {
-        let result = read(&SIMPLE_SOURCE, 99, &Endianness::Big, "test_read_be_4").unwrap_err();
+    fn test_read_be_5() {
+        let result = read(&SIMPLE_SOURCE, 99, &Endianness::Big, "test_read_be_5").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when reading test_read_be_4 (u16) for 4 at 99"
+            "PointerOutOfBounds when reading test_read_be_5 (u16) for 5 at 99"
         );
     }
 }

@@ -24,83 +24,97 @@ mod tests {
 
     #[test]
     fn test_write_le_0() {
-        let mut target = [0; 4];
+        let mut target = [0; 5];
         write(&mut target, 0, 0x1234, &Endianness::Little, "test_write_le_0").unwrap();
-        assert_eq!(target, [0x34, 0x12, 0, 0]);
+        assert_eq!(target, [0x34, 0x12, 0, 0, 0]);
     }
 
     #[test]
     fn test_write_le_1() {
-        let mut target = [0; 4];
+        let mut target = [0; 5];
         write(&mut target, 1, 0x1234, &Endianness::Little, "test_write_le_1").unwrap();
-        assert_eq!(target, [0, 0x34, 0x12, 0]);
+        assert_eq!(target, [0, 0x34, 0x12, 0, 0]);
     }
 
     #[test]
     fn test_write_le_2() {
-        let mut target = [0; 4];
+        let mut target = [0; 5];
         write(&mut target, 2, 0x1234, &Endianness::Little, "test_write_le_2").unwrap();
-        assert_eq!(target, [0, 0, 0x34, 0x12]);
+        assert_eq!(target, [0, 0, 0x34, 0x12, 0]);
     }
 
     #[test]
     fn test_write_le_3() {
-        let mut target = [0; 4];
-        let result = write(&mut target, 3, 0x1234, &Endianness::Little, "test_write_le_3").unwrap_err();
-        assert_eq!(
-            format!("{result:?}"),
-            "PointerOutOfBounds when writing test_write_le_3 (u16) for 4 at 3"
-        );
+        let mut target = [0; 5];
+        write(&mut target, 3, 0x1234, &Endianness::Little, "test_write_le_3").unwrap();
+        assert_eq!(target, [0, 0, 0, 0x34, 0x12]);
     }
 
     #[test]
     fn test_write_le_4() {
-        let mut target = [0; 4];
-        let result = write(&mut target, 99, 0x1234, &Endianness::Little, "test_write_le_4").unwrap_err();
+        let mut target = [0; 5];
+        let result = write(&mut target, 4, 0x1234, &Endianness::Little, "test_write_le_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when writing test_write_le_4 (u16) for 4 at 99"
+            "PointerOutOfBounds when writing test_write_le_4 (u16) for 5 at 4"
+        );
+    }
+
+    #[test]
+    fn test_write_le_5() {
+        let mut target = [0; 5];
+        let result = write(&mut target, 99, 0x1234, &Endianness::Little, "test_write_le_5").unwrap_err();
+        assert_eq!(
+            format!("{result:?}"),
+            "PointerOutOfBounds when writing test_write_le_5 (u16) for 5 at 99"
         );
     }
 
     #[test]
     fn test_write_be_0() {
-        let mut target = [0; 4];
+        let mut target = [0; 5];
         write(&mut target, 0, 0x1234, &Endianness::Big, "test_write_be_0").unwrap();
-        assert_eq!(target, [0x12, 0x34, 0, 0]);
+        assert_eq!(target, [0x12, 0x34, 0, 0, 0]);
     }
 
     #[test]
     fn test_write_be_1() {
-        let mut target = [0; 4];
+        let mut target = [0; 5];
         write(&mut target, 1, 0x1234, &Endianness::Big, "test_write_be_1").unwrap();
-        assert_eq!(target, [0, 0x12, 0x34, 0]);
+        assert_eq!(target, [0, 0x12, 0x34, 0, 0]);
     }
 
     #[test]
     fn test_write_be_2() {
-        let mut target = [0; 4];
+        let mut target = [0; 5];
         write(&mut target, 2, 0x1234, &Endianness::Big, "test_write_be_2").unwrap();
-        assert_eq!(target, [0, 0, 0x12, 0x34]);
+        assert_eq!(target, [0, 0, 0x12, 0x34, 0]);
     }
 
     #[test]
     fn test_write_be_3() {
-        let mut target = [0; 4];
-        let result = write(&mut target, 3, 0x1234, &Endianness::Big, "test_write_be_3").unwrap_err();
-        assert_eq!(
-            format!("{result:?}"),
-            "PointerOutOfBounds when writing test_write_be_3 (u16) for 4 at 3"
-        );
+        let mut target = [0; 5];
+        write(&mut target, 3, 0x1234, &Endianness::Big, "test_write_be_3").unwrap();
+        assert_eq!(target, [0, 0, 0, 0x12, 0x34]);
     }
 
     #[test]
     fn test_write_be_4() {
-        let mut target = [0; 4];
-        let result = write(&mut target, 99, 0x1234, &Endianness::Big, "test_write_be_4").unwrap_err();
+        let mut target = [0; 5];
+        let result = write(&mut target, 4, 0x1234, &Endianness::Big, "test_write_be_4").unwrap_err();
         assert_eq!(
             format!("{result:?}"),
-            "PointerOutOfBounds when writing test_write_be_4 (u16) for 4 at 99"
+            "PointerOutOfBounds when writing test_write_be_4 (u16) for 5 at 4"
+        );
+    }
+
+    #[test]
+    fn test_write_be_5() {
+        let mut target = [0; 5];
+        let result = write(&mut target, 99, 0x1234, &Endianness::Big, "test_write_be_5").unwrap_err();
+        assert_eq!(
+            format!("{result:?}"),
+            "PointerOutOfBounds when writing test_write_be_5 (u16) for 5 at 99"
         );
     }
 }
